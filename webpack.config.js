@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
@@ -7,6 +8,10 @@ const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
+
+const crypto_orig_createHash = crypto.createHash;
+crypto.createHash = (algorithm) =>
+  crypto_orig_createHash(algorithm == 'md4' ? 'sha256' : algorithm);
 
 const webpackConfig = {
   mode: isProd ? 'production' : 'development',
