@@ -30,6 +30,7 @@ export function buildNewWindow(app: App): void {
     minHeight: 350,
     webPreferences: {
       preload: resolve(__dirname, 'preload.js'),
+      sandbox: false,
     },
   });
 

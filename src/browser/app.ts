@@ -1,8 +1,5 @@
 import { app, dialog } from 'electron';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-} from 'electron-devtools-installer';
+import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
 import createLogger from './logger';
 import { buildNewWindow } from './window';
@@ -30,8 +27,6 @@ const logger = createLogger('app');
 //   autoSubmit: true
 // });
 
-app.allowRendererProcessReuse = false;
-
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -45,7 +40,9 @@ app.whenReady().then(async () => {
   registerIPCMainHandlers();
 
   if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
-    await Promise.all([loadExtension(REACT_DEVELOPER_TOOLS), loadExtension(REDUX_DEVTOOLS)]);
+    // Disabling React DevTools as they don't load properly with the current Electron version
+    /*loadExtension(REACT_DEVELOPER_TOOLS),*/
+    await Promise.all([loadExtension(REDUX_DEVTOOLS)]);
   }
 
   buildNewWindow(app);
