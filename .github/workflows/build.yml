@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      node-version: 14
+      node-version: 18
 
     strategy:
       matrix:
@@ -28,9 +28,6 @@ jobs:
       with:
         node-version: ${{ env.node-version }}
         cache: npm
-
-    # Version of npm that comes in 14.x is npm@6
-    - run: npm i -g npm@7
 
     - run: npm ci
 
