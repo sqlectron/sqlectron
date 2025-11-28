@@ -140,12 +140,19 @@ export function decryptSecrects(server: Server, cryptoSecret: string): Server {
   return updatedServer;
 }
 
-async function getValidationErrors(server: Server): Promise<unknown> {
+interface ValidationError extends Error {
+  validationErrors?: { [key: string]: Error };
+}
+
+async function getValidationErrors(
+  server: Server,
+): Promise<Required<Pick<ValidationError, 'validationErrors'>>['validationErrors'] | undefined> {
   try {
     await validate(server);
   } catch (err) {
-    if (err.validationErrors) {
-      return err.validationErrors;
+    const typedError = err as ValidationError;
+    if (typedError.validationErrors) {
+      return typedError.validationErrors;
     }
 
     throw err;
