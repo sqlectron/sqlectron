@@ -16,7 +16,7 @@ import { useAppSelector } from '../hooks/redux';
 import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
-import { RegexString } from '../utils/search';
+import { escapeRegExpString } from '../utils/regexp';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST_ITEM';
 
@@ -46,7 +46,7 @@ const filterItems: <T extends { schema?: string; name: string }>(
   filterInput: string,
   items: T[],
 ) => T[] = (filterInput, items) => {
-  const regex = RegexString(filterInput);
+  const regex = RegExp(escapeRegExpString(filterInput), 'i');
   return items.filter((item) => regex.test(`${item.schema ? `${item.schema}.` : ''}${item.name}`));
 };
 
