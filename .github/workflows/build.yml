@@ -12,14 +12,13 @@ jobs:
 
     strategy:
       matrix:
-        # TODO: re-enable ubuntu
         # TODO: re-enable macos
-        os: [windows-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
+      run: sudo apt-get install icnsutils graphicsmagick rpm libarchive-tools
 
     - uses: actions/checkout@v6
 
