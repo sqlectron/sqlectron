@@ -44,6 +44,10 @@ jobs:
       if: runner.os == 'Linux'
       run: npm run compile
 
+    - name: Fix chrome-sandbox permissions
+      if: runner.os == 'Linux'
+      run: sudo chown root ./node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 ./node_modules/electron/dist/chrome-sandbox
+
     - name: Run e2e test
       if: runner.os == 'Linux'
       run: xvfb-run --auto-servernum npm run test:e2e
