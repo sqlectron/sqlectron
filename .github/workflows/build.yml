@@ -12,14 +12,13 @@ jobs:
 
     strategy:
       matrix:
-        # TODO: re-enable ubuntu
         # TODO: re-enable macos
-        os: [windows-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
+      run: sudo apt-get install icnsutils graphicsmagick rpm libarchive-tools
 
     - uses: actions/checkout@v6
 
@@ -44,6 +43,10 @@ jobs:
     - name: Build app for e2e test
       if: runner.os == 'Linux'
       run: npm run compile
+
+    - name: Fix chrome-sandbox permissions
+      if: runner.os == 'Linux'
+      run: sudo chown root ./node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 ./node_modules/electron/dist/chrome-sandbox
 
     - name: Run e2e test
       if: runner.os == 'Linux'

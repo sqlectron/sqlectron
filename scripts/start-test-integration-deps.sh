@@ -14,7 +14,7 @@ if [ ! -d "sqlectron-db-core" ]; then
 fi
 
 cd sqlectron-db-core
-docker-compose up -d openssh-server mysql
+docker compose up -d openssh-server mysql
 
 # Given a few seconds for the all deps be ready
 sleep 10
