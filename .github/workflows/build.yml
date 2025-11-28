@@ -1,35 +1,36 @@
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
 
     env:
-      node-version: 14
+      node-version: 18
 
     strategy:
       matrix:
-        # TODO: upgrade to latest Ubuntu
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+        # TODO: re-enable macos
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
+      run: sudo apt-get install icnsutils graphicsmagick rpm libarchive-tools
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
 
     - name: Use Node.js ${{ env.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ env.node-version }}
         cache: npm
-    
-    # Version of npm that comes in 14.x is npm@6
-    - run: npm i -g npm@7
 
     - run: npm ci
 
@@ -47,6 +48,10 @@ jobs:
       if: runner.os == 'Linux'
       run: npm run compile
 
+    - name: Fix chrome-sandbox permissions
+      if: runner.os == 'Linux'
+      run: sudo chown root ./node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 ./node_modules/electron/dist/chrome-sandbox
+
     - name: Run e2e test
       if: runner.os == 'Linux'
       run: xvfb-run --auto-servernum npm run test:e2e
@@ -54,7 +59,7 @@ jobs:
     - run: npm run dist -- --publish never
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v5
       with:
         name: ${{ matrix.os }}
         path: dist

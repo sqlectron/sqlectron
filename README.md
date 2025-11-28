@@ -1,4 +1,3 @@
-[![Slack Status](https://sqlectron.herokuapp.com/badge.svg)](https://sqlectron.herokuapp.com)
 [![Build](https://github.com/sqlectron/sqlectron-gui/workflows/Build/badge.svg?branch=master&event=push)](https://github.com/sqlectron/sqlectron-gui/actions?query=workflow%3ABuild+branch%3Amaster)
 
 <p align="center">

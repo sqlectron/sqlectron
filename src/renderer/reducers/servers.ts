@@ -100,9 +100,9 @@ const serverReducer: Reducer<ServerState> = function (
   }
 };
 
-function save(dataItems, server) {
-  const items = [...dataItems] || [];
-  const index = server.id && items.findIndex((srv) => srv.id === server.id);
+function save(dataItems: Server[], server: Server) {
+  const items = [...dataItems];
+  const index = server.id ? items.findIndex((srv) => srv.id === server.id) : -1;
   if (index >= 0) {
     items[index] = server;
   } else {
@@ -111,7 +111,7 @@ function save(dataItems, server) {
   return items;
 }
 
-function remove(items, id) {
+function remove(items: Server[], id: string) {
   const index = items.findIndex((srv) => srv.id === id);
   return [...items.slice(0, index), ...items.slice(index + 1)];
 }

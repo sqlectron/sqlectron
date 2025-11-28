@@ -16,9 +16,13 @@ function copyProps(src, target) {
 
 (global as any).window = window;
 global.document = window.document;
-global.navigator = {
-  userAgent: 'node.js',
-} as Navigator;
+Object.defineProperty(global, 'navigator', {
+  value: {
+    userAgent: 'node.js',
+  } as Navigator,
+  writable: true,
+  configurable: true,
+});
 global.requestAnimationFrame = function (callback) {
   return setTimeout(callback, 0);
 };
