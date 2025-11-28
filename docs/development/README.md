@@ -6,7 +6,7 @@ After running the application if you are interested in contributing to the code 
 
 ## Contributing to the code base
 
-Pick [an issue](http://github.com/sqlectron/sqlectron-gui/issues) to fix, or pitch new features. To avoid wasting your time, please ask for feedback on feature suggestions either with [an issue](http://github.com/sqlectron/sqlectron-gui/issues/new) or on the Slack channel.
+Pick [an issue](http://github.com/sqlectron/sqlectron-gui/issues) to fix, or pitch new features. To avoid wasting your time, please ask for feedback on feature suggestions with [an issue](http://github.com/sqlectron/sqlectron-gui/issues/new).
 
 ### Making a pull request
 

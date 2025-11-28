@@ -25,12 +25,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar gcc-multilib g++-multilib
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - name: Use Node.js ${{ env.node-version }}
+      uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: ${{ env.node-version }}
 
     - run: npm ci
 
