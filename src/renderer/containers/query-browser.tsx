@@ -436,7 +436,7 @@ const QueryBrowserContainer: FC = () => {
             className="react-resizable react-resizable-ew-resize"
             onResizeStop={(_, { size }) => setSideBarWidth(size.width)}
             width={sideBarWidth || SIDEBAR_WIDTH}
-            height={NaN}
+            axis="x"
             minConstraints={[SIDEBAR_WIDTH, 300]}
             maxConstraints={[750, 10000]}>
             <div className="ui vertical menu" style={STYLES.resizeable}>
