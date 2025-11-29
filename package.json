@@ -16,12 +16,22 @@
   },
   "build": {
     "appId": "org.sqlectron.gui",
-    "afterSign": "build/notarize.js",
     "mac": {
       "category": "public.app-category.developer-tools",
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "notarize": true
+      "gatekeeperAssess": false,
+      "hardenedRuntime": true,
+      "notarize": true,
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
     },
     "dmg": {
       "contents": [
@@ -49,13 +59,27 @@
       ]
     },
     "win": {
+      "azureSignOptions": {
+        "publisherName": "Matthew Peveler",
+        "endpoint": "https://eus.codesigning.azure.net/",
+        "certificateProfileName": "Sqlectron",
+        "codeSigningAccountName": "Sqlectron"
+      },
       "target": [
-        "nsis",
-        "portable"
-      ],
-      "arch": [
-        "x64",
-        "ia32"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ]
     },
     "publish": {
