@@ -1,4 +1,4 @@
-name: Build
+name: Test
 
 on:
   push:
@@ -55,11 +55,3 @@ jobs:
     - name: Run e2e test
       if: runner.os == 'Linux'
       run: xvfb-run --auto-servernum npm run test:e2e
-
-    - run: npm run dist -- --publish never
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{ matrix.os }}
-        path: dist

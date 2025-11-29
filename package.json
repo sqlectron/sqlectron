@@ -20,7 +20,8 @@
     "mac": {
       "category": "public.app-category.developer-tools",
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "notarize": true
     },
     "dmg": {
       "contents": [
@@ -50,8 +51,11 @@
     "win": {
       "target": [
         "nsis",
-        "7z",
-        "zip"
+        "portable"
+      ],
+      "arch": [
+        "x64",
+        "ia32"
       ]
     },
     "publish": {
@@ -86,8 +90,6 @@
     "build:linux": "npm run clean:linux && electron-builder --linux",
     "build:win": "npm run clean:win && electron-builder --windows",
     "dist": "npm run compile && electron-builder",
-    "dist:all-arch": "npm run compile && electron-builder --ia32 --x64",
-    "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -115,7 +117,6 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
-    "@electron/notarize": "^2.5.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@storybook/addon-actions": "^6.4.17",
     "@storybook/addon-essentials": "^6.4.17",
