@@ -210,7 +210,7 @@
     "react": "^16.14.0",
     "react-ace": "^9.4.4",
     "react-dom": "^16.14.0",
-    "react-draggable": "^3.3.2",
+    "react-draggable": "^4.5.0",
     "react-redux": "^7.2.4",
     "react-resizable": "^3.0.4",
     "react-router": "^5.2.0",
