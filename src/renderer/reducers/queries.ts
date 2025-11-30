@@ -117,8 +117,13 @@ const queryReducer: Reducer<QueryState> = function (
         newState.currentQueryId = state.queryIds[index + 1];
       }
 
-      newState.queryIds.splice(index, 1);
-      delete newState.queriesById[currentQueryId];
+      newState.queryIds = [
+        ...newState.queryIds.slice(0, index),
+        ...newState.queryIds.slice(index + 1),
+      ];
+      newState.queriesById = Object.fromEntries(
+        Object.entries(newState.queriesById).filter(([id]) => Number(id) !== currentQueryId),
+      );
 
       if (newState.queryIds.length >= 1) {
         return newState;
