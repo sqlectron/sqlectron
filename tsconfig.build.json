@@ -1,15 +1,7 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "rootDir": "src",
-    "outDir": "out",
-    "jsx": "react",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "skipLibCheck": true
+    "rootDir": "src"
   },
   "include": ["src"]
 }
