@@ -82,6 +82,10 @@
         }
       ]
     },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    },
     "publish": {
       "provider": "github",
       "releaseType": "release"
