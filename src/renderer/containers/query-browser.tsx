@@ -42,8 +42,11 @@ import QueryTabs from '../components/query-tabs';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
 import { escapeRegExpString } from '../utils/regexp';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./query-browser.css');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('../components/react-resizable.css');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('../components/react-tabs.scss');
 
 const SIDEBAR_WIDTH = 235;

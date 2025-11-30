@@ -3,6 +3,7 @@ import { sqlectron } from '../api';
 
 import LOGO_PATH from './logo-128px.png';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./header.css');
 
 function onSiteClick(event) {

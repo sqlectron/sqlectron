@@ -2,7 +2,6 @@ export function rowsValuesToString(rows: any[]): any[] {
   return rows.map((row) => rowValuesToString(row));
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function rowValuesToString(row: object | any[]): unknown {
   if (Array.isArray(row)) {
     return rowsValuesToString(row);

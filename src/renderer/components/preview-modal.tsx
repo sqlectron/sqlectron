@@ -43,7 +43,7 @@ const PreviewModal: FC<Props> = ({ value, onCloseClick }) => {
           default:
             return value as string;
         }
-      } catch (err) {
+      } catch {
         return 'Not valid format';
       }
     },

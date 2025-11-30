@@ -49,7 +49,7 @@ const buildConnectionURI = (showPlainPassword: boolean, server: Partial<Server>)
     });
 
     return conn.toString({ passwordHash });
-  } catch (err) {
+  } catch {
     // Ignore error, it just means the data is not ready to be parsed into the URI format yet
     return '';
   }
@@ -259,7 +259,7 @@ const ServerModalForm: FC<Props> = ({
         set(newState, 'database', data.path && data.path[0]);
         set(newState, 'host', data.hostname);
         set(newState, 'port', data.port);
-      } catch (err) {
+      } catch {
         // Ignore error, it just means the data is not ready to be parsed from the URI format yet
         return;
       }

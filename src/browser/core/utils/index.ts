@@ -37,7 +37,7 @@ export function fileExists(filename: string): Promise<boolean> {
 export function fileExistsSync(filename: string): boolean {
   try {
     return fs.statSync(filename).isFile();
-  } catch (e) {
+  } catch {
     return false;
   }
 }

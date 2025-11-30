@@ -16,7 +16,9 @@ import MenuHandler from '../utils/menu';
 import { Query } from '../reducers/queries';
 import { useAppSelector } from '../hooks/redux';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./react-resizable.css');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./override-ace.css');
 
 const QUERY_EDITOR_HEIGTH = 200;

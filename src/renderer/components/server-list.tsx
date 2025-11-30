@@ -6,6 +6,7 @@ import Message from './message';
 import type { Server } from '../../common/types/server';
 import type { ConfigState } from '../reducers/config';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./server-list.scss');
 
 interface Props {
