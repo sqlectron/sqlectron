@@ -131,7 +131,7 @@
     "core-js": "^3.6.5",
     "csv-stringify": "^5.5.1",
     "electron-devtools-installer": "^3.2.1",
-    "env-paths": "^1.0.0",
+    "os-user-dirs": "^3.1.0",
     "lodash": "^4.17.21",
     "sqlectron-db-core": "^0.12.0",
     "uuid": "^8.3.2",

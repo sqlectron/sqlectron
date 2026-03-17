@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { homedir } from 'os';
 import path from 'path';
-import envPaths from 'env-paths';
+import { projectDirs } from 'os-user-dirs';
 
 let configPath = '';
 
@@ -18,7 +18,7 @@ export function getConfigPath(): string {
   } else if (fileExistsSync(oldConfigPath)) {
     configPath = oldConfigPath;
   } else {
-    const newConfigDir = envPaths('Sqlectron', { suffix: '' }).config;
+    const newConfigDir = projectDirs('Sqlectron').config;
     configPath = path.join(newConfigDir, configName);
   }
 
