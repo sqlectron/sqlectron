@@ -58,6 +58,25 @@ export function unsafeDecrypt(text: string, secret: string): string {
     throw new Error('Missing crypto secret');
   }
 
-  const decipher = crypto.createDecipher('aes-256-ctr', secret);
+  // Replicate the key derivation that the removed crypto.createDecipher
+  // used internally (EVP_BytesToKey with MD5, no salt).
+  // aes-256-ctr requires a 32-byte key and 16-byte IV.
+  const keyLen = 32;
+  const ivLen = 16;
+  const totalLen = keyLen + ivLen;
+  const parts: Buffer[] = [];
+  let lastHash = Buffer.alloc(0);
+  while (Buffer.concat(parts).length < totalLen) {
+    lastHash = crypto
+      .createHash('md5')
+      .update(Buffer.concat([lastHash, Buffer.from(secret)]))
+      .digest();
+    parts.push(lastHash);
+  }
+  const derived = Buffer.concat(parts, totalLen);
+  const key = derived.subarray(0, keyLen);
+  const iv = derived.subarray(keyLen, totalLen);
+
+  const decipher = crypto.createDecipheriv('aes-256-ctr', key, iv);
   return decipher.update(text, 'hex', 'utf8') + decipher.final('utf8');
 }
