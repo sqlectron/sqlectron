@@ -60,7 +60,7 @@ function buildServerSchema(
     ssl: Joi.alternatives().try(Joi.boolean(), Joi.object()).required(),
     host: Joi.string().trim().min(1),
     port: Joi.number().integer().min(0).max(99999),
-    socketPath: Joi.string().trim().min(1).allow(null),
+    socketPath: Joi.string().trim().min(1),
     database: Joi.string().trim().min(1),
     user: Joi.string().trim().min(1),
     password: PASSWORD_SCHEMA,
@@ -72,7 +72,7 @@ function buildServerSchema(
   let schema = Joi.object(fields).unknown(true);
 
   if (fields.host && fields.socketPath) {
-    // schema = schema.xor('host', 'socketPath');
+    schema = schema.xor('host', 'socketPath');
   }
   if (fields.host && fields.port) {
     schema = schema.and('host', 'port');

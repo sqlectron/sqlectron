@@ -62,15 +62,19 @@ const mapStateToServer = (state: FormServer): Server => {
     name: state.name,
     client: state.client,
     ssl: !!state.ssl,
-    host: state.host && state.host.length ? state.host : null,
-    port: state.port || state.defaultPort,
-    socketPath: state.socketPath && state.socketPath.length ? state.socketPath : null,
     user: state.user || null,
     password: state.password || null,
     database: state.database,
     domain: state.domain,
     schema: state.schema || null,
   } as Server;
+
+  if (state.host && state.host.length) {
+    server.host = state.host;
+    server.port = state.port || state.defaultPort;
+  } else if (state.socketPath && state.socketPath.length) {
+    server.socketPath = state.socketPath;
+  }
 
   const { ssh } = state;
   if (ssh) {
