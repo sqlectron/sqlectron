@@ -125,7 +125,6 @@
     "@babel/core": "^7.14.3",
     "@types/react-virtualized": "^9.21.16",
     "ace-builds": "^1.4.13",
-    "axios": "^0.21.1",
     "bunyan": "^1.8.5",
     "connection-string": "^4.3.4",
     "core-js": "^3.6.5",

@@ -4,6 +4,7 @@ import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
 import { getConfig } from './config';
 import createLogger from './logger';
+import * as event from '../common/event';
 
 const logger = createLogger('window');
 
@@ -72,9 +73,9 @@ export function buildNewWindow(app: App): void {
     });
   }
 
-  ipcMain.on('sqlectron:check-upgrade', () => {
+  ipcMain.on(event.UPDATE_CHECK, () => {
     checkUpdate(mainWindow, appConfig).catch((err) =>
-      logger.error('Unable to check for updates', err),
+      logger.error('Unable to check for version', err),
     );
   });
 }

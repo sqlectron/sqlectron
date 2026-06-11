@@ -6,11 +6,11 @@ const LATEST_RELEASE_URL = `https://github.com/${repo}/releases/latest`;
 
 const UpdateChecker: FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  //const [currentVersion, setCurrentVersion] = useState('');
+  // const [currentVersion, setCurrentVersion] = useState('');
   const [latestVersion, setLatestVersion] = useState('');
 
-  const updateAvailable = (/*currentVersion,*/ latestVersion) => {
-    //setCurrentVersion(currentVersion);
+  const updateAvailable = (_currentVersion: string, latestVersion: string) => {
+    // setCurrentVersion(currentVersion);
     setLatestVersion(latestVersion);
     setIsVisible(true);
   };
