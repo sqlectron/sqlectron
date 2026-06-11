@@ -1,6 +1,7 @@
 import isPlainObject from 'lodash/isPlainObject';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import classNames from 'classnames';
+import React, { FC, useCallback, useState } from 'react';
+import { Button } from './ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 
 interface Props {
   value: unknown;
@@ -8,29 +9,7 @@ interface Props {
 }
 
 const PreviewModal: FC<Props> = ({ value, onCloseClick }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-
   const [selected, setSelected] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!modalRef.current) {
-      return;
-    }
-    const elem = modalRef.current;
-    $(elem)
-      .modal({
-        context: 'body',
-        closable: false,
-        detachable: false,
-        onDeny: () => {
-          onCloseClick();
-        },
-      })
-      .modal('show');
-    return () => {
-      $(elem).modal('hide');
-    };
-  }, [modalRef, onCloseClick]);
 
   const getPreviewValue = useCallback(
     (type: string | null) => {
@@ -50,43 +29,40 @@ const PreviewModal: FC<Props> = ({ value, onCloseClick }) => {
     [value],
   );
 
-  const onClick = useCallback((type) => setSelected(type), []);
-
   const items = [
-    { type: 'plain', name: 'Plain Text', default: true },
+    { type: 'plain', name: 'Plain Text' },
     { type: 'json', name: 'JSON' },
   ];
 
   return (
-    <div className="ui modal" ref={modalRef}>
-      <div className="header">Content Preview</div>
-      <div className="content">
-        <div className="ui fluid two item menu">
-          {items.map((item) => {
-            const className = classNames({
-              item: true,
-              active: (!selected && item.default) || selected === item.type,
-            });
-
-            return (
-              <a key={item.type} onClick={() => onClick(item.type)} className={className}>
-                {item.name}
-              </a>
-            );
-          })}
+    <Dialog open onOpenChange={(open) => !open && onCloseClick()}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Content Preview</DialogTitle>
+        </DialogHeader>
+        <div className="flex gap-2">
+          {items.map((item) => (
+            <Button
+              key={item.type}
+              variant={(selected || 'plain') === item.type ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSelected(item.type)}>
+              {item.name}
+            </Button>
+          ))}
         </div>
-        <div className="ui segment">
+        <div className="rounded-md border border-slate-200 p-4">
           <div style={{ maxHeight: '500px', overflowY: 'scroll' }}>
             {getPreviewValue(selected || 'plain')}
           </div>
         </div>
-      </div>
-      <div className="actions">
-        <div className="small ui black deny right button" tabIndex={0}>
-          Close
-        </div>
-      </div>
-    </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onCloseClick}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
