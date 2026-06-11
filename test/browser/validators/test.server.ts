@@ -1,5 +1,9 @@
 import { expect } from 'chai';
-import { validate, validateUniqueId } from '../../../src/browser/core/validators/server';
+import {
+  validate,
+  validateUniqueId,
+  ServerValidationError,
+} from '../../../src/browser/core/validators/server';
 import { Server } from '../../../src/common/types/server';
 
 describe('validators/server', () => {
@@ -131,7 +135,8 @@ describe('validators/server', () => {
       validate(server)
         .then(() => done(new Error('should have thrown error')))
         .catch((err) => {
-          expect(err.message).to.eql('validaInvalidError');
+          expect(err).to.be.instanceOf(ServerValidationError);
+          expect(err.validationErrors).to.have.property('client');
           done();
         });
     });

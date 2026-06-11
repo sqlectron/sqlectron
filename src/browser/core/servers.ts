@@ -1,5 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { validate, validateUniqueId } from './validators/server';
+import {
+  validate,
+  validateUniqueId,
+  ServerValidationError,
+  ValidationErrors,
+} from './validators/server';
 import * as config from './config';
 import * as crypto from './crypto';
 import { Server, ServerResult, EncryptedPassword } from '../../common/types/server';
@@ -10,12 +15,11 @@ export async function getAll(): Promise<Array<Server>> {
 }
 
 export async function add(server: Server, cryptoSecret: string): Promise<ServerResult> {
-  let srv = { ...server };
-
-  const validationErrors = await getValidationErrors(srv);
-  if (validationErrors) {
-    return { validationErrors };
+  const validationResult = await validateServer({ ...server });
+  if (validationResult.validationErrors) {
+    return { validationErrors: validationResult.validationErrors };
   }
+  let srv = validationResult.server;
 
   const data = await config.get();
   let newId;
@@ -33,12 +37,11 @@ export async function add(server: Server, cryptoSecret: string): Promise<ServerR
 }
 
 export async function update(server: Server, cryptoSecret: string): Promise<ServerResult> {
-  let srv = { ...server };
-
-  const validationErrors = await getValidationErrors(srv);
-  if (validationErrors) {
-    return { validationErrors };
+  const validationResult = await validateServer({ ...server });
+  if (validationResult.validationErrors) {
+    return { validationErrors: validationResult.validationErrors };
   }
+  let srv = validationResult.server;
 
   const data = await config.get();
 
@@ -140,19 +143,16 @@ export function decryptSecrects(server: Server, cryptoSecret: string): Server {
   return updatedServer;
 }
 
-interface ValidationError extends Error {
-  validationErrors?: { [key: string]: Error };
-}
-
-async function getValidationErrors(
+async function validateServer(
   server: Server,
-): Promise<Required<Pick<ValidationError, 'validationErrors'>>['validationErrors'] | undefined> {
+): Promise<
+  { server: Server; validationErrors?: undefined } | { validationErrors: ValidationErrors }
+> {
   try {
-    await validate(server);
+    return { server: await validate(server) };
   } catch (err) {
-    const typedError = err as ValidationError;
-    if (typedError.validationErrors) {
-      return typedError.validationErrors;
+    if (err instanceof ServerValidationError) {
+      return { validationErrors: err.validationErrors };
     }
 
     throw err;

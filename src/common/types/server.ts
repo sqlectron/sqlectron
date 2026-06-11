@@ -7,7 +7,7 @@ export interface EncryptedPassword {
 
 export interface ServerResult {
   data?: Server;
-  validationErrors?: unknown;
+  validationErrors?: Record<string, string>;
 }
 
 export interface Server {

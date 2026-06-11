@@ -1,154 +1,134 @@
-import Valida from 'valida2';
+import Joi from 'joi';
 import { CLIENTS } from 'sqlectron-db-core';
 import { Server } from '../../../common/types/server';
 
-function serverAddressValidator(ctx) {
-  const { host, port, socketPath } = ctx.obj;
+export type ValidationErrors = Record<string, string>;
 
-  // we need either a host, or a socket path, but not both, and not neither.
-  if ((!host && !socketPath) || (host && socketPath)) {
-    return {
-      validator: 'serverAddressValidator',
-      msg: 'You must use host or socket path',
-    };
-  }
+export class ServerValidationError extends Error {
+  validationErrors: ValidationErrors;
 
-  if (socketPath) {
-    return undefined;
-  }
-
-  if ((host && !port) || (!host && port)) {
-    return {
-      validator: 'serverAddressValidator',
-      msg: 'Host and port are required fields.',
-    };
+  constructor(validationErrors: ValidationErrors) {
+    super('Server validation failed');
+    this.name = 'ServerValidationError';
+    this.validationErrors = validationErrors;
   }
 }
 
-function clientValidator(ctx, options, value) {
-  if (typeof value === 'undefined' || value === null) {
-    return undefined;
-  }
-  if (!CLIENTS.some((dbClient) => dbClient.key === value)) {
-    return {
-      validator: 'clientValidator',
-      msg: 'Invalid client type',
-    };
-  }
-}
+// password may be a plain string or an already encrypted value, and at least
+// one of them must end up non-empty once trimmed.
+const PASSWORD_SCHEMA = Joi.alternatives()
+  .try(
+    Joi.string().trim().min(1),
+    Joi.object({
+      ivText: Joi.string().trim().allow(''),
+      encryptedText: Joi.string().trim().allow(''),
+    }).custom((value, helpers) => {
+      if (!value.ivText && !value.encryptedText) {
+        return helpers.error('any.invalid');
+      }
+      return value;
+    }, 'encrypted password'),
+  )
+  .allow(null);
 
-function boolValidator(ctx, options, value) {
-  if (typeof value === 'undefined' || value === null) {
-    return undefined;
-  }
-  if (value !== true && value !== false) {
-    return {
-      validator: 'boolValidator',
-      msg: 'Invalid boolean type.',
-    };
-  }
-}
+const SSH_SCHEMA = Joi.object({
+  host: Joi.string().trim().min(1),
+  port: Joi.number().integer().min(0).max(99999),
+  user: Joi.string().trim().min(1).required(),
+  password: PASSWORD_SCHEMA,
+  privateKey: Joi.string().trim().min(1),
+  privateKeyWithPassphrase: Joi.boolean(),
+  useAgent: Joi.boolean(),
+}).unknown(true);
 
-function passwordSanitizer(ctx, options, value) {
-  if (value === undefined || value === null) {
-    return value;
-  }
+// fields that, together, determine how a server can be reached. Exactly one
+// of host or socketPath is required, and host requires port (and vice-versa).
+const ADDRESS_FIELDS = ['host', 'port', 'socketPath'];
 
-  if (typeof value === 'string') {
-    return Valida.sanitizers.trim(ctx, options, value);
-  }
-
-  return {
-    ivText: Valida.sanitizers.trim(ctx, options, value.ivText),
-    encryptedText: Valida.sanitizers.trim(ctx, options, value.encryptedText),
+function buildServerSchema(
+  disabledFields: Set<string>,
+): {
+  schema: Joi.ObjectSchema;
+  addressFields: string[];
+} {
+  const fields: Record<string, Joi.Schema> = {
+    name: Joi.string().trim().min(1).required(),
+    client: Joi.string()
+      .trim()
+      .required()
+      .valid(...CLIENTS.map((dbClient) => dbClient.key)),
+    ssl: Joi.alternatives().try(Joi.boolean(), Joi.object()).required(),
+    host: Joi.string().trim().min(1),
+    port: Joi.number().integer().min(0).max(99999),
+    socketPath: Joi.string().trim().min(1),
+    database: Joi.string().trim().min(1),
+    user: Joi.string().trim().min(1),
+    password: PASSWORD_SCHEMA,
+    ssh: SSH_SCHEMA,
   };
-}
 
-function passwordValidator(ctx, options, value) {
-  if (value === undefined || value === null) {
-    return;
+  disabledFields.forEach((field) => delete fields[field]);
+
+  let schema = Joi.object(fields).unknown(true);
+
+  if (fields.host && fields.socketPath) {
+    schema = schema.xor('host', 'socketPath');
+  }
+  if (fields.host && fields.port) {
+    schema = schema.and('host', 'port');
   }
 
-  if (typeof value === 'string') {
-    return Valida.validators.len(ctx, options, value);
-  }
+  const addressFields = ADDRESS_FIELDS.filter((field) => fields[field]);
 
-  return (
-    Valida.validators.len(ctx, options, value.ivText) ||
-    Valida.validators.len(ctx, options, value.encryptedText)
-  );
+  return { schema, addressFields };
 }
 
-const SSH_SCHEMA = {
-  host: [{ sanitizer: Valida.Sanitizer.trim }, { validator: Valida.Validator.len, min: 1 }],
-  port: [
-    { sanitizer: Valida.Sanitizer.toInt },
-    { validator: Valida.Validator.len, min: 1, max: 5 },
-  ],
-  user: [
-    { sanitizer: Valida.Sanitizer.trim },
-    { validator: Valida.Validator.required },
-    { validator: Valida.Validator.len, min: 1 },
-  ],
-  password: [{ sanitizer: passwordSanitizer }, { validator: passwordValidator, min: 1 }],
-  privateKey: [{ sanitizer: Valida.Sanitizer.trim }, { validator: Valida.Validator.len, min: 1 }],
-  privateKeyWithPassphrase: [{ validator: boolValidator }],
-  useAgent: [{ validator: boolValidator }],
-};
+function toValidationErrors(error: Joi.ValidationError, addressFields: string[]): ValidationErrors {
+  const errors: ValidationErrors = {};
 
-const SERVER_SCHEMA = {
-  name: [
-    { sanitizer: Valida.Sanitizer.trim },
-    { validator: Valida.Validator.required },
-    { validator: Valida.Validator.len, min: 1 },
-  ],
-  client: [
-    { sanitizer: Valida.Sanitizer.trim },
-    { validator: Valida.Validator.required },
-    { validator: clientValidator },
-  ],
-  ssl: [{ validator: Valida.Validator.required }],
-  host: [
-    { sanitizer: Valida.Sanitizer.trim },
-    { validator: Valida.Validator.len, min: 1 },
-    { validator: serverAddressValidator },
-  ],
-  port: [
-    { sanitizer: Valida.Sanitizer.toInt },
-    { validator: Valida.Validator.len, min: 1, max: 5 },
-    { validator: serverAddressValidator },
-  ],
-  socketPath: [
-    { sanitizer: Valida.Sanitizer.trim },
-    { validator: Valida.Validator.len, min: 1 },
-    { validator: serverAddressValidator },
-  ],
-  database: [{ sanitizer: Valida.Sanitizer.trim }, { validator: Valida.Validator.len, min: 1 }],
-  user: [{ sanitizer: Valida.Sanitizer.trim }, { validator: Valida.Validator.len, min: 1 }],
-  password: [{ sanitizer: passwordSanitizer }, { validator: passwordValidator, min: 1 }],
-  ssh: [{ validator: Valida.Validator.schema, schema: SSH_SCHEMA }],
-};
+  error.details.forEach((detail) => {
+    if (detail.path.length === 0) {
+      // object-level errors (e.g. host/port/socketPath relationship) apply to
+      // all of the address fields so the form can highlight them.
+      addressFields.forEach((field) => {
+        errors[field] = detail.message;
+      });
+      return;
+    }
+
+    errors[detail.path.join('.')] = detail.message;
+  });
+
+  return errors;
+}
 
 /**
  * validations applied on creating/updating a server
+ *
+ * Returns the sanitized server (e.g. trimmed strings, numeric ports) on
+ * success, or throws a ServerValidationError on failure.
  */
-export async function validate(server: Server): Promise<void> {
-  const serverSchema = { ...SERVER_SCHEMA };
+export async function validate(server: Server): Promise<Server> {
+  const disabledFields = new Set<string>();
 
   const clientConfig = CLIENTS.find((dbClient) => dbClient.key === server.client);
-  if (clientConfig && clientConfig.disabledFeatures) {
+  if (clientConfig) {
     clientConfig.disabledFeatures.forEach((item) => {
       const [region, field] = item.split(':');
       if (region === 'server') {
-        delete serverSchema[field];
+        disabledFields.add(field);
       }
     });
   }
 
-  const validated = await Valida.process(server, serverSchema);
-  if (!validated.isValid()) {
-    throw validated.invalidError();
+  const { schema, addressFields } = buildServerSchema(disabledFields);
+
+  const { value, error } = schema.validate(server, { abortEarly: false });
+  if (error) {
+    throw new ServerValidationError(toValidationErrors(error, addressFields));
   }
+
+  return value as Server;
 }
 
 export function validateUniqueId(servers: Array<Server>, serverId?: string | null): boolean {

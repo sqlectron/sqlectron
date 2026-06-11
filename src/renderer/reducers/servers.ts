@@ -1,24 +1,12 @@
-import { Action, Reducer } from 'redux';
+import { Reducer } from 'redux';
 import * as types from '../actions/servers';
 import * as configTypes from '../actions/config';
 import { Server } from '../../common/types/server';
 
-export interface ValidationError {
-  validationErrors: Array<Error>;
-}
-
-export interface ServerAction extends Action {
-  type: string;
-  error: ValidationError;
-  server: Server;
-  config: {
-    servers: Array<Server>;
-  };
-  id: string;
-}
+export type ValidationErrors = Record<string, string>;
 
 export interface ServerState {
-  error: null | ValidationError;
+  error: null | ValidationErrors;
   isSaving: boolean;
   isEditing: boolean;
   items: Array<Server>;

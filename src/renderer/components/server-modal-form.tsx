@@ -16,7 +16,7 @@ import Checkbox from './checkbox';
 import { requireClientLogo } from './require-context';
 import { ConnectionString } from 'connection-string';
 import { Server } from '../../common/types/server';
-import { ValidationError } from '../reducers/servers';
+import { ValidationErrors } from '../reducers/servers';
 import { useAppSelector } from '../hooks/redux';
 import { titlize } from '../../common/utils/string';
 
@@ -129,7 +129,7 @@ interface Props {
   onTestConnectionClick: (server: Server) => void;
   onDuplicateClick: (server: Server) => void;
   server: Partial<Server>;
-  error: ValidationError | null;
+  error: ValidationErrors | null;
 }
 const ServerModalForm: FC<Props> = ({
   onSaveClick,
@@ -319,16 +319,7 @@ const ServerModalForm: FC<Props> = ({
 
   const highlightError = useCallback(
     (name: string) => {
-      let hasError = !!(error && error[name]);
-      // I'm not sure what this is supposed to be?
-      // @ts-ignore
-      if (error && error.ssh && /^ssh\./.test(name)) {
-        // @ts-ignore
-        const sshErrors = error.ssh[0].errors[0];
-        const lastName = name.replace(/^ssh\./, '');
-        hasError = !!~Object.keys(sshErrors).indexOf(lastName);
-      }
-      return hasError ? 'error' : '';
+      return error && error[name] ? 'error' : '';
     },
     [error],
   );
