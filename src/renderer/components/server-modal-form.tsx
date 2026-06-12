@@ -786,7 +786,6 @@ const ServerModalForm: FC<Props> = ({
       </div>
       {confirmingRemove && (
         <ConfirmModal
-          context="#server-modal"
           title={`Delete ${serverState.name}`}
           message="Are you sure you want to remove this server connection?"
           onCancelClick={onRemoveCancelClick}

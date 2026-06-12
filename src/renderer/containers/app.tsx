@@ -16,6 +16,8 @@ require('../../../vendor/renderer/lato/latofonts.css');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('../../../vendor/renderer/semantic-ui/semantic.css');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
+require('../tailwind.css');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./app.css');
 
 const AppContainer: FC = ({ children }) => {

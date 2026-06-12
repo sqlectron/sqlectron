@@ -1,61 +1,39 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import { Button } from './ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from './ui/dialog';
 
 interface ConfirmModalProps {
   title: string;
   message: string;
-  context: string;
   onCancelClick: () => void;
   onRemoveClick: () => void;
 }
 
-const ConfirmModal = ({
-  onCancelClick,
-  onRemoveClick,
-  title,
-  message,
-  context,
-}: ConfirmModalProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
-    const elem = ref.current;
-    $(elem)
-      .modal({
-        closable: false,
-        detachable: false,
-        allowMultiple: true,
-        context: context,
-        onDeny: () => {
-          onCancelClick();
-        },
-        onApprove: () => {
-          onRemoveClick();
-        },
-      })
-      .modal('show');
-    return () => {
-      $(elem).modal('hide');
-    };
-  }, [ref, context, onCancelClick, onRemoveClick]);
-
+const ConfirmModal = ({ onCancelClick, onRemoveClick, title, message }: ConfirmModalProps) => {
   return (
-    <div className="ui modal" ref={ref} style={{ position: 'absolute' }}>
-      <div className="header">{title}</div>
-      <div className="content">{message}</div>
-      <div className="actions">
-        <div className="small ui black deny right labeled icon button" tabIndex={0}>
-          No
-          <i className="ban icon" />
-        </div>
-        <div className="small ui positive right labeled icon button" tabIndex={0}>
-          Yes
-          <i className="checkmark icon" />
-        </div>
-      </div>
-    </div>
+    <Dialog open onOpenChange={(open) => !open && onCancelClick()}>
+      <DialogContent showCloseButton={false}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{message}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={onCancelClick}>
+            No
+          </Button>
+          <Button variant="positive" onClick={onRemoveClick}>
+            Yes
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -1,12 +1,14 @@
-import React, {
-  ChangeEvent,
-  FC,
-  KeyboardEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { ChangeEvent, FC, KeyboardEvent, useCallback, useState } from 'react';
+import { Button } from './ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from './ui/dialog';
+import { Input } from './ui/input';
 
 interface Props {
   onCancelClick: () => void;
@@ -17,37 +19,7 @@ interface Props {
 }
 
 const PromptModal: FC<Props> = ({ onCancelClick, onOKClick, title, message, type }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
   const [value, setValue] = useState('');
-
-  useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
-    const elem = ref.current;
-    $(elem).modal({
-      closable: false,
-      detachable: false,
-      onDeny: () => {
-        onCancelClick();
-      },
-      onApprove: () => {
-        onOKClick(value);
-      },
-    });
-  }, [ref, onCancelClick, onOKClick, value]);
-
-  useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
-    const elem = ref.current;
-    $(elem).modal('show');
-    return () => {
-      $(elem).modal('hide');
-    };
-  }, [ref]);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent<HTMLInputElement>): void => {
@@ -63,25 +35,26 @@ const PromptModal: FC<Props> = ({ onCancelClick, onOKClick, title, message, type
   }, []);
 
   return (
-    <div className="ui modal" ref={ref}>
-      <div className="header">{title}</div>
-      <div className="content">
-        {message}
-        <div className="ui fluid icon input">
-          <input onChange={handleChange} type={type} onKeyPress={handleKeyPress} />
-        </div>
-      </div>
-      <div className="actions">
-        <div className="small ui black deny right labeled icon button" tabIndex={0}>
-          Cancel
-          <i className="ban icon" />
-        </div>
-        <div className="small ui positive right labeled icon button" tabIndex={0}>
-          OK
-          <i className="checkmark icon" />
-        </div>
-      </div>
-    </div>
+    <Dialog open>
+      <DialogContent
+        showCloseButton={false}
+        onEscapeKeyDown={(event) => event.preventDefault()}
+        onPointerDownOutside={(event) => event.preventDefault()}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{message}</DialogDescription>
+        </DialogHeader>
+        <Input autoFocus type={type} onChange={handleChange} onKeyPress={handleKeyPress} />
+        <DialogFooter>
+          <Button variant="outline" onClick={onCancelClick}>
+            Cancel
+          </Button>
+          <Button variant="positive" onClick={() => onOKClick(value)}>
+            OK
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

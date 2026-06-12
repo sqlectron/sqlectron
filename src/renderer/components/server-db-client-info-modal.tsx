@@ -39,10 +39,7 @@ const ServerDBClientInfoModal: FC<Props> = ({ client, infos, onCloseClick }) => 
     <div id="server-modal" className="ui modal" ref={ref}>
       <div className="header">{dbClient.name} Query Information</div>
       <div className="content">
-        <p>
-          Some particularities about queries on
-          {dbClient.name} you should know:
-        </p>
+        <p>Some particularities about queries on {dbClient.name} you should know:</p>
         <div className="ui bulleted list">
           {infos.map((info, idx) => (
             <div key={idx} className="item">

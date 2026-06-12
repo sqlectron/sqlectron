@@ -26,12 +26,12 @@ const langTools = ace.require('ace/ext/language_tools');
 
 const INFOS = {
   mysql: [
-    'MySQL treats commented query as a non select query.' +
+    'MySQL treats commented query as a non select query. ' +
       'So you may see "affected rows" for a commented query.',
     'Usually executing a single query per tab will give better results.',
   ],
   sqlserver: [
-    'MSSQL treats multiple non select queries as a single query result.' +
+    'MSSQL treats multiple non select queries as a single query result. ' +
       'So you affected rows will show the amount over all queries executed in the same tab.',
     'Usually executing a single query per tab will give better results.',
   ],
