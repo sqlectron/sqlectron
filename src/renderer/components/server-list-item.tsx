@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
+import { Pencil, Plug } from 'lucide-react';
 import { requireClientLogo } from './require-context';
 import { DB_CLIENTS } from '../api';
 import { Server } from '../../common/types/server';
+import { Button } from './ui/button';
 
 /**
  * Load icons for supported database clients
@@ -19,38 +21,22 @@ interface Props {
 }
 
 const ServerListItem: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
-  <div className="item">
-    <div className="middle aligned content">
-      <div className="left floated" style={{ padding: '1em' }}>
-        <img alt="client" className="ui tiny image" style={{}} src={ICONS[server.client]} />
-      </div>
-      <div className="right floated">
-        <div style={{ padding: '0 0 3em' }}>
-          <button className="right floated circular ui icon button mini" onClick={onEditClick}>
-            <i className="icon pencil" />
-          </button>
-        </div>
-        <div>
-          <button
-            className="ui button"
-            tabIndex={0}
-            onClick={onConnectClick}
-            style={{ verticalAlign: 'middle' }}>
-            <div>
-              <i className="plug icon" />
-              Connect
-            </div>
-          </button>
-        </div>
-      </div>
-      <div>
-        <div className="header">{server.name}</div>
-        <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px' }}>
-          {server.host ? `${server.host}:${server.port}` : server.socketPath}
-          {server.ssh && <div>via {server.ssh.host}</div>}
-        </div>
+  <div className="flex items-center gap-3 px-3 py-2.5">
+    <img alt="client" className="h-8 w-8 shrink-0" src={ICONS[server.client]} />
+    <div className="min-w-0 flex-1">
+      <div className="truncate text-sm font-semibold text-slate-900">{server.name}</div>
+      <div className="break-all text-xs text-slate-500">
+        {server.host ? `${server.host}:${server.port}` : server.socketPath}
+        {server.ssh && <div>via {server.ssh.host}</div>}
       </div>
     </div>
+    <Button variant="outline" size="sm" title="Edit" onClick={onEditClick}>
+      <Pencil className="h-3.5 w-3.5" />
+    </Button>
+    <Button variant="outline" size="sm" onClick={onConnectClick}>
+      <Plug className="h-4 w-4" />
+      Connect
+    </Button>
   </div>
 );
 

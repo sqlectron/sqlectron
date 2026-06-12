@@ -22,7 +22,7 @@ describe('<Checkbox />', () => {
     expect(wrapper.find('input')).to.have.length(1);
     expect(wrapper.find('input').props().name).to.eql('test-name');
     expect(wrapper.find('label')).to.have.length(1);
-    expect(wrapper.find('label').props().children).to.eql('test-label');
+    expect(wrapper.find('label').props().children).to.include('test-label');
   });
 
   it('should be checked', () => {

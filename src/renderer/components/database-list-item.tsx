@@ -1,13 +1,6 @@
-import React, {
-  CSSProperties,
-  FC,
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronDown, ChevronRight, Database as DatabaseIcon } from 'lucide-react';
+import { cn } from '../lib/utils';
 import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
 import * as eventKeys from '../../common/event';
@@ -19,28 +12,6 @@ import type { ActionType, ObjectType } from '../reducers/sqlscripts';
 import { escapeRegExpString } from '../utils/regexp';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST_ITEM';
-
-const STYLE: Record<string, CSSProperties> = {
-  database: {
-    fontSize: '0.85em',
-    color: '#636363',
-    wordBreak: 'break-all',
-    cursor: 'pointer',
-    // force menu item go over the parent padding
-    // this way allows the whole line be clickable
-    position: 'absolute',
-    margin: '-0.92857143em -1.14285714em',
-    padding: '0.92857143em 1.14285714em',
-    display: 'block',
-  },
-  activeDatabase: {
-    backgroundColor: '#FFFAF3',
-    boxShadow: '0 0 0 1px #C9BA9B inset,0 0 0 0 transparent',
-  },
-  loadedDatabase: {
-    backgroundColor: '#F8FFFF',
-  },
-};
 
 const filterItems: <T extends { schema?: string; name: string }>(
   filterInput: string,
@@ -66,7 +37,6 @@ interface Props {
   ) => void;
   onRefreshDatabase: (database: Database) => void;
   onOpenTab: (database: Database) => void;
-  onShowDiagramModal: (database: Database) => void;
 }
 
 const DatabaseListItem: FC<Props> = ({
@@ -80,7 +50,6 @@ const DatabaseListItem: FC<Props> = ({
   onGetSQLScript,
   onRefreshDatabase,
   onOpenTab,
-  onShowDiagramModal,
 }) => {
   const {
     tables,
@@ -135,18 +104,12 @@ const DatabaseListItem: FC<Props> = ({
       click: () => onOpenTab(database),
     });
 
-    contextMenu.append({
-      label: 'Show Database Diagram',
-      event: eventKeys.BROWSER_MENU_SHOW_DATABASE_DIAGRAM,
-      click: () => onShowDiagramModal(database),
-    });
-
     contextMenu.build();
 
     return () => {
       contextMenu.dispose();
     };
-  }, [contextMenu, database, onRefreshDatabase, onOpenTab, onShowDiagramModal]);
+  }, [contextMenu, database, onRefreshDatabase, onOpenTab]);
 
   const onContextMenu = useCallback(
     (event) => {
@@ -192,13 +155,7 @@ const DatabaseListItem: FC<Props> = ({
   const isMetadataLoaded = Boolean(tables && views && functions && procedures);
   const isCurrentDB = currentDB === database.name;
 
-  const styleComponent = isCurrentDB
-    ? STYLE.activeDatabase
-    : isMetadataLoaded
-    ? STYLE.loadedDatabase
-    : {};
-
-  const collapseCssClass = !isMetadataLoaded || collapsed ? 'right' : 'down';
+  const Icon = !isMetadataLoaded || collapsed ? ChevronRight : ChevronDown;
 
   const filteredTables = !collapsed && isMetadataLoaded ? filterItems(filter, tables) : tables;
   const filteredViews = !collapsed && isMetadataLoaded ? filterItems(filter, views) : views;
@@ -207,83 +164,86 @@ const DatabaseListItem: FC<Props> = ({
   const filteredProcedures =
     !collapsed && isMetadataLoaded ? filterItems(filter, procedures) : procedures;
 
-  const cssStyleItems = collapsed || !isMetadataLoaded ? { display: 'none' } : {};
-
   return (
-    <div className={`item ${isCurrentDB ? 'active' : ''}`} style={styleComponent}>
-      <span
-        className="header"
+    <div
+      className={cn(
+        'rounded-sm',
+        isCurrentDB && 'bg-amber-50 ring-1 ring-inset ring-amber-200',
+        !isCurrentDB && isMetadataLoaded && 'bg-cyan-50/60',
+      )}>
+      <div
+        className="flex cursor-pointer items-center gap-1 px-2 py-1 text-sm"
         onClick={() => onHeaderClick(database)}
-        onContextMenu={onContextMenu}
-        style={STYLE.database}>
-        <i className={`${collapseCssClass} triangle icon`} />
-        <i className="database icon" />
-        {database.name}
-      </span>
+        onContextMenu={onContextMenu}>
+        <Icon className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+        <DatabaseIcon className="h-3.5 w-3.5 shrink-0" />
+        <span className="truncate">{database.name}</span>
+      </div>
       {isCurrentDB && !isMetadataLoaded ? (
-        <div className="ui list">
-          <div className="item">
-            <DatabaseFilter
-              isFetching
-              placeholder="Loading..."
-              onFilterChange={() => {
-                /* pass */
-              }}
-            />
-          </div>
+        <div className="ml-2 px-2 py-0.5">
+          <DatabaseFilter
+            isFetching
+            placeholder="Loading..."
+            onFilterChange={() => {
+              /* pass */
+            }}
+          />
         </div>
       ) : (
-        <div className="ui list" style={cssStyleItems}>
-          <div className="item" style={cssStyleItems}>
-            <DatabaseFilter
-              ref={filterRef}
-              value={filter}
-              isFetching={!isMetadataLoaded}
-              onFilterChange={onFilterChange}
+        !collapsed &&
+        isMetadataLoaded && (
+          <div className="ml-2 flex flex-col">
+            <div className="px-2 py-0.5">
+              <DatabaseFilter
+                ref={filterRef}
+                value={filter}
+                isFetching={!isMetadataLoaded}
+                onFilterChange={onFilterChange}
+              />
+            </div>
+            <DatabaseListItemMetatada
+              title="Tables"
+              objectType="Table"
+              client={client}
+              items={filteredTables}
+              columnsByTable={columnsByTable}
+              triggersByTable={triggersByTable}
+              indexesByTable={indexesByTable}
+              database={database}
+              onExecuteDefaultQuery={onExecuteDefaultQuery}
+              onSelectItem={onSelectTable}
+              onGetSQLScript={onGetSQLScript}
+            />
+            <DatabaseListItemMetatada
+              collapsed
+              title="Views"
+              objectType="View"
+              client={client}
+              items={filteredViews}
+              database={database}
+              onExecuteDefaultQuery={onExecuteDefaultQuery}
+              onGetSQLScript={onGetSQLScript}
+            />
+            <DatabaseListItemMetatada
+              collapsed
+              title="Functions"
+              objectType="Function"
+              client={client}
+              items={filteredFunctions}
+              database={database}
+              onGetSQLScript={onGetSQLScript}
+            />
+            <DatabaseListItemMetatada
+              collapsed
+              title="Procedures"
+              objectType="Procedure"
+              client={client}
+              items={filteredProcedures}
+              database={database}
+              onGetSQLScript={onGetSQLScript}
             />
           </div>
-          <DatabaseListItemMetatada
-            title="Tables"
-            objectType="Table"
-            client={client}
-            items={filteredTables}
-            columnsByTable={columnsByTable}
-            triggersByTable={triggersByTable}
-            indexesByTable={indexesByTable}
-            database={database}
-            onExecuteDefaultQuery={onExecuteDefaultQuery}
-            onSelectItem={onSelectTable}
-            onGetSQLScript={onGetSQLScript}
-          />
-          <DatabaseListItemMetatada
-            collapsed
-            title="Views"
-            objectType="View"
-            client={client}
-            items={filteredViews}
-            database={database}
-            onExecuteDefaultQuery={onExecuteDefaultQuery}
-            onGetSQLScript={onGetSQLScript}
-          />
-          <DatabaseListItemMetatada
-            collapsed
-            title="Functions"
-            objectType="Function"
-            client={client}
-            items={filteredFunctions}
-            database={database}
-            onGetSQLScript={onGetSQLScript}
-          />
-          <DatabaseListItemMetatada
-            collapsed
-            title="Procedures"
-            objectType="Procedure"
-            client={client}
-            items={filteredProcedures}
-            database={database}
-            onGetSQLScript={onGetSQLScript}
-          />
-        </div>
+        )
       )}
       {/* create a blank empty div the user cannot click on, so cannot accidently trigger onFocus */}
       <div ref={databaseRef} tabIndex={-1} onFocus={onFocus}></div>

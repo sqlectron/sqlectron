@@ -1,13 +1,7 @@
-import React, {
-  CSSProperties,
-  FC,
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FC, MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { Table as TableIcon } from 'lucide-react';
 import { DB_CLIENTS } from '../api';
+import { cn } from '../lib/utils';
 import CollapseIcon from './collapse-icon';
 import TableSubmenu from './table-submenu';
 import * as eventKeys from '../../common/event';
@@ -26,7 +20,7 @@ interface Props {
   database: Database;
   item: { schema?: string; name: string };
   dbObjectType: ObjectType;
-  style?: CSSProperties;
+  indent?: boolean;
   columnsByTable?: ColumnsByTable;
   triggersByTable?: TriggersByTable;
   indexesByTable?: IndexesByTable;
@@ -45,7 +39,7 @@ const DatabaseItem: FC<Props> = ({
   database,
   item,
   dbObjectType,
-  style,
+  indent,
   columnsByTable,
   triggersByTable,
   indexesByTable,
@@ -168,25 +162,33 @@ const DatabaseItem: FC<Props> = ({
         /* pass */
       };
 
-  const tableIcon = <i className="table icon" style={{ float: 'left', margin: '0 0.3em 0 0' }} />;
-
   const { schema, name } = item;
   const fullName = schema ? `${schema}.${name}` : name;
 
   return (
     <div>
-      <span style={style} className={`item item-${dbObjectType}`} onContextMenu={onContextMenu}>
+      <div
+        className={cn(
+          'flex items-center gap-1 px-2 py-0.5 text-xs hover:bg-slate-100',
+          indent && 'ml-2',
+          onSelectItem ? 'cursor-pointer' : 'cursor-default',
+        )}
+        onContextMenu={onContextMenu}>
         {dbObjectType === 'Table' ? (
           <CollapseIcon
             arrowDirection={tableCollapsed ? 'right' : 'down'}
             expandAction={expandChildren}
           />
-        ) : null}
-        {dbObjectType === 'Table' ? tableIcon : null}
-        <span onClick={onSingleClick}>{fullName}</span>
-      </span>
-      {columnsByTable?.[name] ? (
-        <div style={{ ...(tableCollapsed && { display: 'none' }) }}>
+        ) : (
+          <span className="w-3.5 shrink-0" />
+        )}
+        {dbObjectType === 'Table' && <TableIcon className="h-3.5 w-3.5 shrink-0" />}
+        <span className="truncate" title={fullName} onClick={onSingleClick}>
+          {fullName}
+        </span>
+      </div>
+      {columnsByTable?.[name] && !tableCollapsed && (
+        <div>
           <TableSubmenu title="Columns" table={name} itemsByTable={columnsByTable} />
           <TableSubmenu
             startCollapsed
@@ -196,7 +198,7 @@ const DatabaseItem: FC<Props> = ({
           />
           <TableSubmenu startCollapsed title="Indexes" table={name} itemsByTable={indexesByTable} />
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

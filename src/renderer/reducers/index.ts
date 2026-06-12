@@ -14,7 +14,6 @@ import columns, { ColumnState } from './columns';
 import triggers, { TriggerState } from './triggers';
 import indexes, { IndexState } from './indexes';
 import sqlscripts, { ScriptState } from './sqlscripts';
-import keys, { KeyState } from './keys';
 
 export type ThunkResult<R> = ThunkAction<R, ApplicationState, undefined, AnyAction>;
 
@@ -34,7 +33,6 @@ export interface ApplicationState {
   triggers: TriggerState;
   indexes: IndexState;
   sqlscripts: ScriptState;
-  keys: KeyState;
 }
 
 const rootReducer: Reducer<ApplicationState> = combineReducers<ApplicationState>({
@@ -52,7 +50,6 @@ const rootReducer: Reducer<ApplicationState> = combineReducers<ApplicationState>
   triggers,
   indexes,
   sqlscripts,
-  keys,
 });
 
 export default rootReducer;

@@ -21,7 +21,6 @@ export interface TableState {
   itemsByDatabase: {
     [database: string]: DbTable[];
   };
-  selectedTablesForDiagram: Array<string>;
 }
 
 const INITIAL_STATE: TableState = {
@@ -29,7 +28,6 @@ const INITIAL_STATE: TableState = {
   isFetching: false,
   didInvalidate: false,
   itemsByDatabase: {},
-  selectedTablesForDiagram: [],
 };
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_TABLE', 'DROP_TABLE'];
@@ -41,12 +39,6 @@ const tableReducer: Reducer<TableState> = function (
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
-    }
-    case types.SELECT_TABLES_FOR_DIAGRAM: {
-      return {
-        ...state,
-        selectedTablesForDiagram: action.tables,
-      };
     }
     case types.FETCH_TABLES_REQUEST: {
       return {
@@ -88,12 +80,6 @@ const tableReducer: Reducer<TableState> = function (
       return {
         ...state,
         didInvalidate: true,
-      };
-    }
-    case dbTypes.CLOSE_DATABASE_DIAGRAM: {
-      return {
-        ...state,
-        selectedTablesForDiagram: [],
       };
     }
     default:

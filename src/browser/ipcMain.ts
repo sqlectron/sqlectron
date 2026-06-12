@@ -215,15 +215,6 @@ function registerDBIPCMainHandlers() {
       getConn(e).saveQuery(isSaveAs, filename, query),
   );
   ipcMain.handle(event.DB_QUERY_OPEN, (e: IpcMainInvokeEvent) => getConn(e).openQuery());
-
-  ipcMain.handle(
-    event.DB_DIAGRAM_SAVE,
-    (e: IpcMainInvokeEvent, filename: string, diagramJSON: unknown) =>
-      getConn(e).saveDatabaseDiagram(filename, diagramJSON),
-  );
-  ipcMain.handle(event.DB_DIAGRAM_OPEN, (e: IpcMainInvokeEvent, filename: string) =>
-    getConn(e).openDatabaseDiagram(filename),
-  );
 }
 
 function registerBrowserIPCMainHandlers() {

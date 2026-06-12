@@ -49,7 +49,7 @@ const QueryResults: FC<Props> = ({
 
   if (isExecuting) {
     return (
-      <div style={{ minHeight: '250px' }}>
+      <div className="relative min-h-[250px]">
         <Loader message="Loading" type="active" inverted />
       </div>
     );

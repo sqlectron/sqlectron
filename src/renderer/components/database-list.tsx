@@ -21,7 +21,6 @@ interface Props {
   ) => void;
   onRefreshDatabase: (database: Database) => void;
   onOpenTab: (database: Database) => void;
-  onShowDiagramModal: (database: Database) => void;
 }
 
 const DatabaseList: FC<Props> = ({
@@ -36,18 +35,17 @@ const DatabaseList: FC<Props> = ({
   onGetSQLScript,
   onRefreshDatabase,
   onOpenTab,
-  onShowDiagramModal,
 }) => {
   if (isFetching) {
-    return <div className="ui grey item">Loading...</div>;
+    return <div className="px-2 py-1 text-xs text-slate-400">Loading...</div>;
   }
 
   if (!databases.length) {
-    return <div className="ui grey item">No results found</div>;
+    return <div className="px-2 py-1 text-xs text-slate-400">No results found</div>;
   }
 
   return (
-    <div className="item" style={{ padding: 0 }}>
+    <div className="flex flex-col">
       {databases.map((database) => (
         <DatabaseListItem
           databaseRef={databaseRefs[database.name]}
@@ -61,7 +59,6 @@ const DatabaseList: FC<Props> = ({
           onGetSQLScript={onGetSQLScript}
           onRefreshDatabase={onRefreshDatabase}
           onOpenTab={onOpenTab}
-          onShowDiagramModal={onShowDiagramModal}
         />
       ))}
     </div>

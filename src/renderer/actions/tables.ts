@@ -1,4 +1,3 @@
-import { AnyAction } from 'redux';
 import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { SchemaFilter } from '../../common/types/database';
@@ -6,11 +5,6 @@ import { SchemaFilter } from '../../common/types/database';
 export const FETCH_TABLES_REQUEST = 'FETCH_TABLES_REQUEST';
 export const FETCH_TABLES_SUCCESS = 'FETCH_TABLES_SUCCESS';
 export const FETCH_TABLES_FAILURE = 'FETCH_TABLES_FAILURE';
-export const SELECT_TABLES_FOR_DIAGRAM = 'SELECT_TABLES_FOR_DIAGRAM';
-
-export function selectTablesForDiagram(tables: Array<string>): AnyAction {
-  return { type: SELECT_TABLES_FOR_DIAGRAM, tables };
-}
 
 export function fetchTablesIfNeeded(database: string, filter?: SchemaFilter): ThunkResult<void> {
   return (dispatch, getState) => {

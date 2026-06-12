@@ -1,4 +1,3 @@
-import { union } from 'lodash';
 import React, {
   createRef,
   CSSProperties,
@@ -12,11 +11,12 @@ import React, {
 } from 'react';
 import { useHistory, useRouteMatch } from 'react-router';
 import { ResizableBox } from 'react-resizable';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DB_CLIENTS } from '../api';
 import * as ConnActions from '../actions/connections';
 import * as QueryActions from '../actions/queries';
 import * as DbAction from '../actions/databases';
-import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
+import { fetchTablesIfNeeded } from '../actions/tables';
 import { fetchSchemasIfNeeded } from '../actions/schemas';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
@@ -24,10 +24,8 @@ import { fetchTableIndexesIfNeeded } from '../actions/indexes';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
-import { fetchTableKeysIfNeeded } from '../actions/keys';
 import DatabaseFilter from '../components/database-filter';
 import DatabaseList from '../components/database-list';
-import DatabaseDiagramModal from '../components/database-diagram-modal';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Loader from '../components/loader';
@@ -85,9 +83,7 @@ const CLIENTS = DB_CLIENTS.reduce((clients, dbClient) => {
 }, {});
 
 const QueryBrowserContainer: FC = () => {
-  const { columns, connections, databases, keys, queries, status, tables, views } = useAppSelector(
-    (state) => state,
-  );
+  const { connections, databases, queries, status } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const history = useHistory();
   const match = useRouteMatch<{ id: string }>();
@@ -188,13 +184,6 @@ const QueryBrowserContainer: FC = () => {
     [dispatch],
   );
 
-  const onShowDiagramModal = useCallback(
-    (database: Database) => {
-      dispatch(DbAction.showDatabaseDiagram(database.name));
-    },
-    [dispatch],
-  );
-
   const onCollapseClick = useCallback(() => {
     setSidebarCollapsed(!sidebarCollapsed);
   }, [sidebarCollapsed]);
@@ -240,67 +229,6 @@ const QueryBrowserContainer: FC = () => {
     },
     [dispatch, connections],
   );
-
-  const fetchTableDiagramData = useCallback(
-    (database, tables: string[]) => {
-      tables.forEach((item) => {
-        const schema = connections.server?.schema;
-        dispatch(fetchTableColumnsIfNeeded(database, item, schema));
-        dispatch(fetchTableKeysIfNeeded(database, item, schema));
-      });
-    },
-    [dispatch, connections],
-  );
-
-  const onGenerateDatabaseDiagram = useCallback(
-    (database) => {
-      const selectedTables: string[] = [];
-
-      dispatch(DbAction.generateDatabaseDiagram());
-
-      $(':checkbox:checked', 'div.ui.list').map((index, checkbox) =>
-        selectedTables.push(checkbox.id),
-      );
-
-      dispatch(selectTablesForDiagram(selectedTables));
-      fetchTableDiagramData(database, selectedTables);
-    },
-    [dispatch, fetchTableDiagramData],
-  );
-
-  const onAddRelatedTables = useCallback(
-    (relatedTables: string[]) => {
-      const database = databases.diagramDatabase;
-      const tablesOnDiagram = tables.selectedTablesForDiagram;
-      const selectedTables = union(tablesOnDiagram, relatedTables);
-
-      dispatch(selectTablesForDiagram(selectedTables));
-      fetchTableDiagramData(database, relatedTables);
-    },
-    [dispatch, databases, tables, fetchTableDiagramData],
-  );
-
-  const onSaveDatabaseDiagram = useCallback(
-    (diagram) => {
-      dispatch(DbAction.saveDatabaseDiagram(diagram));
-    },
-    [dispatch],
-  );
-
-  const onExportDatabaseDiagram = useCallback(
-    (diagram, imageType) => {
-      dispatch(DbAction.exportDatabaseDiagram(diagram, imageType));
-    },
-    [dispatch],
-  );
-
-  const onOpenDatabaseDiagram = useCallback(() => {
-    dispatch(DbAction.openDatabaseDiagram());
-  }, [dispatch]);
-
-  const onCloseDiagramModal = useCallback(() => {
-    dispatch(DbAction.closeDatabaseDiagram());
-  }, [dispatch]);
 
   const executeQuery = useCallback(() => {
     if (!currentQuery) {
@@ -411,8 +339,6 @@ const QueryBrowserContainer: FC = () => {
   const regex = RegExp(escapeRegExpString(filter), 'i');
   const filteredDatabases = databases.items.filter((db) => regex.test(db.name));
 
-  const selectedDb = databases.diagramDatabase;
-
   return (
     <div style={STYLES.wrapper}>
       <div>
@@ -423,10 +349,17 @@ const QueryBrowserContainer: FC = () => {
         />
       </div>
       <div id="main-collapse" onClick={onCollapseClick} style={STYLES.collapse}>
-        <i
-          className={`${sidebarCollapsed ? 'right' : 'left'} triangle icon`}
-          style={{ top: 'calc(100vh/2 - 7px)', position: 'absolute', marginLeft: -3 }}
-        />
+        {sidebarCollapsed ? (
+          <ChevronRight
+            className="absolute h-4 w-4 text-white"
+            style={{ top: 'calc(100vh/2 - 7px)', marginLeft: -3 }}
+          />
+        ) : (
+          <ChevronLeft
+            className="absolute h-4 w-4 text-white"
+            style={{ top: 'calc(100vh/2 - 7px)', marginLeft: -3 }}
+          />
+        )}
       </div>
       <div style={STYLES.container}>
         <div
@@ -437,24 +370,26 @@ const QueryBrowserContainer: FC = () => {
           }}>
           <ResizableBox
             className="react-resizable react-resizable-ew-resize"
+            onResize={(_, { size }) => setSideBarWidth(size.width)}
             onResizeStop={(_, { size }) => setSideBarWidth(size.width)}
             width={sideBarWidth || SIDEBAR_WIDTH}
             height={NaN}
             axis="x"
             minConstraints={[SIDEBAR_WIDTH, 300]}
             maxConstraints={[750, 10000]}>
-            <div className="ui vertical menu" style={STYLES.resizeable}>
-              <div className="item active" style={{ textAlign: 'center' }}>
-                <b>{connections.server?.name}</b>
+            <div
+              className="flex h-full flex-col overflow-y-auto border border-slate-200 bg-white"
+              style={STYLES.resizeable}>
+              <div className="flex items-center justify-center gap-2 border-b border-slate-200 px-3 py-2">
+                <b className="truncate text-sm">{connections.server?.name}</b>
                 <img
                   title={CLIENTS[connections.server.client].name}
                   alt={CLIENTS[connections.server.client].name}
-                  style={{ width: '2.5em' }}
-                  className="ui mini left spaced image right"
+                  className="h-7 w-7 shrink-0"
                   src={CLIENTS[connections.server.client].image}
                 />
               </div>
-              <div className="item">
+              <div className="p-1.5">
                 <DatabaseFilter
                   ref={databaseFilterRef}
                   value={filter}
@@ -474,7 +409,6 @@ const QueryBrowserContainer: FC = () => {
                 onGetSQLScript={onGetSQLScript}
                 onRefreshDatabase={onRefreshDatabase}
                 onOpenTab={onOpenTab}
-                onShowDiagramModal={onShowDiagramModal}
               />
             </div>
           </ResizableBox>
@@ -482,24 +416,6 @@ const QueryBrowserContainer: FC = () => {
         <div style={STYLES.content}>
           <QueryTabs sideBarWidth={sideBarWidth} queryRefs={queryRefs} />
         </div>
-        {databases.showingDiagram && selectedDb && (
-          <DatabaseDiagramModal
-            database={databases.diagramDatabase}
-            tables={tables.itemsByDatabase[selectedDb]}
-            selectedTables={tables.selectedTablesForDiagram}
-            views={views.viewsByDatabase[selectedDb]}
-            columnsByTable={columns.columnsByTable[selectedDb]}
-            tableKeys={keys.keysByTable[selectedDb]}
-            diagramJSON={databases.diagramJSON}
-            isSaving={databases.isSaving}
-            onGenerateDatabaseDiagram={onGenerateDatabaseDiagram}
-            addRelatedTables={onAddRelatedTables}
-            onSaveDatabaseDiagram={onSaveDatabaseDiagram}
-            onExportDatabaseDiagram={onExportDatabaseDiagram}
-            onOpenDatabaseDiagram={onOpenDatabaseDiagram}
-            onClose={onCloseDiagramModal}
-          />
-        )}
       </div>
       <div style={STYLES.footer}>
         <Footer status={status} />

@@ -1,4 +1,6 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC } from 'react';
+import { Loader2 } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface Props {
   message?: string;
@@ -7,22 +9,15 @@ interface Props {
 }
 
 const Loader: FC<Props> = ({ message, type, inverted = false }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
-    const elem = ref.current;
-    $(elem).dimmer('show');
-    return () => {
-      $(elem).dimmer('hide');
-    };
-  }, [ref]);
-
   return (
-    <div className={`ui ${type} ${inverted ? 'inverted' : ''} dimmer`} ref={ref}>
-      <div className={`ui ${message ? 'text' : ''} loader`}>{message}</div>
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center gap-2 text-sm font-medium',
+        type === 'page' ? 'fixed inset-0 z-50' : 'absolute inset-0',
+        inverted ? 'bg-white/80 text-slate-900' : 'bg-slate-900/80 text-white',
+      )}>
+      <Loader2 className="h-8 w-8 animate-spin" />
+      {message && <div>{message}</div>}
     </div>
   );
 };

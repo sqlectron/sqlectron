@@ -20,15 +20,14 @@
 .react-resizable-ew-resize .react-resizable-handle {
   position: absolute;
   width: 15px;
-  top: 7.5px;
-  right: 7.5px;
+  height: 100%;
+  top: 0;
+  right: 0;
   margin-top: 0;
   cursor: -webkit-grabbing;
-}
-
-.react-resizable-ew-resize .react-resizable-handle:before {
-  content: '\f07e';
-  font-family: Icons;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>')
+    no-repeat center;
+  background-size: contain;
 }
 
 .react-resizable-se-resize .react-resizable-handle {

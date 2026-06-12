@@ -1,5 +1,7 @@
-import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import groupBy from 'lodash/groupBy';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import { cn } from '../lib/utils';
 import CollapseIcon from './collapse-icon';
 import DatabaseItem from './database-item';
 import type { Database } from '../reducers/databases';
@@ -8,12 +10,6 @@ import type { ActionType, ObjectType } from '../reducers/sqlscripts';
 import type { ColumnsByTable } from '../reducers/columns';
 import type { TriggersByTable } from '../reducers/triggers';
 import type { IndexesByTable } from '../reducers/indexes';
-
-const STYLE: Record<string, CSSProperties> = {
-  header: { fontSize: '0.85em', color: '#636363' },
-  menu: { marginLeft: '5px' },
-  item: { wordBreak: 'break-all', cursor: 'default' },
-};
 
 interface Props<T> {
   title: string;
@@ -63,51 +59,48 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
 
   const grouped = useMemo(() => (items ? groupBy(items, 'schema') : {}), [items]);
 
-  const spanTitle = isCollapsed ? 'Expand' : 'Collapse';
-  const cssClass = isCollapsed ? 'right' : 'down';
-  const cssStyle = { ...STYLE.header, ...((!items || !items.length) && { color: 'lightgray' }) };
-  if (!items || !items.length) {
-    cssStyle.color = 'lightgray';
-  }
+  const hasItems = !!items?.length;
+  const Icon = isCollapsed ? ChevronRight : ChevronDown;
 
   return (
-    <div className="item">
-      <span title={spanTitle} className="header clickable" style={cssStyle}>
-        <i className={`${cssClass} triangle icon`} onClick={toggleCollapse} />
-        <span>{title}</span>
-      </span>
-      <div className="menu" style={STYLE.menu}>
-        {!items || isCollapsed ? null : !items.length ? (
-          <span className="ui grey item">
-            <i> No results found</i>
-          </span>
-        ) : (
-          Object.keys(grouped).map((key) => {
-            const hasGroup = !(key === 'undefined' || key === undefined || key === '');
-            const hasChildren = !!grouped[key].length;
-            return (
-              <div key={`list-item.${key}.${title}.${database.name}`}>
-                {hasGroup ? (
-                  <span
-                    style={{ ...STYLE.item, cursor: hasChildren ? 'pointer' : 'default' }}
-                    className="item"
-                    onClick={() => handleTableCollapse(key)}>
-                    {hasChildren ? (
-                      <CollapseIcon arrowDirection={tableUncollapsed[key] ? 'down' : 'right'} />
-                    ) : null}
-                    {key}
-                  </span>
-                ) : null}
-                {!hasGroup || (hasChildren && tableUncollapsed[key])
-                  ? grouped[key].map((item) => {
-                      const hasChildElements = !!onSelectItem;
-
-                      const cssStyle = { ...STYLE.item, marginLeft: hasGroup ? '0.5em' : '0px' };
-                      if (isCollapsed) {
-                        cssStyle.display = 'none';
-                      }
-                      cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
-
+    <div>
+      <div
+        title={isCollapsed ? 'Expand' : 'Collapse'}
+        className={cn(
+          'flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs font-medium text-slate-600',
+          !hasItems && 'text-slate-300',
+        )}
+        onClick={toggleCollapse}>
+        <Icon className="h-3.5 w-3.5 shrink-0" />
+        {title}
+      </div>
+      {!isCollapsed && items && (
+        <div className="ml-2 flex flex-col">
+          {!items.length ? (
+            <div className="px-2 py-0.5 text-xs italic text-slate-300">No results found</div>
+          ) : (
+            Object.keys(grouped).map((key) => {
+              const hasGroup = !(key === 'undefined' || key === undefined || key === '');
+              const hasChildren = !!grouped[key].length;
+              return (
+                <div key={`list-item.${key}.${title}.${database.name}`}>
+                  {hasGroup && (
+                    <div
+                      className={cn(
+                        'flex items-center gap-1 px-2 py-0.5 text-xs',
+                        hasChildren ? 'cursor-pointer' : 'cursor-default',
+                      )}
+                      onClick={() => handleTableCollapse(key)}>
+                      {hasChildren ? (
+                        <CollapseIcon arrowDirection={tableUncollapsed[key] ? 'down' : 'right'} />
+                      ) : (
+                        <span className="w-3.5 shrink-0" />
+                      )}
+                      {key}
+                    </div>
+                  )}
+                  {(!hasGroup || (hasChildren && tableUncollapsed[key])) &&
+                    grouped[key].map((item) => {
                       const { schema, name } = item;
                       const fullName = schema ? `${schema}.${name}` : name;
 
@@ -118,7 +111,7 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
                           database={database}
                           item={item}
                           dbObjectType={objectType}
-                          style={cssStyle}
+                          indent={hasGroup}
                           columnsByTable={columnsByTable}
                           triggersByTable={triggersByTable}
                           indexesByTable={indexesByTable}
@@ -127,13 +120,13 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
                           onGetSQLScript={onGetSQLScript}
                         />
                       );
-                    })
-                  : null}
-              </div>
-            );
-          })
-        )}
-      </div>
+                    })}
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
     </div>
   );
 };

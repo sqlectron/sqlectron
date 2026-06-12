@@ -1,5 +1,4 @@
 import isPlainObject from 'lodash/isPlainObject';
-import classNames from 'classnames';
 import React, { FC, MouseEvent, useCallback, useEffect, useState } from 'react';
 import ContextMenu from '../utils/context-menu';
 import * as eventKeys from '../../common/event';
@@ -67,13 +66,16 @@ const QueryResultTableCell: FC<Props> = ({ rowIndex, col, data, onOpenPreviewCli
   }, [contextMenu, showMenuEvent]);
 
   const value = getValue();
-  const className = classNames({
-    'ui mini grey label table-cell-type-null': value === null,
-  });
 
   return (
     <div className="item" onContextMenu={onContextMenu}>
-      {value === null ? <span className={className}>NULL</span> : valueToString(value)}
+      {value === null ? (
+        <span className="table-cell-type-null inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-1.5 text-[10px] uppercase text-slate-400">
+          NULL
+        </span>
+      ) : (
+        valueToString(value)
+      )}
     </div>
   );
 };

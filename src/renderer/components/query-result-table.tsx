@@ -2,6 +2,7 @@ import debounce from 'lodash/debounce';
 import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 import { Grid, ScrollSync } from 'react-virtualized';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import { Copy, Save, Table as TableIcon } from 'lucide-react';
 
 import scrollbarSize from 'dom-helpers/scrollbarSize';
 import QueryResultTableCell from './query-result-table-cell';
@@ -201,66 +202,63 @@ const QueryResultTable: FC<Props> = ({
 
   const renderHeaderTopBar = useCallback(() => {
     const csvDelimiter = config.data?.csvDelimiter || ',';
-    const styleCopied = { display: showCopied ? 'inline-block' : 'none' };
-    const styleSaved = { display: showSaved ? 'inline-block' : 'none' };
-    const styleCopyButtons = { display: showCopied ? 'none' : 'inline-block' };
-    const styleSaveButtons = { display: showSaved ? 'none' : 'inline-block' };
+    const badgeClass =
+      'flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs';
+    const linkClass = 'cursor-pointer hover:underline';
 
     let copyPanel: ReactElement | null = null;
     let savePanel: ReactElement | null = null;
     if (rowCount) {
       copyPanel = (
-        <div className="ui small label" title="Copy as" style={{ float: 'right', margin: '3px' }}>
-          <i className="copy icon" />
-          <a className="detail" style={styleCopied}>
-            Copied
-          </a>
-          <a
-            className="detail"
-            style={styleCopyButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>
-            CSV
-          </a>
-          <a
-            className="detail"
-            style={styleCopyButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'JSON')}>
-            JSON
-          </a>
+        <div className={badgeClass} title="Copy as">
+          <Copy className="h-3 w-3" />
+          {showCopied ? (
+            <span>Copied</span>
+          ) : (
+            <>
+              <a
+                className={linkClass}
+                onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>
+                CSV
+              </a>
+              <a className={linkClass} onClick={() => onCopyToClipboardClick(rows, 'JSON')}>
+                JSON
+              </a>
+            </>
+          )}
         </div>
       );
 
       savePanel = (
-        <div className="ui small label" title="Save as" style={{ float: 'right', margin: '3px' }}>
-          <i className="save icon" />
-          <a className="detail" style={styleSaved}>
-            Saved
-          </a>
-          <a
-            className="detail"
-            style={styleSaveButtons}
-            onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>
-            CSV
-          </a>
-          <a
-            className="detail"
-            style={styleSaveButtons}
-            onClick={() => onSaveToFileClick(rows, 'JSON')}>
-            JSON
-          </a>
+        <div className={badgeClass} title="Save as">
+          <Save className="h-3 w-3" />
+          {showSaved ? (
+            <span>Saved</span>
+          ) : (
+            <>
+              <a className={linkClass} onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>
+                CSV
+              </a>
+              <a className={linkClass} onClick={() => onSaveToFileClick(rows, 'JSON')}>
+                JSON
+              </a>
+            </>
+          )}
         </div>
       );
     }
 
     return (
-      <div style={{ background: 'rgba(0, 0, 0, 0.05)', overflow: 'hidden' }}>
-        <div className="ui label" style={{ margin: '3px', float: 'left' }}>
-          <i className="table icon" />
+      <div className="flex items-center justify-between gap-2 bg-black/5 p-1">
+        <div className={badgeClass}>
+          <TableIcon className="h-3 w-3" />
           Rows
-          <div className="detail">{rowCount}</div>
+          <span className="font-semibold">{rowCount}</span>
         </div>
-        {savePanel}
-        {copyPanel}
+        <div className="flex items-center gap-2">
+          {savePanel}
+          {copyPanel}
+        </div>
       </div>
     );
   }, [

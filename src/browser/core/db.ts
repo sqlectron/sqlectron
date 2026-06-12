@@ -321,34 +321,6 @@ export default class DatabaseFacade implements SqlectronDB {
 
     return { name, query, filename };
   }
-
-  async saveDatabaseDiagram(filename: string, diagramJSON: unknown): Promise<string> {
-    const filters = [{ name: 'JSON', extensions: ['json'] }];
-
-    if (!filename) {
-      filename = await browserFacade.dialog.showSaveDialog(filters);
-    }
-
-    if (path.extname(filename) !== '.json') {
-      filename += '.json';
-    }
-
-    await writeFile(filename, JSON.stringify(diagramJSON));
-
-    return filename;
-  }
-
-  async openDatabaseDiagram(filename: string): Promise<{ filename: string; diagram: unknown }> {
-    // Path user used last for save or open diagram in the same session. If such exists.
-    const defaultPath = path.dirname(filename || '');
-    const filters = [{ name: 'JSON', extensions: ['json'] }];
-
-    const [diagramFilename] = await browserFacade.dialog.showOpenDialog(filters, defaultPath);
-
-    const diagramJSON = await readFile(diagramFilename);
-
-    return { filename: diagramFilename, diagram: diagramJSON };
-  }
 }
 
 // Keep connections by BrowserWindow instances

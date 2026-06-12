@@ -1,4 +1,6 @@
 import React, { ChangeEvent, forwardRef, useCallback } from 'react';
+import { Loader2, Search } from 'lucide-react';
+import { Input } from './ui/input';
 
 interface Props {
   value?: string;
@@ -18,8 +20,9 @@ const DatabaseFilter = forwardRef<HTMLInputElement, Props>(
     );
 
     return (
-      <div className={`ui icon input ${isFetching ? 'loading' : ''}`}>
-        <input
+      <div className="relative">
+        <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+        <Input
           type="text"
           placeholder={placeholder || 'Search...'}
           value={value || ''}
@@ -27,8 +30,11 @@ const DatabaseFilter = forwardRef<HTMLInputElement, Props>(
           onChange={handleFilterChange}
           onFocus={onFocus}
           ref={ref}
+          className="h-7 pl-7 pr-7 text-xs"
         />
-        <i className="search icon" />
+        {isFetching && (
+          <Loader2 className="absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 animate-spin text-slate-400" />
+        )}
       </div>
     );
   },

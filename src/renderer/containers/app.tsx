@@ -3,7 +3,6 @@ import { CONFIG } from '../api';
 import * as ConfigActions from '../actions/config';
 import imageSrc from './sqlectron.gif';
 
-import '../../../vendor/renderer/semantic-ui/semantic';
 import { sqlectron } from '../api';
 import * as eventKeys from '../../common/event';
 import { mapObjectToConfig } from '../utils/config';
@@ -13,8 +12,6 @@ import { cloneDeep } from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('../../../vendor/renderer/lato/latofonts.css');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-require('../../../vendor/renderer/semantic-ui/semantic.css');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('../tailwind.css');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -149,11 +146,7 @@ const AppContainer: FC = ({ children }) => {
     style = { fontFamily: `'${customFont}', 'Helvetica Neue', Arial, Helvetica, sans-serif` };
   }
 
-  return (
-    <div className="ui" style={style}>
-      {config.isLoaded ? children : null}
-    </div>
-  );
+  return <div style={style}>{config.isLoaded ? children : null}</div>;
 };
 
 AppContainer.displayName = 'AppContainer';

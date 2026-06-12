@@ -3,12 +3,10 @@
   position: relative;
 }
 
-.react-tabs .react-tabs__tab-list {
+.react-tabs__tab-list {
+  position: relative;
+  margin: 0;
   white-space: nowrap;
-}
-
-.react-tabs ul.react-tabs__tab-list > li.react-tabs__tab.item {
-  display: inline-block;
 }
 
 .react-tabs__tab-panel {
@@ -17,50 +15,4 @@
 
 .react-tabs__tab-panel--selected {
   display: block;
-}
-
-#tabs-nav-wrapper {
-  display: flex;
-  flex-direction: row;
-}
-
-#tabs-nav-wrapper > .tabs-container {
-  flex: auto;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  padding-bottom: 3px;
-}
-
-#tabs-nav-wrapper > .tabs-container > ul {
-  position: relative;
-  margin: 0;
-
-  .item > .button {
-    opacity: 0;
-    transition: opacity .25s ease-in-out;
-    font-size: 0.5em;
-    margin: -0.5em -1em 0 1.5em;
-  }
-
-  .item.active:hover > .button {
-    opacity: 1;
-  }
-}
-
-#tabs-nav-wrapper > button {
-  font-size: 0.75em;
-  margin: 0;
-  border-radius: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-#tabs-nav-wrapper button.right.floated.ui.icon.button.mini {
-  font-size: 0.5em;
-  margin-left: 0.5em;
-}
-
-.react-tabs #tabs-nav-wrapper [role=tablist] {
-    border-bottom: none;
 }

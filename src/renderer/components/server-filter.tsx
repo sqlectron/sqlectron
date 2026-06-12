@@ -1,5 +1,8 @@
 import React, { ChangeEvent, ChangeEventHandler, FC, useCallback, useMemo } from 'react';
 import { debounce } from 'lodash';
+import { Search } from 'lucide-react';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 interface Props {
   onFilterChange: ChangeEventHandler<HTMLInputElement>;
@@ -19,17 +22,17 @@ const ServerFilter: FC<Props> = ({ onFilterChange, onAddClick, onSettingsClick }
   );
 
   return (
-    <div
-      className="ui small action left icon input fluid"
-      style={{ marginBottom: '1em', fontSize: '0.8em' }}>
-      <i className="search icon" />
-      <input type="text" placeholder="Search..." onChange={handleFilterChange} />
-      <button className="ui button green" onClick={onAddClick}>
+    <div className="mb-4 flex items-center gap-2">
+      <div className="relative flex-1">
+        <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Input type="text" placeholder="Search..." onChange={handleFilterChange} className="pl-8" />
+      </div>
+      <Button variant="positive" onClick={onAddClick}>
         Add
-      </button>
-      <button className="ui button" onClick={onSettingsClick}>
+      </Button>
+      <Button variant="outline" onClick={onSettingsClick}>
         Settings
-      </button>
+      </Button>
     </div>
   );
 };

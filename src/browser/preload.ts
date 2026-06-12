@@ -91,11 +91,6 @@ const sqlectronAPI: SqlectronAPI = {
     saveQuery: (isSaveAs: boolean, filename: string | null, query: string) =>
       ipcRenderer.invoke(eventKeys.DB_QUERY_SAVE, isSaveAs, filename, query),
     openQuery: () => ipcRenderer.invoke(eventKeys.DB_QUERY_OPEN),
-
-    saveDatabaseDiagram: (filename: string, diagramJSON: unknown) =>
-      ipcRenderer.invoke(eventKeys.DB_DIAGRAM_SAVE, filename, diagramJSON),
-    openDatabaseDiagram: (filename: string) =>
-      ipcRenderer.invoke(eventKeys.DB_DIAGRAM_OPEN, filename),
   },
   servers: {
     getAll: () => ipcRenderer.invoke(eventKeys.SERVERS_GET_ALL),

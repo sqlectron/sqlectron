@@ -13,8 +13,6 @@ export interface DatabaseAction extends Action {
   isServerConnection: boolean;
   databases: Array<Database>;
   name: string;
-  fileName: string;
-  diagramJSON: unknown;
   results: Array<{ command: string }>;
 }
 
@@ -23,11 +21,6 @@ export interface DatabaseState {
   isFetching: boolean;
   didInvalidate: boolean;
   items: Array<Database>;
-  showingDiagram: boolean;
-  diagramDatabase: string | null;
-  fileName: null;
-  diagramJSON: null;
-  isSaving: boolean;
 }
 
 const INITIAL_STATE: DatabaseState = {
@@ -35,11 +28,6 @@ const INITIAL_STATE: DatabaseState = {
   isFetching: false,
   didInvalidate: false,
   items: [],
-  showingDiagram: false,
-  diagramDatabase: null,
-  fileName: null,
-  diagramJSON: null,
-  isSaving: false,
 };
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_DATABASE', 'DROP_DATABASE'];
@@ -75,58 +63,6 @@ const databaseReducer: Reducer<DatabaseState> = function (
         isFetching: false,
         didInvalidate: true,
         error: action.error,
-      };
-    }
-    case types.SHOW_DATABASE_DIAGRAM: {
-      return {
-        ...state,
-        showingDiagram: true,
-        diagramDatabase: action.name,
-      };
-    }
-    case types.CLOSE_DATABASE_DIAGRAM: {
-      return {
-        ...state,
-        showingDiagram: false,
-        diagramDatabase: null,
-        diagramJSON: null,
-      };
-    }
-    case types.GENERATE_DATABASE_DIAGRAM: {
-      return {
-        ...state,
-        fileName: null,
-      };
-    }
-    case types.SAVE_DIAGRAM_REQUEST:
-    case types.EXPORT_DIAGRAM_REQUEST: {
-      return {
-        ...state,
-        isSaving: true,
-      };
-    }
-    case types.SAVE_DIAGRAM_SUCCESS:
-    case types.EXPORT_DIAGRAM_SUCCESS: {
-      return {
-        ...state,
-        fileName: action.fileName,
-        isSaving: false,
-      };
-    }
-    case types.OPEN_DIAGRAM_SUCCESS: {
-      return {
-        ...state,
-        fileName: action.fileName,
-        diagramJSON: action.diagramJSON,
-      };
-    }
-    case types.SAVE_DIAGRAM_FAILURE:
-    case types.EXPORT_DIAGRAM_FAILURE:
-    case types.OPEN_DIAGRAM_FAILURE: {
-      return {
-        ...state,
-        error: action.error,
-        isSaving: false,
       };
     }
     case queryTypes.EXECUTE_QUERY_SUCCESS: {

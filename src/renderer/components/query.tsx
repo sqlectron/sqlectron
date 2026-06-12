@@ -8,9 +8,11 @@ import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import { ResizableBox } from 'react-resizable';
+import { Info, Loader2 } from 'lucide-react';
 import CheckBox from './checkbox';
 import QueryResults from './query-results';
 import ServerDBClientInfoModal from './server-db-client-info-modal';
+import { Button } from './ui/button';
 import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
 import MenuHandler from '../utils/menu';
 import { Query } from '../reducers/queries';
@@ -326,7 +328,7 @@ const Query: FC<Props> = ({
     <div>
       <div>
         <ResizableBox
-          className="react-resizable react-resizable-se-resize ui segment"
+          className="react-resizable react-resizable-se-resize rounded-md border border-slate-200 bg-white p-2"
           height={QUERY_EDITOR_HEIGTH}
           width={500}
           onResizeStop={onQueryBoxResize}>
@@ -348,8 +350,8 @@ const Query: FC<Props> = ({
               enableBasicAutocompletion
               enableLiveAutocompletion
             />
-            <div className="ui secondary menu" style={{ marginTop: 0 }}>
-              <div className="right menu">
+            <div className="flex justify-end mb-1">
+              <div className="pr-2">
                 <CheckBox
                   name="wrapQueryContents"
                   label="Wrap Contents"
@@ -361,41 +363,41 @@ const Query: FC<Props> = ({
             </div>
           </>
         </ResizableBox>
-        <div className="ui secondary menu" style={{ marginTop: 0 }}>
-          {infos && (
-            <div className="item">
-              <span>
-                <button
-                  className="ui icon button small"
-                  title="Query Information"
-                  onClick={onShowInfoClick}>
-                  <i className="icon info" />
-                </button>
-              </span>
-            </div>
-          )}
-          <div className="right menu">
-            <div className="item">
-              <div className="ui buttons">
-                <button
-                  className={`ui positive button ${query.isExecuting ? 'loading' : ''}`}
-                  onClick={handleExecQueryClick}>
-                  Execute
-                </button>
-                <div className="or" />
-                {query.isExecuting && allowCancel ? (
-                  <button
-                    className={`ui negative button ${query.isCanceling ? 'loading' : ''}`}
-                    onClick={handleCancelQueryClick}>
-                    Cancel
-                  </button>
-                ) : (
-                  <button className="ui button" onClick={onDiscQueryClick}>
-                    Discard
-                  </button>
-                )}
-              </div>
-            </div>
+        <div className="flex items-center justify-between py-1">
+          <div>
+            {infos && (
+              <Button
+                variant="outline"
+                size="sm"
+                title="Query Information"
+                onClick={onShowInfoClick}>
+                <Info className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="positive"
+              size="sm"
+              disabled={query.isExecuting}
+              onClick={handleExecQueryClick}>
+              {query.isExecuting && <Loader2 className="h-4 w-4 animate-spin" />}
+              Execute
+            </Button>
+            {query.isExecuting && allowCancel ? (
+              <Button
+                variant="destructive"
+                size="sm"
+                disabled={query.isCanceling}
+                onClick={handleCancelQueryClick}>
+                {query.isCanceling && <Loader2 className="h-4 w-4 animate-spin" />}
+                Cancel
+              </Button>
+            ) : (
+              <Button variant="outline" size="sm" onClick={onDiscQueryClick}>
+                Discard
+              </Button>
+            )}
           </div>
         </div>
       </div>

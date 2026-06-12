@@ -95,7 +95,6 @@ const webpackConfig = {
         ],
       },
     ],
-    noParse: [/(html2canvas)/],
   },
   plugins: [
     // Configuration required for the connection-string module
@@ -134,10 +133,6 @@ const webpackConfig = {
         },
       },
     ),
-    new webpack.ProvidePlugin({
-      jQuery: 'jquery',
-      $: 'jquery',
-    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
     }),

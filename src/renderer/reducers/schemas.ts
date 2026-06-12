@@ -24,7 +24,6 @@ export interface SchemaState {
   itemsByDatabase: {
     [db: string]: Array<string>;
   };
-  selectedSchemasForDiagram: [];
 }
 
 const INITIAL_STATE: SchemaState = {
@@ -32,7 +31,6 @@ const INITIAL_STATE: SchemaState = {
   isFetching: false,
   didInvalidate: false,
   itemsByDatabase: {},
-  selectedSchemasForDiagram: [],
 };
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_SCHEMA', 'DROP_SCHEMA'];
@@ -85,12 +83,6 @@ const schemaReducer: Reducer<SchemaState> = function (
       return {
         ...state,
         didInvalidate: true,
-      };
-    }
-    case dbTypes.CLOSE_DATABASE_DIAGRAM: {
-      return {
-        ...state,
-        selectedSchemasForDiagram: [],
       };
     }
     default:

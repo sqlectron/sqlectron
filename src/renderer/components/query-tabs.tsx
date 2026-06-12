@@ -1,8 +1,10 @@
 import React, { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { TabPanel, Tabs } from 'react-tabs';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 
 import Query from './query';
 import TabList from './tab-list';
+import { Button } from './ui/button';
 
 import * as QueryActions from '../actions/queries';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -139,7 +141,7 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
     const query = queries.queriesById[queryId];
 
     return (
-      <TabPanel key={queryId} className={['react-tabs__tab-panel']}>
+      <TabPanel key={queryId} className="react-tabs__tab-panel">
         <Query
           editorName={`querybox${queryId}`}
           client={server.client}
@@ -160,41 +162,50 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
 
   return (
     <Tabs
-      className={['react-tabs']}
+      className="react-tabs"
       onSelect={handleSelectTab}
       selectedIndex={selectedIndex}
       forceRenderTabPanel>
-      <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
+      <div className="flex items-center border-b border-slate-200">
         {isTabsFitOnScreen && (
-          <button
-            className="ui icon button"
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 shrink-0 rounded-none border-y-0 border-l-0 px-2"
             disabled={tabNavPosition === 0}
             onClick={() => {
               const position = tabNavPosition + 100;
               setTabNavPosition(position > 0 ? 0 : position);
             }}>
-            <i className="left chevron icon" />
-          </button>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
         )}
-        <div className="tabs-container">
+        <div className="relative flex-1 overflow-hidden">
           <TabList
             ref={tabListRef}
+            className="react-tabs__tab-list flex"
             style={{ left: `${tabNavPosition}px`, transition: 'left 0.2s linear' }}>
             {tabs}
           </TabList>
         </div>
-        <button className="ui basic icon button" onClick={() => newTab()}>
-          <i className="plus icon" />
-        </button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 shrink-0 rounded-none border-y-0 border-r-0 px-2"
+          onClick={() => newTab()}>
+          <Plus className="h-4 w-4" />
+        </Button>
         {isTabsFitOnScreen && (
-          <button
-            className="ui icon button"
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 shrink-0 rounded-none border-y-0 border-r-0 px-2"
             disabled={tabListTotalWidthChildren < tabListTotalWidth || isOnMaxPosition}
             onClick={() => {
               setTabNavPosition(tabNavPosition - 100);
             }}>
-            <i className="right chevron icon" />
-          </button>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         )}
       </div>
       {panels}

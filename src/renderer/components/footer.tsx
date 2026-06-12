@@ -1,4 +1,5 @@
 import React, { FC, MouseEvent } from 'react';
+import { Keyboard } from 'lucide-react';
 
 import { sqlectron } from '../api';
 import UpdateChecker from './update-checker';
@@ -22,18 +23,18 @@ const Footer: FC<Props> = ({ status }) => {
   };
 
   return (
-    <div className="ui bottom fixed menu borderless" style={{ minHeight: 'auto' }}>
-      <div style={{ paddingLeft: '0.5em' }}>{status}</div>
-      <div className="right menu">
-        <div className="item">
+    <div className="fixed inset-x-0 bottom-0 flex h-8 items-center justify-between border-t border-slate-200 bg-white px-3 text-xs">
+      <div>{status}</div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <LogStatus />
           <UpdateChecker />
         </div>
-        <a href="#" className="item" onClick={onGithubClick}>
+        <a href="#" className="hover:underline" onClick={onGithubClick}>
           GitHub
         </a>
-        <a href="#" className="item" title="Keyboard Shortcuts" onClick={onShortcutsClick}>
-          <i className="keyboard icon" />
+        <a href="#" title="Keyboard Shortcuts" onClick={onShortcutsClick}>
+          <Keyboard className="h-4 w-4" />
         </a>
       </div>
     </div>

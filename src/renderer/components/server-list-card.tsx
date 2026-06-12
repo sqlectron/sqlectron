@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
+import { Pencil, Plug } from 'lucide-react';
 import { requireClientLogo } from './require-context';
 import { DB_CLIENTS } from '../api';
 import { Server } from '../../common/types/server';
+import { Button } from './ui/button';
 
 /**
  * Load icons for supported database clients
@@ -18,36 +20,32 @@ interface Props {
 }
 
 const ServerListCard: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
-  <div className="card">
-    <div className="content">
-      <div
-        className="left floated"
-        style={{ height: '35px', width: '35px', margin: '5px 10px 0 0' }}>
-        <img
-          alt="client"
-          className="ui image"
-          style={{ width: '100%' }}
-          src={ICONS[server.client]}
-        />
+  <div className="flex flex-col rounded-md border border-slate-200 bg-white shadow-sm">
+    <div className="relative flex flex-1 items-start gap-2.5 p-3">
+      <img alt="client" className="h-[35px] w-[35px] shrink-0" src={ICONS[server.client]} />
+      <div className="min-w-0 flex-1 pr-7">
+        <div className="truncate text-sm font-semibold text-slate-900">{server.name}</div>
+        <div className="break-all text-xs text-slate-500">
+          {server.host ? `${server.host}:${server.port}` : server.socketPath}
+          {server.ssh && <div>via {server.ssh.host}</div>}
+        </div>
       </div>
-      <button className="right floated circular ui icon button mini" onClick={onEditClick}>
-        <i className="icon pencil" />
-      </button>
-      <div className="header">{server.name}</div>
-      <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px', marginLeft: '45px' }}>
-        {server.host ? `${server.host}:${server.port}` : server.socketPath}
-        {server.ssh && (
-          <div>
-            via
-            {server.ssh.host}
-          </div>
-        )}
-      </div>
+      <Button
+        variant="outline"
+        size="sm"
+        className="absolute right-2 top-2 h-7 w-7 rounded-full p-0"
+        title="Edit"
+        onClick={onEditClick}>
+        <Pencil className="h-3.5 w-3.5" />
+      </Button>
     </div>
-    <div className="ui bottom attached button" tabIndex={0} onClick={onConnectClick}>
-      <i className="plug icon" />
+    <Button
+      variant="outline"
+      className="w-full shrink-0 rounded-t-none rounded-b-md border-x-0 border-b-0 border-t-slate-200"
+      onClick={onConnectClick}>
+      <Plug className="h-4 w-4" />
       Connect
-    </div>
+    </Button>
   </div>
 );
 

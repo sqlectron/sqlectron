@@ -1,9 +1,12 @@
 import { debounce } from 'lodash';
 import React, { FC, useCallback, useState } from 'react';
 import { Tab } from 'react-tabs';
+import { X } from 'lucide-react';
 
 import * as QueryActions from '../actions/queries';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { cn } from '../lib/utils';
+import { Input } from './ui/input';
 
 interface Props {
   queryId: number;
@@ -29,45 +32,48 @@ const QueryTab: FC<Props> = ({ queryId, tabNavPosition, setTabNavPosition }) => 
   const buildContent = () => {
     if (isRenaming) {
       return (
-        <div className="ui input">
-          <input
-            autoFocus
-            type="text"
-            value={tabValue}
-            onBlur={() => {
+        <Input
+          autoFocus
+          type="text"
+          value={tabValue}
+          onChange={(event) => setTabValue(event.target.value)}
+          onBlur={() => {
+            dispatch(QueryActions.renameQuery(tabValue));
+            setIsRenaming(false);
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== 'Escape' && event.key !== 'Enter') {
+              return;
+            }
+
+            if (event.key === 'Enter') {
               dispatch(QueryActions.renameQuery(tabValue));
-              setIsRenaming(false);
-            }}
-            onKeyDown={(event) => {
-              if (event.key !== 'Escape' && event.key !== 'Enter') {
-                return;
-              }
+            }
 
-              if (event.key === 'Enter') {
-                dispatch(QueryActions.renameQuery(tabValue));
-              }
-
-              setIsRenaming(false);
-            }}
-            defaultValue={queries.queriesById[queryId].name}
-          />
-        </div>
+            setIsRenaming(false);
+          }}
+          className="h-6 w-32 px-1.5 py-0 text-xs"
+        />
       );
     }
 
     return (
-      <div>
-        {queries.queriesById[queryId].name}
+      <>
+        <span className="truncate">{queries.queriesById[queryId].name}</span>
         <button
-          className="right floated ui icon button mini"
+          type="button"
+          className={cn(
+            'rounded p-0.5 text-slate-400 transition-opacity hover:bg-slate-200 hover:text-slate-700',
+            isCurrentQuery ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+          )}
           onClick={debounce(() => {
             removeQuery(queryId);
             const position = tabNavPosition + 200;
             setTabNavPosition(position > 0 ? 0 : position);
           }, 200)}>
-          <i className="icon remove" />
+          <X className="h-3 w-3" />
         </button>
-      </div>
+      </>
     );
   };
 
@@ -78,7 +84,12 @@ const QueryTab: FC<Props> = ({ queryId, tabNavPosition, setTabNavPosition }) => 
         setIsRenaming(true);
         setTabValue(queries.queriesById[queryId].name);
       }}
-      className={['react-tabs__tab', `item ${isCurrentQuery ? 'active' : ''}`]}>
+      className={cn(
+        'group flex shrink-0 cursor-pointer items-center gap-1.5 border-b-2 px-3 py-1.5 text-sm',
+        isCurrentQuery
+          ? 'border-slate-900 bg-white font-medium text-slate-900'
+          : 'border-transparent text-slate-500 hover:bg-slate-100',
+      )}>
       {buildContent()}
     </Tab>
   );

@@ -1,10 +1,6 @@
-import React, { CSSProperties, useCallback, useState } from 'react';
-
-const STYLE: Record<string, CSSProperties> = {
-  header: { fontSize: '0.85em', color: '#636363' },
-  menu: { marginLeft: '5px' },
-  item: { wordBreak: 'break-all', cursor: 'default' },
-};
+import React, { useCallback, useState } from 'react';
+import { ChevronDown, ChevronRight, Columns } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface Props<T> {
   title: string;
@@ -25,49 +21,41 @@ const TableSubmenu = <T extends { name: string; dataType?: string }>({
     setCollapsed((prev) => !prev);
   }, []);
 
+  const hasItems = !!itemsByTable?.[table]?.length;
+  const Icon = collapsed ? ChevronRight : ChevronDown;
+
   return (
-    <div className="item">
-      <span
+    <div>
+      <div
         title={collapsed ? 'Expand' : 'Collapse'}
-        className="header clickable"
-        onClick={toggleCollapse}
-        style={{
-          ...STYLE.header,
-          ...(!itemsByTable?.[table]?.length ? { color: 'lightgray' } : {}),
-        }}>
-        <i className={`${collapsed ? 'right' : 'down'} triangle icon`} />
-        {title}
-      </span>
-      <div className="menu" style={STYLE.menu}>
-        {collapsed || !itemsByTable?.[table] ? null : !itemsByTable[table].length ? (
-          <span className="ui grey item">
-            <i> No results found</i>
-          </span>
-        ) : (
-          itemsByTable[table].map((item) => (
-            <span
-              key={item.name}
-              title={item.name}
-              style={{ ...STYLE.item, ...(collapsed ? { display: 'none' } : {}) }}
-              className="item">
-              {title === 'Columns' ? (
-                <i className="columns icon" style={{ float: 'left', margin: '0 0.3em 0 0' }} />
-              ) : null}
-              {item.name}
-              {title === 'Columns' ? (
-                <span
-                  style={{
-                    float: 'right',
-                    padding: '0 0.5em 0 0.5em',
-                    textTransform: 'uppercase',
-                  }}>
-                  {item.dataType}
-                </span>
-              ) : null}
-            </span>
-          ))
+        className={cn(
+          'flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs font-medium text-slate-600',
+          !hasItems && 'text-slate-300',
         )}
+        onClick={toggleCollapse}>
+        <Icon className="h-3.5 w-3.5 shrink-0" />
+        {title}
       </div>
+      {!collapsed && (
+        <div className="ml-4 flex flex-col">
+          {!itemsByTable?.[table] ? null : !itemsByTable[table].length ? (
+            <div className="px-2 py-0.5 text-xs italic text-slate-300">No results found</div>
+          ) : (
+            itemsByTable[table].map((item) => (
+              <div
+                key={item.name}
+                title={item.name}
+                className="flex items-center gap-1 px-2 py-0.5 text-xs">
+                {title === 'Columns' && <Columns className="h-3.5 w-3.5 shrink-0" />}
+                <span className="truncate">{item.name}</span>
+                {title === 'Columns' && (
+                  <span className="ml-auto shrink-0 uppercase text-slate-400">{item.dataType}</span>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };

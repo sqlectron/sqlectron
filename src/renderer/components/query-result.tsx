@@ -123,8 +123,10 @@ const QueryResult: FC<Props> = ({
   }
 
   return (
-    <div key={queryIndex} className="ui segment">
-      <div className="ui top left attached label">Query {queryIndex + 1}</div>
+    <div key={queryIndex} className="relative mt-3 rounded-md border border-slate-200 p-4 pt-6">
+      <div className="absolute -top-3 left-3 rounded-md border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold">
+        Query {queryIndex + 1}
+      </div>
       {msgDuplicatedColumns}
       {tableResult}
     </div>
