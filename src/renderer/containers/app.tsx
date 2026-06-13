@@ -146,7 +146,11 @@ const AppContainer: FC = ({ children }) => {
     style = { fontFamily: `'${customFont}', 'Helvetica Neue', Arial, Helvetica, sans-serif` };
   }
 
-  return <div style={style}>{config.isLoaded ? children : null}</div>;
+  return (
+    <div id="app" style={style}>
+      {config.isLoaded ? children : null}
+    </div>
+  );
 };
 
 AppContainer.displayName = 'AppContainer';

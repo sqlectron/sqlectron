@@ -172,6 +172,7 @@ const DatabaseListItem: FC<Props> = ({
         !isCurrentDB && isMetadataLoaded && 'bg-cyan-50/60',
       )}>
       <div
+        data-testid="db-header"
         className="flex cursor-pointer items-center gap-1 px-2 py-1 text-sm"
         onClick={() => onHeaderClick(database)}
         onContextMenu={onContextMenu}>

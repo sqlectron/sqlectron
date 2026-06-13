@@ -12,7 +12,6 @@ module.exports = {
   env: {
     es2017: true,
     node: true,
-    mocha: true,
   },
   overrides: [
     {
@@ -157,7 +156,12 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:prettier/recommended',
       ],
-      globals: { NodeJS: true, Atomics: 'readonly', SharedArrayBuffer: 'readonly' },
+      globals: {
+        NodeJS: true,
+        BufferEncoding: true,
+        Atomics: 'readonly',
+        SharedArrayBuffer: 'readonly',
+      },
       parser: '@typescript-eslint/parser',
       parserOptions: {
         ecmaFeatures: { jsx: true },

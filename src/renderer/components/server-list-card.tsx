@@ -24,8 +24,10 @@ const ServerListCard: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
     <div className="relative flex flex-1 items-start gap-2.5 p-3">
       <img alt="client" className="h-[35px] w-[35px] shrink-0" src={ICONS[server.client]} />
       <div className="min-w-0 flex-1 pr-7">
-        <div className="truncate text-sm font-semibold text-slate-900">{server.name}</div>
-        <div className="break-all text-xs text-slate-500">
+        <div data-testid="server-name" className="truncate text-sm font-semibold text-slate-900">
+          {server.name}
+        </div>
+        <div data-testid="server-meta" className="break-all text-xs text-slate-500">
           {server.host ? `${server.host}:${server.port}` : server.socketPath}
           {server.ssh && <div>via {server.ssh.host}</div>}
         </div>
@@ -40,6 +42,7 @@ const ServerListCard: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
       </Button>
     </div>
     <Button
+      data-testid="connect-button"
       variant="outline"
       className="w-full shrink-0 rounded-t-none rounded-b-md border-x-0 border-b-0 border-t-slate-200"
       onClick={onConnectClick}>

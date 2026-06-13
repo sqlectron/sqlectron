@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
+
 import {
   validate,
   validateUniqueId,
@@ -94,15 +95,13 @@ describe('validators/server', () => {
         ssl: false,
       },
     ].forEach((server, idx) => {
-      it(`should validate server ${idx}`, (done) => {
-        validate(server as Server)
-          .then(() => done())
-          .catch((err) => done(err));
+      it(`should validate server ${idx}`, async () => {
+        await validate(server as Server);
       });
     });
 
     ['mysql', 'postgresql', 'sqlserver', 'sqlite', 'cassandra'].forEach((client) => {
-      it(`should validate client ${client}`, (done) => {
+      it(`should validate client ${client}`, async () => {
         const server = {
           id: 'c94cbafa-8977-4142-9f34-c84d382d8731',
           name: 'name',
@@ -114,13 +113,11 @@ describe('validators/server', () => {
           database: 'company',
           ssl: false,
         } as Server;
-        validate(server)
-          .then(() => done())
-          .catch((err) => done(err));
+        await validate(server);
       });
     });
 
-    it('should not validate invalid client', (done) => {
+    it('should not validate invalid client', async () => {
       const server = {
         id: 'c94cbafa-8977-4142-9f34-c84d382d8731',
         name: 'pg-vm',
@@ -132,25 +129,25 @@ describe('validators/server', () => {
         database: 'company',
         ssl: false,
       } as Server;
-      validate(server)
-        .then(() => done(new Error('should have thrown error')))
-        .catch((err) => {
-          expect(err).to.be.instanceOf(ServerValidationError);
-          expect(err.validationErrors).to.have.property('client');
-          done();
-        });
+      try {
+        await validate(server);
+        expect.unreachable('should have thrown error');
+      } catch (err) {
+        expect(err).toBeInstanceOf(ServerValidationError);
+        expect((err as ServerValidationError).validationErrors).toHaveProperty('client');
+      }
     });
   });
 
   describe('validateUniqueId', () => {
     [undefined, null].forEach((serverId) => {
       it(`should throw when serverId is ${JSON.stringify(serverId)}`, () => {
-        expect(() => validateUniqueId([], serverId)).to.throw('serverId should be set');
+        expect(() => validateUniqueId([], serverId)).toThrow('serverId should be set');
       });
     });
 
     it('should validate when serverId is not found', () => {
-      expect(validateUniqueId([], '1c7cdae9-6065-46fa-a7d0-b89ccff78703')).to.eql(true);
+      expect(validateUniqueId([], '1c7cdae9-6065-46fa-a7d0-b89ccff78703')).toEqual(true);
     });
 
     it('should fail when serverId is found', () => {
@@ -159,7 +156,7 @@ describe('validators/server', () => {
           [{ id: '1c7cdae9-6065-46fa-a7d0-b89ccff78703' } as Server],
           '1c7cdae9-6065-46fa-a7d0-b89ccff78703',
         ),
-      ).to.eql(false);
+      ).toEqual(false);
     });
   });
 });

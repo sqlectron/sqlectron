@@ -1,6 +1,6 @@
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 
 import Checkbox from '../../../src/renderer/components/checkbox';
 
@@ -10,7 +10,7 @@ const emptyFunc = () => {
 
 describe('<Checkbox />', () => {
   it('should have input with name and label elements', () => {
-    const wrapper = shallow(
+    render(
       <Checkbox
         name="test-name"
         label="test-label"
@@ -19,14 +19,13 @@ describe('<Checkbox />', () => {
         onUnchecked={emptyFunc}
       />,
     );
-    expect(wrapper.find('input')).to.have.length(1);
-    expect(wrapper.find('input').props().name).to.eql('test-name');
-    expect(wrapper.find('label')).to.have.length(1);
-    expect(wrapper.find('label').props().children).to.include('test-label');
+    const input = screen.getByRole('checkbox', { name: 'test-label' });
+    expect(input).toHaveAttribute('name', 'test-name');
+    expect(screen.getByText('test-label')).toBeInTheDocument();
   });
 
   it('should be checked', () => {
-    const wrapper = shallow(
+    render(
       <Checkbox
         name="test"
         label="test"
@@ -35,13 +34,11 @@ describe('<Checkbox />', () => {
         onUnchecked={emptyFunc}
       />,
     );
-    expect(wrapper.find('input')).to.have.length(1);
-    const input = wrapper.find('input');
-    expect(input.props().checked).to.be.true;
+    expect(screen.getByRole('checkbox')).toBeChecked();
   });
 
   it('should be unchecked', () => {
-    const wrapper = shallow(
+    render(
       <Checkbox
         name="test"
         label="test"
@@ -50,14 +47,13 @@ describe('<Checkbox />', () => {
         onUnchecked={emptyFunc}
       />,
     );
-    const input = wrapper.find('input');
-    expect(input.props().checked).to.be.false;
+    expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 
   it('should trigger onChecked for checked event', () => {
     let checked = false;
     let unchecked = false;
-    const wrapper = shallow(
+    render(
       <Checkbox
         name="test"
         label="test"
@@ -70,21 +66,21 @@ describe('<Checkbox />', () => {
         }}
       />,
     );
-    const input = wrapper.find('input');
-    expect(input.props().checked).to.be.false;
-    input.simulate('change', { target: { checked: true } });
-    expect(checked).to.be.true;
-    expect(unchecked).to.be.false;
+    const input = screen.getByRole('checkbox');
+    expect(input).not.toBeChecked();
+    fireEvent.click(input);
+    expect(checked).toBe(true);
+    expect(unchecked).toBe(false);
   });
 
   it('should trigger onUnchecked for unchecked event', () => {
     let checked = false;
     let unchecked = false;
-    const wrapper = shallow(
+    render(
       <Checkbox
         name="test"
         label="test"
-        checked={false}
+        checked={true}
         onChecked={() => {
           checked = true;
         }}
@@ -93,10 +89,10 @@ describe('<Checkbox />', () => {
         }}
       />,
     );
-    const input = wrapper.find('input');
-    expect(input.props().checked).to.be.false;
-    input.simulate('change', { target: { checked: false } });
-    expect(checked).to.be.false;
-    expect(unchecked).to.be.true;
+    const input = screen.getByRole('checkbox');
+    expect(input).toBeChecked();
+    fireEvent.click(input);
+    expect(checked).toBe(false);
+    expect(unchecked).toBe(true);
   });
 });

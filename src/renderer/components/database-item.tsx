@@ -168,6 +168,7 @@ const DatabaseItem: FC<Props> = ({
   return (
     <div>
       <div
+        data-testid={`db-item-${dbObjectType}`}
         className={cn(
           'flex items-center gap-1 px-2 py-0.5 text-xs hover:bg-slate-100',
           indent && 'ml-2',

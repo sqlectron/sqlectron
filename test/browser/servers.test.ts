@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
+
 import { servers } from '../../src/browser/core';
 import { readJSONFile } from '../../src/browser/core/utils';
 import * as crypto from '../../src/browser/core/crypto';
@@ -19,17 +20,18 @@ function assertServers(serverA, serverB) {
     srvAPasswordDecrypted = crypto.decrypt(srvA.password, cryptoSecret);
   }
 
-  expect(srvB).to.have.property('password').to.have.keys(['ivText', 'encryptedText']);
+  expect(srvB).toHaveProperty('password');
+  expect(Object.keys(srvB.password).sort()).toEqual(['encryptedText', 'ivText']);
   const srvBPasswordDecrypted = crypto.decrypt(srvB.password, cryptoSecret);
 
-  expect(srvBPasswordDecrypted).to.eql(srvAPasswordDecrypted);
+  expect(srvBPasswordDecrypted).toEqual(srvAPasswordDecrypted);
 
   srvA.encrypted = true;
 
   delete srvA.password;
   delete srvB.password;
 
-  expect(srvA).to.eql(srvB);
+  expect(srvA).toEqual(srvB);
 }
 
 describe('servers', () => {
@@ -54,7 +56,7 @@ describe('servers', () => {
       encryptedServer2.password = 'fa1d88ee82bd4439';
       encryptedServer2.ssh!.password = 'fa1d88ee82bd4439';
 
-      expect(result).to.eql(fixture.servers);
+      expect(result).toEqual(fixture.servers);
     });
   });
 
@@ -73,12 +75,12 @@ describe('servers', () => {
         password: 'password',
       };
       const { data: createdServer } = await servers.add(newServer, cryptoSecret);
-      expect(createdServer).to.have.property('id');
+      expect(createdServer).toHaveProperty('id');
       createdServer!.id = '';
       assertServers(newServer, createdServer);
 
       const configAfter = await loadConfig();
-      expect(configAfter.servers.length).to.eql(configBefore.servers.length + 1);
+      expect(configAfter.servers.length).toEqual(configBefore.servers.length + 1);
     });
 
     it('should add new server with ssh', async () => {
@@ -106,12 +108,12 @@ describe('servers', () => {
         },
       };
       const { data: createdServer } = await servers.add(newServer, cryptoSecret);
-      expect(createdServer).to.have.property('id');
+      expect(createdServer).toHaveProperty('id');
       createdServer!.id = '';
       assertServers(newServer, createdServer);
 
       const configAfter = await loadConfig();
-      expect(configAfter.servers.length).to.eql(configBefore.servers.length + 1);
+      expect(configAfter.servers.length).toEqual(configBefore.servers.length + 1);
     });
   });
 
@@ -134,7 +136,7 @@ describe('servers', () => {
       assertServers(serverToUpdate, updatedServer);
 
       const configAfter = await loadConfig();
-      expect(configAfter.servers.length).to.eql(configBefore.servers.length);
+      expect(configAfter.servers.length).toEqual(configBefore.servers.length);
       const configServer = configAfter.servers.find((srv) => srv.id === id);
       assertServers(serverToUpdate, configServer);
     });
@@ -158,7 +160,7 @@ describe('servers', () => {
       assertServers(serverToUpdate, updatedServer);
 
       const configAfter = await loadConfig();
-      expect(configAfter.servers.length).to.eql(configBefore.servers.length);
+      expect(configAfter.servers.length).toEqual(configBefore.servers.length);
 
       const configServer = configAfter.servers.find((srv) => srv.id === id);
       assertServers(serverToUpdate, configServer);
@@ -187,8 +189,8 @@ describe('servers', () => {
 
     const configAfter = await loadConfig();
 
-    expect(configAfter.servers.length).to.eql(configBefore.servers.length);
-    expect(configAfter.servers.find((srv) => srv.id === id)).to.eql({
+    expect(configAfter.servers.length).toEqual(configBefore.servers.length);
+    expect(configAfter.servers.find((srv) => srv.id === id)).toEqual({
       ...serverToUpdate,
       encrypted: true,
     });
@@ -210,12 +212,12 @@ describe('servers', () => {
           password: 'password',
         };
         const { data: createdServer } = await servers.addOrUpdate(newServer, cryptoSecret);
-        expect(createdServer).to.have.property('id');
+        expect(createdServer).toHaveProperty('id');
         createdServer!.id = '';
         assertServers(newServer, createdServer);
 
         const configAfter = await loadConfig();
-        expect(configAfter.servers.length).to.eql(configBefore.servers.length + 1);
+        expect(configAfter.servers.length).toEqual(configBefore.servers.length + 1);
       });
     });
 
@@ -238,7 +240,7 @@ describe('servers', () => {
         assertServers(serverToUpdate, updatedServer);
 
         const configAfter = await loadConfig();
-        expect(configAfter.servers.length).to.eql(configBefore.servers.length);
+        expect(configAfter.servers.length).toEqual(configBefore.servers.length);
         const configServer = configAfter.servers.find((srv) => srv.id === id);
         assertServers(serverToUpdate, configServer);
       });
@@ -251,8 +253,8 @@ describe('servers', () => {
       await servers.removeById('c94cbafa-8977-4142-9f34-c84d382d8731');
 
       const configAfter = await loadConfig();
-      expect(configAfter.servers.length).to.eql(configBefore.servers.length - 1);
-      expect(configAfter.servers.find((srv) => srv.name === 'pg-vm')).to.eql(undefined);
+      expect(configAfter.servers.length).toEqual(configBefore.servers.length - 1);
+      expect(configAfter.servers.find((srv) => srv.name === 'pg-vm')).toEqual(undefined);
     });
   });
 
@@ -277,7 +279,7 @@ describe('servers', () => {
 
       encryptedServer.encrypted = false;
       encryptedServer.password = 'password';
-      expect(decryptedServer).to.eql(encryptedServer);
+      expect(decryptedServer).toEqual(encryptedServer);
     });
 
     it('should decrypt new style password for ssh', () => {
@@ -306,7 +308,7 @@ describe('servers', () => {
 
       encryptedServer.encrypted = false;
       encryptedServer.ssh!.password = 'password';
-      expect(decryptedServer).to.eql(encryptedServer);
+      expect(decryptedServer).toEqual(encryptedServer);
     });
 
     it('should decrypt old style password', () => {
@@ -326,7 +328,7 @@ describe('servers', () => {
 
       encryptedServer.encrypted = false;
       encryptedServer.password = 'password';
-      expect(decryptedServer).to.eql(encryptedServer);
+      expect(decryptedServer).toEqual(encryptedServer);
     });
 
     it('should decrypt old style password for ssh', () => {
@@ -356,7 +358,7 @@ describe('servers', () => {
       encryptedServer.encrypted = false;
       encryptedServer.password = 'password';
       encryptedServer.ssh!.password = 'password';
-      expect(decryptedServer).to.eql(encryptedServer);
+      expect(decryptedServer).toEqual(encryptedServer);
     });
 
     it('should do nothing for unencrypted server', () => {
@@ -371,7 +373,7 @@ describe('servers', () => {
         user: 'usr',
         password: 'password',
       };
-      expect(servers.decryptSecrects(encryptedServer, cryptoSecret)).to.eql(encryptedServer);
+      expect(servers.decryptSecrects(encryptedServer, cryptoSecret)).toEqual(encryptedServer);
     });
   });
 

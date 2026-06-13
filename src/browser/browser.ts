@@ -37,12 +37,17 @@ const contextMenus: {
 const fsFacade: SqlectronBrowserFS = {
   saveFile: (fileName: string, data: unknown, encoding = 'utf8'): Promise<void> => {
     return new Promise((resolve, reject) => {
-      fs.writeFile(fileName, data, encoding, (err) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve();
-      });
+      fs.writeFile(
+        fileName,
+        data as string | NodeJS.ArrayBufferView,
+        encoding as BufferEncoding,
+        (err) => {
+          if (err) {
+            return reject(err);
+          }
+          return resolve();
+        },
+      );
     });
   },
   openFile: (fileName: string): Promise<string> => {

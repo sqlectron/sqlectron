@@ -1,5 +1,6 @@
 import path from 'path';
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
+
 import { config } from '../../src/browser/core';
 import { readJSONFile } from '../../src/browser/core/utils';
 import { decrypt } from '../../src/browser/core/crypto';
@@ -20,18 +21,18 @@ describe('config', () => {
       await config.prepare(cryptoSecret);
       const fixtureAfter = await loadConfig();
 
-      expect(findItem(fixtureBefore)).to.not.have.property('id');
-      expect(findItem(fixtureAfter)).to.have.property('id');
+      expect(findItem(fixtureBefore)).not.toHaveProperty('id');
+      expect(findItem(fixtureAfter)).toHaveProperty('id');
       const expected = await readJSONFile<ConfigFile>(
         path.join(__dirname, '../fixtures/browser/sqlectron.prepared.json'),
       );
-      expect(fixtureAfter.servers).to.be.same.length(expected.servers.length);
+      expect(fixtureAfter.servers).toHaveLength(expected.servers.length);
       fixtureAfter.servers[0].id = expected.servers[0].id;
       for (let i = 0; i < fixtureAfter.servers.length; i++) {
         const expectedServer = expected.servers[i];
         const actualServer = fixtureAfter.servers[i];
         if (expectedServer.password) {
-          expect(decrypt(expected.servers[i].password as EncryptedPassword, cryptoSecret)).to.equal(
+          expect(decrypt(expected.servers[i].password as EncryptedPassword, cryptoSecret)).toBe(
             decrypt(actualServer.password as EncryptedPassword, cryptoSecret),
           );
           expectedServer.password = '';
@@ -39,14 +40,14 @@ describe('config', () => {
         }
 
         if (expectedServer.ssh && expectedServer.ssh.password) {
-          expect(decrypt(expectedServer.ssh.password as EncryptedPassword, cryptoSecret)).to.equal(
+          expect(decrypt(expectedServer.ssh.password as EncryptedPassword, cryptoSecret)).toBe(
             decrypt(actualServer.ssh!.password as EncryptedPassword, cryptoSecret),
           );
           expectedServer.ssh.password = '';
           actualServer.ssh!.password = '';
         }
 
-        expect(expectedServer).to.eql(actualServer);
+        expect(expectedServer).toEqual(actualServer);
       }
     });
   });

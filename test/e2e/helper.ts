@@ -1,7 +1,7 @@
 import path from 'path';
-import { expect } from 'chai';
 import { _electron as electron, ElementHandle } from 'playwright';
 import type { ElectronApplication, Page } from 'playwright';
+import { expect } from 'vitest';
 
 const startApp = async ({
   sqlectronHome,
@@ -45,7 +45,7 @@ const getAppPage = async (app: ElectronApplication, { waitAppLoad = true } = {})
       if ((await page.title()) === 'Sqlectron') {
         if (waitAppLoad) {
           // Wait until the app finished loading
-          await page.waitForSelector('.ui');
+          await page.waitForSelector('#app');
         }
 
         return page;
@@ -59,7 +59,21 @@ const getAppPage = async (app: ElectronApplication, { waitAppLoad = true } = {})
 };
 
 const expectToEqualText = async (page: Page, selector: string, text: string): Promise<void> => {
-  expect(await page.$eval(selector, (node: HTMLElement) => node.innerText)).to.be.equal(text);
+  // Wait for the element's text to settle (e.g. the Ace editor renders its
+  // content slightly after the surrounding elements appear in the DOM).
+  await page
+    .waitForFunction(
+      ({ selector, text }) => {
+        const el = document.querySelector(selector) as HTMLElement | null;
+        return el?.innerText === text;
+      },
+      { selector, text },
+    )
+    .catch(() => {
+      // ignore: fall through to the assertion below for a clearer failure message
+    });
+
+  expect(await page.$eval(selector, (node: HTMLElement) => node.innerText)).toBe(text);
 };
 
 const getElementByText = async (
@@ -68,7 +82,7 @@ const getElementByText = async (
   text: string,
 ): Promise<ElementHandle<HTMLElement>> => {
   const elements = await page.$$(selector);
-  expect(elements).to.have.lengthOf.at.least(1);
+  expect(elements.length).toBeGreaterThanOrEqual(1);
 
   for (const element of elements) {
     const eltext = await element.innerText();

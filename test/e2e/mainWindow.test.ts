@@ -1,15 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import { expect } from 'chai';
+import type { ElectronApplication, Page } from 'playwright';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import helper from './helper';
-import type { ElectronApplication, Page } from 'playwright';
 
-describe('MainWindow', function () {
+describe('MainWindow', () => {
   let app: ElectronApplication;
   let mainWindow: Page;
 
-  before(async () => {
+  beforeAll(async () => {
     // Makes a copy of the file, because the app writes to it during the startup
     // which has a slight different format than we use with prettier and it causes
     // an unecessary change to be commited everytime the test runs.
@@ -26,7 +26,7 @@ describe('MainWindow', function () {
     mainWindow = res.mainWindow;
   });
 
-  after(async () => {
+  afterAll(async () => {
     await helper.endApp(app);
   });
 
@@ -38,19 +38,27 @@ describe('MainWindow', function () {
     });
 
     if (process.env.DEV_MODE === 'true') {
-      expect(appPath).to.be.equal(path.join(__dirname, '../../src/browser'));
+      expect(appPath).toBe(path.join(__dirname, '../../src/browser'));
     } else {
-      expect(appPath).to.be.equal(path.join(__dirname, '../../out/browser'));
+      expect(appPath).toBe(path.join(__dirname, '../../out/browser'));
     }
   });
 
   it('load servers from configuration file', async () => {
     await mainWindow.waitForSelector('#server-list');
 
-    const list = await mainWindow.$$('#server-list .header');
-    expect(list).to.have.lengthOf(1);
+    const list = await mainWindow.$$('#server-list [data-testid="server-name"]');
+    expect(list).toHaveLength(1);
 
-    await helper.expectToEqualText(mainWindow, '#server-list .header', 'sqlectron-local-dev');
-    await helper.expectToEqualText(mainWindow, '#server-list .meta', 'localhost:3306');
+    await helper.expectToEqualText(
+      mainWindow,
+      '#server-list [data-testid="server-name"]',
+      'sqlectron-local-dev',
+    );
+    await helper.expectToEqualText(
+      mainWindow,
+      '#server-list [data-testid="server-meta"]',
+      'localhost:3306',
+    );
   });
 });

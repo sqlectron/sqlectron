@@ -1,4 +1,0 @@
-exit: true
-colors: true
-timeout: 10000
-require: test/setup.ts

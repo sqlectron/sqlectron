@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
+
 import { titlize } from '../../../src/common/utils/string';
 
 describe('titlize', () => {
@@ -8,7 +9,7 @@ describe('titlize', () => {
     ['Test', 'Test'],
   ].forEach(([input, expected]) => {
     it(`should convert ${input} to ${expected}`, () => {
-      expect(titlize(input)).to.equal(expected);
+      expect(titlize(input)).toBe(expected);
     });
   });
 });

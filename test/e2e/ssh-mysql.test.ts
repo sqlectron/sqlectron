@@ -1,10 +1,10 @@
-import os from 'os';
-import fs from 'fs';
 import { execSync } from 'child_process';
-import { expect } from 'chai';
+import fs from 'fs';
+import os from 'os';
 import path from 'path';
-import { ConfigFile } from '../../src/common/types/config';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
+import { ConfigFile } from '../../src/common/types/config';
 import helper from './helper';
 
 const BASE_PATH = path.join(__dirname, '../fixtures/ssh-mysql');
@@ -44,34 +44,42 @@ describeFunc('SSH MySQL', function () {
   const assertConnection = async () => {
     await mainWindow.waitForSelector('#server-list');
 
-    const list = await mainWindow.$$('#server-list .header');
-    expect(list).to.have.lengthOf(1);
+    const list = await mainWindow.$$('#server-list [data-testid="server-name"]');
+    expect(list).toHaveLength(1);
 
     await helper.expectToEqualText(
       mainWindow,
-      '#server-list .header',
+      '#server-list [data-testid="server-name"]',
       'test mysql with SSH private key rsa',
     );
-    await helper.expectToEqualText(mainWindow, '#server-list .attached.button', 'Connect');
+    await helper.expectToEqualText(
+      mainWindow,
+      '#server-list [data-testid="connect-button"]',
+      'Connect',
+    );
 
-    const btnConnect = await mainWindow.$('#server-list .attached.button');
+    const btnConnect = await mainWindow.$('#server-list [data-testid="connect-button"]');
     // TODO: replace dispatchEvent('click') with the click method when we upgrade the electron app.
     // https://github.com/microsoft/playwright/issues/1042
     await btnConnect.dispatchEvent('click');
 
-    await mainWindow.waitForSelector('#sidebar .header');
-    const dbItem = await helper.getElementByText(mainWindow, '#sidebar .header', 'sqlectron');
+    await mainWindow.waitForSelector('#sidebar [data-testid="db-header"]');
+    const dbItem = await helper.getElementByText(
+      mainWindow,
+      '#sidebar [data-testid="db-header"]',
+      'sqlectron',
+    );
     await dbItem.dispatchEvent('click');
 
-    await mainWindow.waitForSelector('#sidebar .item-Table');
-    const tables = await mainWindow.$$('#sidebar .item-Table');
+    await mainWindow.waitForSelector('#sidebar [data-testid="db-item-Table"]');
+    const tables = await mainWindow.$$('#sidebar [data-testid="db-item-Table"]');
 
-    expect(tables).to.have.lengthOf(2);
-    await expect(await tables[0].innerText()).to.be.equal('roles');
-    await expect(await tables[1].innerText()).to.be.equal('users');
+    expect(tables).toHaveLength(2);
+    expect(await tables[0].innerText()).toBe('roles');
+    expect(await tables[1].innerText()).toBe('users');
 
     // Clicks in the table to run default select query
-    const btnTable = await mainWindow.$('#sidebar .item-Table span');
+    const btnTable = await mainWindow.$('#sidebar [data-testid="db-item-Table"] span');
     await btnTable.dispatchEvent('click');
 
     // Set default query and automatically executes it
@@ -84,7 +92,7 @@ describeFunc('SSH MySQL', function () {
     // Render results for a single query
     await mainWindow.waitForSelector('.grid-query-wrapper');
     const queryResults = await mainWindow.$$('.grid-query-wrapper');
-    expect(queryResults).to.have.lengthOf(1);
+    expect(queryResults).toHaveLength(1);
 
     // Assert rows
     const rows = await mainWindow.$$('.ReactVirtualized__Grid__cell');
@@ -92,8 +100,8 @@ describeFunc('SSH MySQL', function () {
     // NOTE: Keeping it disabled on CI for now. For some reason on running this
     // assertion on CI it doesn't return any rows.
     if (process.env.CI !== 'true') {
-      expect(rows).to.have.lengthOf.at.least(2); // rows + info header
-      expect(await rows[0].innerText()).to.be.equal('id');
+      expect(rows.length).toBeGreaterThanOrEqual(2); // rows + info header
+      expect(await rows[0].innerText()).toBe('id');
     }
   };
 
