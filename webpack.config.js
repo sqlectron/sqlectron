@@ -83,12 +83,24 @@ const webpackConfig = {
         ],
       },
       {
-        test: /\.(?:eot|ttf|woff|woff2|svg)$/,
+        test: /\.(?:eot|ttf|woff|woff2)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
               name: isProd ? 'fonts/[name]-[hash:6].[ext]' : '[path][name]-[hash:6].[ext]',
+              context: isProd ? 'context' : 'assets',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: isProd ? 'images/[name]-[hash:6].[ext]' : '[path][name]-[hash:6].[ext]',
               context: isProd ? 'context' : 'assets',
             },
           },
