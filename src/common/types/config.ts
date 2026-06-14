@@ -1,6 +1,6 @@
 import { Server } from './server';
 
-interface LogOptions {
+export interface LogOptions {
   console: boolean;
   file: boolean;
   level: string;

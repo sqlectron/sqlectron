@@ -2,7 +2,7 @@ import { ipcMain, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 import { config, servers, getConn } from './core';
 import browser from './browser';
 import { getConfig } from './config';
-import createLogger from './logger';
+import createLogger, { applyLogConfig } from './logger';
 import * as event from '../common/event';
 import { Config } from '../common/types/config';
 import { Server } from '../common/types/server';
@@ -28,9 +28,10 @@ function registerConfigIPCMainHandlers() {
     e.returnValue = getConfig(forceCleanCache);
   });
   ipcMain.handle(event.CONFIG_SAVE, (e: IpcMainInvokeEvent, data: Config) => config.save(data));
-  ipcMain.handle(event.CONFIG_SAVE_SETTINS, (e: IpcMainInvokeEvent, data: Config) =>
-    config.saveSettings(data),
-  );
+  ipcMain.handle(event.CONFIG_SAVE_SETTINS, async (e: IpcMainInvokeEvent, data: Config) => {
+    await config.saveSettings(data);
+    applyLogConfig(getConfig(true).log);
+  });
 }
 
 function registerServersIPCMainHandlers() {

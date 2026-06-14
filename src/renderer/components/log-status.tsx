@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 import { Terminal } from 'lucide-react';
-import { CONFIG } from '../api';
-
-const log = CONFIG.log;
+import { useAppSelector } from '../hooks/redux';
 
 const LogStatus: FC = () => {
-  if (!log.console && !log.file) {
+  const log = useAppSelector((state) => state.config.data?.log);
+  if (!log || (!log.console && !log.file)) {
     return null;
   }
 
