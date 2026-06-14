@@ -379,7 +379,7 @@ const Query: FC<Props> = ({
             <Button
               variant="positive"
               size="sm"
-              className="pr-5 [-webkit-mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)]"
+              className="w-28 pr-5 [-webkit-mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)]"
               disabled={query.isExecuting}
               onClick={handleExecQueryClick}>
               {query.isExecuting && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -392,7 +392,7 @@ const Query: FC<Props> = ({
               <Button
                 variant="destructive"
                 size="sm"
-                className="pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
+                className="w-24 pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
                 disabled={query.isCanceling}
                 onClick={handleCancelQueryClick}>
                 {query.isCanceling && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -402,7 +402,7 @@ const Query: FC<Props> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className="pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
+                className="w-24 pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
                 onClick={onDiscQueryClick}>
                 Discard
               </Button>
