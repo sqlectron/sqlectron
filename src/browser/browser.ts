@@ -125,8 +125,11 @@ const menuFacade: SqlectronBrowserMenu = {
 
   // Dummy implementation to fulfill the interface contract.
   // The real implementation only exists on preload.
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  onMenuClick: (menuEvent: string, cb: () => void): ListenerUnsub => () => failNotImplemented(),
+  onMenuClick:
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (menuEvent: string, cb: () => void): ListenerUnsub =>
+      () =>
+        failNotImplemented(),
 };
 
 /***

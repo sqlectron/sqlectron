@@ -18,7 +18,6 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
   for (const method in console) {
     // eslint-disable-next-line no-console
     if (typeof console[method] === 'function') {
-      // eslint-disable-line no-console
       loggerConfig.logger[method] = function levelFn(...args) {
         if (isLogConsoleEnabled) {
           const m = method === 'debug' ? 'log' : method;
@@ -51,7 +50,7 @@ export const store = configureStore({
 if (module.hot) {
   module.hot.accept(
     '../reducers',
-    // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     () => store.replaceReducer(require('../reducers')),
   );
 }

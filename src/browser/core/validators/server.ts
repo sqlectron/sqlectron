@@ -45,9 +45,7 @@ const SSH_SCHEMA = Joi.object({
 // of host or socketPath is required, and host requires port (and vice-versa).
 const ADDRESS_FIELDS = ['host', 'port', 'socketPath'];
 
-function buildServerSchema(
-  disabledFields: Set<string>,
-): {
+function buildServerSchema(disabledFields: Set<string>): {
   schema: Joi.ObjectSchema;
   addressFields: string[];
 } {

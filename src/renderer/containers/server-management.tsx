@@ -59,9 +59,10 @@ const ServerManagement = () => {
 
   const onSettingsClick = useCallback(() => dispatch(ConfigActions.startEditing()), [dispatch]);
 
-  const onEditClick = useCallback((server) => dispatch(ServersActions.startEditing(server.id)), [
-    dispatch,
-  ]);
+  const onEditClick = useCallback(
+    (server) => dispatch(ServersActions.startEditing(server.id)),
+    [dispatch],
+  );
 
   const onDuplicateClick = useCallback(
     (server: Server) => dispatch(ServersActions.duplicateServer({ server })),
@@ -86,13 +87,15 @@ const ServerManagement = () => {
     dispatch(ServersActions.removeServer({ id }));
   }, [dispatch, servers]);
 
-  const onSettingsSaveClick = useCallback((config) => dispatch(ConfigActions.saveConfig(config)), [
-    dispatch,
-  ]);
+  const onSettingsSaveClick = useCallback(
+    (config) => dispatch(ConfigActions.saveConfig(config)),
+    [dispatch],
+  );
 
-  const onSettingsCancelClick = useCallback(() => dispatch(ConfigActions.finishEditing()), [
-    dispatch,
-  ]);
+  const onSettingsCancelClick = useCallback(
+    () => dispatch(ConfigActions.finishEditing()),
+    [dispatch],
+  );
 
   const selected = servers.editingServer || {};
   const filteredServers = filterServers(filter, servers.items);

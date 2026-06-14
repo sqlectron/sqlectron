@@ -60,7 +60,6 @@ function registerServersIPCMainHandlers() {
 }
 
 function registerLoggerIPCMainHandlers() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ipcMain.on(event.LOGGER_ERROR, (e: IpcMainEvent, ...args: any[]) => {
     rendererLogger.error(...args);
   });

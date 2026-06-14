@@ -312,8 +312,8 @@ const Query: FC<Props> = ({
                 language: ['cassandra', 'sqlite'].includes(client)
                   ? 'sql'
                   : client === 'sqlserver'
-                  ? 'tsql'
-                  : client,
+                    ? 'tsql'
+                    : client,
               }),
             );
           }

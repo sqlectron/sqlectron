@@ -20,38 +20,38 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
-    - name: Install Linux Dependencies
-      if: runner.os == 'Linux'
-      run: sudo apt-get install icnsutils graphicsmagick rpm libarchive-tools
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get install icnsutils graphicsmagick rpm libarchive-tools
 
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-    - name: Use Node.js ${{ env.node-version }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ env.node-version }}
-        cache: npm
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.node-version }}
+          cache: npm
 
-    - run: npm ci
+      - run: npm ci
 
-    - run: npm run lint
+      - run: npm run lint
 
-    - run: npm run format:check
+      - run: npm run format:check
 
-    - run: npm run test
+      - run: npm run test
 
-    - name: Prepare integration test dependencies
-      if: runner.os == 'Linux'
-      run: ./scripts/start-test-integration-deps.sh
+      - name: Prepare integration test dependencies
+        if: runner.os == 'Linux'
+        run: ./scripts/start-test-integration-deps.sh
 
-    - name: Build app for e2e test
-      if: runner.os == 'Linux'
-      run: npm run compile
+      - name: Build app for e2e test
+        if: runner.os == 'Linux'
+        run: npm run compile
 
-    - name: Fix chrome-sandbox permissions
-      if: runner.os == 'Linux'
-      run: sudo chown root ./node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 ./node_modules/electron/dist/chrome-sandbox
+      - name: Fix chrome-sandbox permissions
+        if: runner.os == 'Linux'
+        run: sudo chown root ./node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 ./node_modules/electron/dist/chrome-sandbox
 
-    - name: Run e2e test
-      if: runner.os == 'Linux'
-      run: xvfb-run --auto-servernum npm run test:e2e
+      - name: Run e2e test
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum npm run test:e2e

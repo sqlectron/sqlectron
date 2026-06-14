@@ -49,10 +49,8 @@ const DatabaseItem: FC<Props> = ({
 }) => {
   const [tableCollapsed, setTableCollapsed] = useState(true);
   const [contextMenu, setContextMenu] = useState<ContextMenu | null>(null);
-  const [
-    displayContextMenuEvent,
-    setDisplayContextMenuEvent,
-  ] = useState<MouseEvent<HTMLSpanElement> | null>(null);
+  const [displayContextMenuEvent, setDisplayContextMenuEvent] =
+    useState<MouseEvent<HTMLSpanElement> | null>(null);
 
   const disabledFeatures = useMemo<string[]>(
     () => DB_CLIENTS.find((dbClient) => dbClient.key === client)?.disabledFeatures || [],

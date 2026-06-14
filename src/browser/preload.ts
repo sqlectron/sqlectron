@@ -10,7 +10,6 @@ import type { Config } from '../common/types/config';
 import * as eventKeys from '../common/event';
 
 const ipcRendererHelper = {
-  // eslint-disable-next-line no-unused-vars
   receive: (channel: string, cb: (...args: Array<string>) => void): ListenerUnsub => {
     // Deliberately strip event as it includes `sender`
     const subscription = (event, ...args) => cb(...args);
@@ -166,7 +165,6 @@ const sqlectronAPI: SqlectronAPI = {
   update: {
     checkUpdateAvailable: () => ipcRenderer.send(eventKeys.UPDATE_CHECK),
     onUpdateAvailable: (
-      // eslint-disable-next-line no-unused-vars
       cb: (currentVersion: string, latestVersion: string) => void,
     ): ListenerUnsub => ipcRendererHelper.receive(eventKeys.UPDATE_AVAILABLE, cb),
   },

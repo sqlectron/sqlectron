@@ -10,7 +10,7 @@ const pathCore = join(__dirname, '../../sqlectron-db-core/lib');
 try {
   fs.accessSync(pathCore, fs.F_OK);
   watch.push(pathCore);
-} catch (err) {
+} catch {
   console.log('Not watching changes on sqlectron-db-core');
 }
 

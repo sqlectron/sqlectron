@@ -51,23 +51,16 @@ const DatabaseListItem: FC<Props> = ({
   onRefreshDatabase,
   onOpenTab,
 }) => {
-  const {
-    tables,
-    views,
-    functions,
-    procedures,
-    columnsByTable,
-    triggersByTable,
-    indexesByTable,
-  } = useAppSelector((state) => ({
-    tables: state.tables.itemsByDatabase[database.name],
-    views: state.views.viewsByDatabase[database.name],
-    functions: state.routines.functionsByDatabase[database.name],
-    procedures: state.routines.proceduresByDatabase[database.name],
-    columnsByTable: state.columns.columnsByTable[database.name],
-    triggersByTable: state.triggers.triggersByTable[database.name],
-    indexesByTable: state.indexes.indexesByTable[database.name],
-  }));
+  const { tables, views, functions, procedures, columnsByTable, triggersByTable, indexesByTable } =
+    useAppSelector((state) => ({
+      tables: state.tables.itemsByDatabase[database.name],
+      views: state.views.viewsByDatabase[database.name],
+      functions: state.routines.functionsByDatabase[database.name],
+      procedures: state.routines.proceduresByDatabase[database.name],
+      columnsByTable: state.columns.columnsByTable[database.name],
+      triggersByTable: state.triggers.triggersByTable[database.name],
+      indexesByTable: state.indexes.indexesByTable[database.name],
+    }));
 
   const [filter, setFilter] = useState('');
   const [collapsed, setCollapsed] = useState(false);

@@ -354,7 +354,7 @@ function stringifyResultToCSV(origRows: any[], delimiter: string): Promise<strin
   const rows = cloneDeep(origRows);
 
   const header = Object.keys(rows[0]).reduce((_header, col) => {
-    _header[col] = col; // eslint-disable-line no-param-reassign
+    _header[col] = col;
     return _header;
   }, {});
 
