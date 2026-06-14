@@ -123,8 +123,9 @@ const mapStateToServer = (state: FormServer): Server => {
 
 const renderClientItem = ({ label, logo }: { label: string; logo: string }): ReactElement => {
   return (
-    <div>
-      <img alt="logo" src={logo} style={{ width: '16px' }} /> {label}
+    <div className="flex items-center gap-2">
+      <img alt="logo" src={logo} style={{ width: '16px' }} />
+      <div>{label}</div>
     </div>
   );
 };
