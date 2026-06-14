@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import type { ElectronApplication, Page } from 'playwright';
+import type { ElectronApplication, Page } from 'playwright-core';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import helper from './helper';

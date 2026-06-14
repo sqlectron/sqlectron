@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { ElectronApplication, Page } from 'playwright';
+import { ElectronApplication, Page } from 'playwright-core';
 import sqlite3 from 'sqlite3';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 

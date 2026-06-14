@@ -1,6 +1,6 @@
 import path from 'path';
-import { _electron as electron, ElementHandle } from 'playwright';
-import type { ElectronApplication, Page } from 'playwright';
+import { _electron as electron, ElementHandle } from 'playwright-core';
+import type { ElectronApplication, Page } from 'playwright-core';
 import { expect } from 'vitest';
 
 const startApp = async ({
