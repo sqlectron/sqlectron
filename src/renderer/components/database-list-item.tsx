@@ -163,12 +163,14 @@ const DatabaseListItem: FC<Props> = ({
         'rounded-sm',
         isCurrentDB && 'bg-amber-50 ring-1 ring-inset ring-amber-200',
         !isCurrentDB && isMetadataLoaded && 'bg-cyan-50/60',
-      )}>
+      )}
+    >
       <div
         data-testid="db-header"
         className="flex cursor-pointer items-center gap-1 px-2 py-1 text-sm"
         onClick={() => onHeaderClick(database)}
-        onContextMenu={onContextMenu}>
+        onContextMenu={onContextMenu}
+      >
         <Icon className="h-3.5 w-3.5 shrink-0 text-slate-400" />
         <DatabaseIcon className="h-3.5 w-3.5 shrink-0" />
         <span className="truncate">{database.name}</span>

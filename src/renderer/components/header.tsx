@@ -46,7 +46,8 @@ const Header: FC<Props> = ({ items, onCloseConnectionClick, onReConnectionClick 
   return (
     <div
       id="header"
-      className="fixed inset-x-0 top-0 z-40 grid h-[50px] grid-cols-3 items-center border-b border-slate-200 bg-white px-3">
+      className="fixed inset-x-0 top-0 z-40 grid h-[50px] grid-cols-3 items-center border-b border-slate-200 bg-white px-3"
+    >
       <a href="#" onClick={onSiteClick} className="justify-self-start">
         <img alt="logo" src={LOGO_PATH} className="w-[5.5em]" />
       </a>
@@ -60,7 +61,8 @@ const Header: FC<Props> = ({ items, onCloseConnectionClick, onReConnectionClick 
             variant="outline"
             size="sm"
             title="Close connection"
-            onClick={onCloseConnectionClick}>
+            onClick={onCloseConnectionClick}
+          >
             <Power className="h-4 w-4" />
           </Button>
         </div>

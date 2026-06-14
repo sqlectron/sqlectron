@@ -172,7 +172,8 @@ const DatabaseItem: FC<Props> = ({
           indent && 'ml-2',
           onSelectItem ? 'cursor-pointer' : 'cursor-default',
         )}
-        onContextMenu={onContextMenu}>
+        onContextMenu={onContextMenu}
+      >
         {dbObjectType === 'Table' ? (
           <CollapseIcon
             arrowDirection={tableCollapsed ? 'right' : 'down'}

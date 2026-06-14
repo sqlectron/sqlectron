@@ -218,7 +218,8 @@ const QueryResultTable: FC<Props> = ({
             <>
               <a
                 className={linkClass}
-                onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>
+                onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}
+              >
                 CSV
               </a>
               <a className={linkClass} onClick={() => onCopyToClipboardClick(rows, 'JSON')}>
@@ -324,7 +325,8 @@ const QueryResultTable: FC<Props> = ({
             onStop={(e, data) =>
               handleStop({ name: field.name, index: params.columnIndex }, e, data)
             }
-            position={{ x: 0, y: 0 }}>
+            position={{ x: 0, y: 0 }}
+          >
             <div className="draggable-handle" />
           </Draggable>
         );

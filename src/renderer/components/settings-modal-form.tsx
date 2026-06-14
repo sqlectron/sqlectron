@@ -307,7 +307,8 @@ const SettingsModalForm: FC<Props> = ({ onSaveClick, onCancelClick, config }) =>
                     className={cn(
                       buttonVariants({ variant: 'outline', size: 'sm' }),
                       'cursor-pointer',
-                    )}>
+                    )}
+                  >
                     Browse
                     <input
                       type="file"

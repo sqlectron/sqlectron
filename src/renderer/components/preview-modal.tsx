@@ -46,7 +46,8 @@ const PreviewModal: FC<Props> = ({ value, onCloseClick }) => {
               key={item.type}
               variant={(selected || 'plain') === item.type ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setSelected(item.type)}>
+              onClick={() => setSelected(item.type)}
+            >
               {item.name}
             </Button>
           ))}

@@ -70,7 +70,8 @@ const QueryTab: FC<Props> = ({ queryId, tabNavPosition, setTabNavPosition }) => 
             removeQuery(queryId);
             const position = tabNavPosition + 200;
             setTabNavPosition(position > 0 ? 0 : position);
-          }, 200)}>
+          }, 200)}
+        >
           <X className="h-3 w-3" />
         </button>
       </>
@@ -89,7 +90,8 @@ const QueryTab: FC<Props> = ({ queryId, tabNavPosition, setTabNavPosition }) => 
         isCurrentQuery
           ? 'border-slate-900 bg-white font-medium text-slate-900'
           : 'border-transparent text-slate-500 hover:bg-slate-100',
-      )}>
+      )}
+    >
       {buildContent()}
     </Tab>
   );

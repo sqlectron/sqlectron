@@ -34,7 +34,8 @@ const Checkbox: FC<CheckboxProps> = ({
       className={cn(
         'inline-flex items-center gap-2 text-sm font-medium',
         disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
-      )}>
+      )}
+    >
       <input
         type="checkbox"
         name={name}

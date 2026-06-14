@@ -367,7 +367,8 @@ const QueryBrowserContainer: FC = () => {
           style={{
             ...STYLES.sidebar,
             marginLeft: sidebarCollapsed ? -sideBarWidth : 0,
-          }}>
+          }}
+        >
           <ResizableBox
             className="react-resizable react-resizable-ew-resize"
             onResize={(_, { size }) => setSideBarWidth(size.width)}
@@ -376,10 +377,12 @@ const QueryBrowserContainer: FC = () => {
             height={NaN}
             axis="x"
             minConstraints={[SIDEBAR_WIDTH, 300]}
-            maxConstraints={[750, 10000]}>
+            maxConstraints={[750, 10000]}
+          >
             <div
               className="flex h-full flex-col overflow-y-auto border border-slate-200 bg-white"
-              style={STYLES.resizeable}>
+              style={STYLES.resizeable}
+            >
               <div className="flex items-center justify-center gap-2 border-b border-slate-200 px-3 py-2">
                 <b className="truncate text-sm">{connections.server?.name}</b>
                 <img

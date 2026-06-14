@@ -331,7 +331,8 @@ const Query: FC<Props> = ({
           className="react-resizable react-resizable-se-resize rounded-md border border-slate-200 bg-white p-2"
           height={QUERY_EDITOR_HEIGTH}
           width={500}
-          onResizeStop={onQueryBoxResize}>
+          onResizeStop={onQueryBoxResize}
+        >
           <>
             <div ref={queryRef} tabIndex={-1} onFocus={onFocus}></div>
             <AceEditor
@@ -370,7 +371,8 @@ const Query: FC<Props> = ({
                 variant="outline"
                 size="sm"
                 title="Query Information"
-                onClick={onShowInfoClick}>
+                onClick={onShowInfoClick}
+              >
                 <Info className="h-4 w-4" />
               </Button>
             )}
@@ -381,7 +383,8 @@ const Query: FC<Props> = ({
               size="sm"
               className="w-28 pr-5 [-webkit-mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)]"
               disabled={query.isExecuting}
-              onClick={handleExecQueryClick}>
+              onClick={handleExecQueryClick}
+            >
               {query.isExecuting && <Loader2 className="h-4 w-4 animate-spin" />}
               Execute
             </Button>
@@ -394,7 +397,8 @@ const Query: FC<Props> = ({
                 size="sm"
                 className="w-24 pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
                 disabled={query.isCanceling}
-                onClick={handleCancelQueryClick}>
+                onClick={handleCancelQueryClick}
+              >
                 {query.isCanceling && <Loader2 className="h-4 w-4 animate-spin" />}
                 Cancel
               </Button>
@@ -403,7 +407,8 @@ const Query: FC<Props> = ({
                 variant="outline"
                 size="sm"
                 className="w-24 pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
-                onClick={onDiscQueryClick}>
+                onClick={onDiscQueryClick}
+              >
                 Discard
               </Button>
             )}

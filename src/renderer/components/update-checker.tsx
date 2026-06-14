@@ -33,7 +33,8 @@ const UpdateChecker: FC = () => {
       {isVisible && (
         <a
           className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-xs text-green-700 hover:bg-green-100"
-          onClick={onClick}>
+          onClick={onClick}
+        >
           <CloudDownload className="h-3 w-3" />
           Update available: {latestVersion}
         </a>

@@ -144,7 +144,8 @@ const FileBrowseButton: FC<FileBrowseButtonProps> = ({ id, name, disabled, onCha
       buttonVariants({ variant: 'outline', size: 'sm' }),
       'cursor-pointer',
       disabled && 'pointer-events-none opacity-50',
-    )}>
+    )}
+  >
     <FolderOpen className="h-4 w-4" />
     <input
       type="file"
@@ -501,7 +502,8 @@ const ServerModalForm: FC<Props> = ({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={onToggleShowPlainPasswordClick}>
+                  onClick={onToggleShowPlainPasswordClick}
+                >
                   {showPlainPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
@@ -553,7 +555,8 @@ const ServerModalForm: FC<Props> = ({
               className={errorInputClass('name')}
             />
             <em
-              className={cn('text-xs text-slate-500', showPlainPassword ? 'invisible' : 'visible')}>
+              className={cn('text-xs text-slate-500', showPlainPassword ? 'invisible' : 'visible')}
+            >
               Make the password visible in order to change the database credentials through the URI
               format.
             </em>
@@ -757,7 +760,8 @@ const ServerModalForm: FC<Props> = ({
           <Button
             variant="default"
             onClick={handleTestConnectionClick}
-            disabled={!serverState.client || testConnection.connecting}>
+            disabled={!serverState.client || testConnection.connecting}
+          >
             {testConnection.connecting ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -769,7 +773,8 @@ const ServerModalForm: FC<Props> = ({
             <Button
               variant="outline"
               onClick={handleDuplicateClick}
-              disabled={testConnection.connecting}>
+              disabled={testConnection.connecting}
+            >
               <Copy className="h-4 w-4" />
               Duplicate
             </Button>
@@ -784,7 +789,8 @@ const ServerModalForm: FC<Props> = ({
             <Button
               variant="destructive"
               onClick={onRemoveOpenClick}
-              disabled={testConnection.connecting}>
+              disabled={testConnection.connecting}
+            >
               <Trash2 className="h-4 w-4" />
               Remove
             </Button>

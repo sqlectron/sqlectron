@@ -70,7 +70,8 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
           'flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs font-medium text-slate-600',
           !hasItems && 'text-slate-300',
         )}
-        onClick={toggleCollapse}>
+        onClick={toggleCollapse}
+      >
         <Icon className="h-3.5 w-3.5 shrink-0" />
         {title}
       </div>
@@ -90,7 +91,8 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
                         'flex items-center gap-1 px-2 py-0.5 text-xs',
                         hasChildren ? 'cursor-pointer' : 'cursor-default',
                       )}
-                      onClick={() => handleTableCollapse(key)}>
+                      onClick={() => handleTableCollapse(key)}
+                    >
                       {hasChildren ? (
                         <CollapseIcon arrowDirection={tableUncollapsed[key] ? 'down' : 'right'} />
                       ) : (
