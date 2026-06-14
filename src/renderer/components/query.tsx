@@ -375,26 +375,35 @@ const Query: FC<Props> = ({
               </Button>
             )}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <Button
               variant="positive"
               size="sm"
+              className="pr-5 [-webkit-mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)]"
               disabled={query.isExecuting}
               onClick={handleExecQueryClick}>
               {query.isExecuting && <Loader2 className="h-4 w-4 animate-spin" />}
               Execute
             </Button>
+            <div className="relative z-10 -mx-[18px] flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300 bg-slate-100 text-xs text-slate-400">
+              or
+            </div>
             {query.isExecuting && allowCancel ? (
               <Button
                 variant="destructive"
                 size="sm"
+                className="pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
                 disabled={query.isCanceling}
                 onClick={handleCancelQueryClick}>
                 {query.isCanceling && <Loader2 className="h-4 w-4 animate-spin" />}
                 Cancel
               </Button>
             ) : (
-              <Button variant="outline" size="sm" onClick={onDiscQueryClick}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
+                onClick={onDiscQueryClick}>
                 Discard
               </Button>
             )}
