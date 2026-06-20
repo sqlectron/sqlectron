@@ -1,17 +1,17 @@
-import debounce from 'lodash/debounce';
-import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react';
-import { Grid, ScrollSync } from 'react-virtualized';
-import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import { Copy, Save, Table as TableIcon } from 'lucide-react';
-
 import scrollbarSize from 'dom-helpers/scrollbarSize';
-import QueryResultTableCell from './query-result-table-cell';
-import PreviewModal from './preview-modal';
-import { valueToString } from '../../common/utils/convert';
+import debounce from 'lodash/debounce';
+import { Copy, Save, Table as TableIcon } from 'lucide-react';
+import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react';
+import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import { Grid, ScrollSync } from 'react-virtualized';
 
-import './query-result-table.scss';
+import { valueToString } from '../../common/utils/convert';
 import { useAppSelector } from '../hooks/redux';
 import { usePrevious } from '../hooks/usePrevious';
+
+import PreviewModal from './preview-modal';
+import QueryResultTableCell from './query-result-table-cell';
+import './query-result-table.scss';
 
 // TODO: remove this shim
 function createCellRenderer(cellRenderer) {

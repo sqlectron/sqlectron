@@ -3,11 +3,12 @@
  */
 import { ipcRenderer, contextBridge } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
+
+import * as eventKeys from '../common/event';
 import type { SqlectronAPI, DialogFilter, MenuOptions, ListenerUnsub } from '../common/types/api';
+import type { Config } from '../common/types/config';
 import type { DatabaseFilter, SchemaFilter } from '../common/types/database';
 import type { Server } from '../common/types/server';
-import type { Config } from '../common/types/config';
-import * as eventKeys from '../common/event';
 
 const ipcRendererHelper = {
   receive: (channel: string, cb: (...args: Array<string>) => void): ListenerUnsub => {

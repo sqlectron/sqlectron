@@ -6,10 +6,12 @@
  */
 
 import fs from 'fs';
-import path from 'path';
 import defaultsDeep from 'lodash/defaultsDeep';
-import * as sqlectron from './core';
+import path from 'path';
+
 import { Config } from '../common/types/config';
+
+import * as sqlectron from './core';
 
 let config: Config;
 

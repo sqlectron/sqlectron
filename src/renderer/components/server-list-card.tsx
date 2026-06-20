@@ -1,8 +1,10 @@
-import React, { FC } from 'react';
 import { Pencil, Plug } from 'lucide-react';
-import { requireClientLogo } from './require-context';
-import { DB_CLIENTS } from '../api';
+import React, { FC } from 'react';
+
 import { Server } from '../../common/types/server';
+import { DB_CLIENTS } from '../api';
+
+import { requireClientLogo } from './require-context';
 import { Button } from './ui/button';
 
 /**

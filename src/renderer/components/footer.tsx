@@ -1,9 +1,10 @@
-import React, { FC, MouseEvent } from 'react';
 import { Keyboard } from 'lucide-react';
+import React, { FC, MouseEvent } from 'react';
 
 import { sqlectron } from '../api';
-import UpdateChecker from './update-checker';
+
 import LogStatus from './log-status';
+import UpdateChecker from './update-checker';
 
 interface Props {
   status: string;

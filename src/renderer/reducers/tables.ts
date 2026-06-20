@@ -1,4 +1,5 @@
 import { Action, Reducer } from 'redux';
+
 import { DbTable } from '../../common/types/database';
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';

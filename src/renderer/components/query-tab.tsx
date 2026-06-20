@@ -1,11 +1,12 @@
 import { debounce } from 'lodash';
+import { X } from 'lucide-react';
 import React, { FC, useCallback, useState } from 'react';
 import { Tab } from 'react-tabs';
-import { X } from 'lucide-react';
 
 import * as QueryActions from '../actions/queries';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { cn } from '../lib/utils';
+
 import { Input } from './ui/input';
 
 interface Props {

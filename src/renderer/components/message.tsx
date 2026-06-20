@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react';
 import { X } from 'lucide-react';
+import React, { FC, useState } from 'react';
+
 import { cn } from '../lib/utils';
 
 interface Props {

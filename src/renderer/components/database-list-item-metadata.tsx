@@ -1,15 +1,17 @@
-import React, { useCallback, useMemo, useState } from 'react';
 import groupBy from 'lodash/groupBy';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import React, { useCallback, useMemo, useState } from 'react';
+
+import type { DbTable } from '../../common/types/database';
 import { cn } from '../lib/utils';
+import type { ColumnsByTable } from '../reducers/columns';
+import type { Database } from '../reducers/databases';
+import type { IndexesByTable } from '../reducers/indexes';
+import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+import type { TriggersByTable } from '../reducers/triggers';
+
 import CollapseIcon from './collapse-icon';
 import DatabaseItem from './database-item';
-import type { Database } from '../reducers/databases';
-import type { DbTable } from '../../common/types/database';
-import type { ActionType, ObjectType } from '../reducers/sqlscripts';
-import type { ColumnsByTable } from '../reducers/columns';
-import type { TriggersByTable } from '../reducers/triggers';
-import type { IndexesByTable } from '../reducers/indexes';
 
 interface Props<T> {
   title: string;

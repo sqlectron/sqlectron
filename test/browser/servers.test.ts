@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import { servers } from '../../src/browser/core';
-import { readJSONFile } from '../../src/browser/core/utils';
 import * as crypto from '../../src/browser/core/crypto';
-import { Server } from '../../src/common/types/server';
-import utilsStub from './utils-stub';
+import { readJSONFile } from '../../src/browser/core/utils';
 import { Config } from '../../src/common/types/config';
+import { Server } from '../../src/common/types/server';
+
+import utilsStub from './utils-stub';
 
 const cryptoSecret = 'CHK`Ya91Hs{me!^8ndwPPaPPxwQ}`';
 

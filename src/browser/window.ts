@@ -1,10 +1,12 @@
-import { resolve } from 'path';
 import { BrowserWindow, ipcMain, Menu, App } from 'electron';
-import { attachMenuToWindow } from './menu';
-import { check as checkUpdate } from './update-checker';
+import { resolve } from 'path';
+
+import * as event from '../common/event';
+
 import { getConfig } from './config';
 import createLogger from './logger';
-import * as event from '../common/event';
+import { attachMenuToWindow } from './menu';
+import { check as checkUpdate } from './update-checker';
 
 const logger = createLogger('window');
 

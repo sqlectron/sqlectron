@@ -1,10 +1,11 @@
-import React, { FC, MouseEvent } from 'react';
 import { ChevronRight, Database, Plug, Power, Server } from 'lucide-react';
+import React, { FC, MouseEvent } from 'react';
+
 import { sqlectron } from '../api';
-import { Button } from './ui/button';
 import { cn } from '../lib/utils';
 
 import LOGO_PATH from './logo-128px.png';
+import { Button } from './ui/button';
 
 const BREADCRUMB_ICONS: Record<string, typeof Server> = {
   server: Server,

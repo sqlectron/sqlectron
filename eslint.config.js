@@ -1,9 +1,10 @@
 const js = require('@eslint/js');
-const tseslint = require('typescript-eslint');
+const importPlugin = require('eslint-plugin-import');
+const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 const reactPlugin = require('eslint-plugin-react');
 const reactHooksPlugin = require('eslint-plugin-react-hooks');
-const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 const globals = require('globals');
+const tseslint = require('typescript-eslint');
 
 module.exports = tseslint.config(
   {
@@ -20,8 +21,19 @@ module.exports = tseslint.config(
         ...globals.es2017,
       },
     },
+    plugins: {
+      import: importPlugin,
+    },
     rules: {
       'no-console': 'error',
+      'import/order': [
+        'error',
+        {
+          alphabetize: { caseInsensitive: true, order: 'asc' },
+          groups: [['builtin', 'external'], 'parent', 'sibling', 'index', 'object'],
+          'newlines-between': 'always',
+        },
+      ],
     },
   },
   {

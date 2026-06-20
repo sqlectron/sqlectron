@@ -1,5 +1,6 @@
 import { groupBy } from 'lodash';
 import React, { FC, ReactElement } from 'react';
+
 import Message from './message';
 import QueryResultTable from './query-result-table';
 

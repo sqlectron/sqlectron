@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from 'react';
 import { ChevronDown, ChevronRight, Columns } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
+
 import { cn } from '../lib/utils';
 
 interface Props<T> {

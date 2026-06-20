@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
 import App from './app';
-import ServerManagementContainer from './server-management';
 import QueryBrowserContainer from './query-browser';
+import ServerManagementContainer from './server-management';
 
 interface Props {
   store: Store;

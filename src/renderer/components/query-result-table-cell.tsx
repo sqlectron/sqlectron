@@ -1,8 +1,9 @@
 import isPlainObject from 'lodash/isPlainObject';
 import React, { FC, MouseEvent, useCallback, useEffect, useState } from 'react';
-import ContextMenu from '../utils/context-menu';
+
 import * as eventKeys from '../../common/event';
 import { valueToString } from '../../common/utils/convert';
+import ContextMenu from '../utils/context-menu';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_TABLE_CELL';
 

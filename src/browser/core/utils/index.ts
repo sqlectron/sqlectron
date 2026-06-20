@@ -1,7 +1,7 @@
+import envPaths from 'env-paths';
 import fs from 'fs';
 import { homedir } from 'os';
 import path from 'path';
-import envPaths from 'env-paths';
 
 let configPath = '';
 

@@ -1,22 +1,24 @@
-import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import debounce from 'lodash/debounce';
-import { format } from 'sql-formatter';
-import AceEditor, { ICommand } from 'react-ace';
 import ace from 'ace-builds';
+import debounce from 'lodash/debounce';
+import { Info, Loader2 } from 'lucide-react';
+import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import AceEditor, { ICommand } from 'react-ace';
+import { ResizableBox } from 'react-resizable';
+import { format } from 'sql-formatter';
 import 'ace-builds/src-noconflict/mode-sql';
 import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { ResizableBox } from 'react-resizable';
-import { Info, Loader2 } from 'lucide-react';
+
+import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
+import { useAppSelector } from '../hooks/redux';
+import { Query } from '../reducers/queries';
+import MenuHandler from '../utils/menu';
+
 import CheckBox from './checkbox';
 import QueryResults from './query-results';
 import ServerDBClientInfoModal from './server-db-client-info-modal';
 import { Button } from './ui/button';
-import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
-import MenuHandler from '../utils/menu';
-import { Query } from '../reducers/queries';
-import { useAppSelector } from '../hooks/redux';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./react-resizable.css');

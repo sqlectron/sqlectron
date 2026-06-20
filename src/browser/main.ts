@@ -1,5 +1,5 @@
-import * as sqlectron from './core';
 import { getConfig } from './config';
+import * as sqlectron from './core';
 
 const configData = getConfig();
 

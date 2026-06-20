@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { usePrevious } from './usePrevious';
 
 export const useEffectDebugger = (

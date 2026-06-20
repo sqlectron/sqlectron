@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { store } from './store/configure';
+
 import Root from './containers/root';
+import { store } from './store/configure';
 
 const doRender = (NextRoot) => {
   ReactDOM.render(<NextRoot store={store} />, document.getElementById('content'));

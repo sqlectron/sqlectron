@@ -1,6 +1,7 @@
 import { Action, Reducer } from 'redux';
-import * as types from '../actions/config';
+
 import { Config as ConfigType } from '../../common/types/config';
+import * as types from '../actions/config';
 
 export interface Config {
   database: string;

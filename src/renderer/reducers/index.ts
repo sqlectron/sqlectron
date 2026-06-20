@@ -1,19 +1,20 @@
 import { combineReducers, Reducer, AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import config, { ConfigState } from './config';
-import databases, { DatabaseState } from './databases';
-import servers, { ServerState } from './servers';
-import queries, { QueryState } from './queries';
-import connections, { ConnectionState } from './connections';
-import schemas, { SchemaState } from './schemas';
-import tables, { TableState } from './tables';
-import status from './status';
-import views, { ViewState } from './views';
-import routines, { RoutineState } from './routines';
+
 import columns, { ColumnState } from './columns';
-import triggers, { TriggerState } from './triggers';
+import config, { ConfigState } from './config';
+import connections, { ConnectionState } from './connections';
+import databases, { DatabaseState } from './databases';
 import indexes, { IndexState } from './indexes';
+import queries, { QueryState } from './queries';
+import routines, { RoutineState } from './routines';
+import schemas, { SchemaState } from './schemas';
+import servers, { ServerState } from './servers';
 import sqlscripts, { ScriptState } from './sqlscripts';
+import status from './status';
+import tables, { TableState } from './tables';
+import triggers, { TriggerState } from './triggers';
+import views, { ViewState } from './views';
 
 export type ThunkResult<R> = ThunkAction<R, ApplicationState, undefined, AnyAction>;
 

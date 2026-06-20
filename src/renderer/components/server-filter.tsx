@@ -1,6 +1,7 @@
-import React, { ChangeEvent, ChangeEventHandler, FC, useCallback, useMemo } from 'react';
 import { debounce } from 'lodash';
 import { Search } from 'lucide-react';
+import React, { ChangeEvent, ChangeEventHandler, FC, useCallback, useMemo } from 'react';
+
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 

@@ -1,5 +1,6 @@
-import React, { ChangeEvent, forwardRef, useCallback } from 'react';
 import { Loader2, Search } from 'lucide-react';
+import React, { ChangeEvent, forwardRef, useCallback } from 'react';
+
 import { Input } from './ui/input';
 
 interface Props {

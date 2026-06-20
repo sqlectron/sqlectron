@@ -1,4 +1,3 @@
-import fs from 'fs';
 import electron, {
   WebContents,
   BrowserWindow,
@@ -8,6 +7,7 @@ import electron, {
   shell,
   clipboard,
 } from 'electron';
+import fs from 'fs';
 
 import {
   SqlectronBrowser,

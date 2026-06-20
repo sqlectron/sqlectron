@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 
-import ServerListCard from './server-list-card';
-import ServerListItem from './server-list-item';
-import Message from './message';
 import type { Server } from '../../common/types/server';
 import type { ConfigState } from '../reducers/config';
+
+import Message from './message';
+import ServerListCard from './server-list-card';
+import ServerListItem from './server-list-item';
 
 interface Props {
   servers: Server[];

@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { CLIENTS } from 'sqlectron-db-core';
+
 import { Server } from '../../../common/types/server';
 
 export type ValidationErrors = Record<string, string>;

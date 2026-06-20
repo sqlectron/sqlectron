@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
 import { Loader2 } from 'lucide-react';
+import React, { FC } from 'react';
+
 import { cn } from '../lib/utils';
 
 interface Props {

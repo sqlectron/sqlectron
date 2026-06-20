@@ -1,8 +1,10 @@
 import { AnyAction } from 'redux';
-import { ApplicationState, ThunkResult } from '../reducers';
-import { getDatabaseByQueryID } from './connections';
-import { sqlectron } from '../api';
+
 import type { DatabaseFilter } from '../../common/types/database';
+import { sqlectron } from '../api';
+import { ApplicationState, ThunkResult } from '../reducers';
+
+import { getDatabaseByQueryID } from './connections';
 
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
 export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';

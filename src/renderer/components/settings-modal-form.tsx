@@ -1,14 +1,15 @@
-import React, { ChangeEvent, FC, MouseEvent, useCallback, useState } from 'react';
 import { cloneDeep, set } from 'lodash';
-import Select from 'react-select';
 import { AlertTriangle, Bug, CircleX, Info } from 'lucide-react';
+import React, { ChangeEvent, FC, MouseEvent, useCallback, useState } from 'react';
+import Select from 'react-select';
 
+import type { BaseConfig, Config } from '../../common/types/config';
 import { sqlectron } from '../api';
 import { cn } from '../lib/utils';
-import Checkbox from './checkbox';
-import { mapObjectToConfig } from '../utils/config';
-import type { BaseConfig, Config } from '../../common/types/config';
 import { ConfigState } from '../reducers/config';
+import { mapObjectToConfig } from '../utils/config';
+
+import Checkbox from './checkbox';
 import { Button, buttonVariants } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';

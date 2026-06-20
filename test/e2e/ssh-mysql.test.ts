@@ -5,6 +5,7 @@ import path from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { ConfigFile } from '../../src/common/types/config';
+
 import helper from './helper';
 
 const BASE_PATH = path.join(__dirname, '../fixtures/ssh-mysql');

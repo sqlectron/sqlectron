@@ -1,3 +1,4 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React, {
   createRef,
   CSSProperties,
@@ -9,35 +10,35 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useHistory, useRouteMatch } from 'react-router';
 import { ResizableBox } from 'react-resizable';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { DB_CLIENTS } from '../api';
-import * as ConnActions from '../actions/connections';
-import * as QueryActions from '../actions/queries';
-import * as DbAction from '../actions/databases';
-import { fetchTablesIfNeeded } from '../actions/tables';
-import { fetchSchemasIfNeeded } from '../actions/schemas';
+import { useHistory, useRouteMatch } from 'react-router';
+
+import * as eventKeys from '../../common/event';
+import { DbTable } from '../../common/types/database';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
-import { fetchTableTriggersIfNeeded } from '../actions/triggers';
+import * as ConnActions from '../actions/connections';
+import * as DbAction from '../actions/databases';
 import { fetchTableIndexesIfNeeded } from '../actions/indexes';
-import { fetchViewsIfNeeded } from '../actions/views';
+import * as QueryActions from '../actions/queries';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
+import { fetchSchemasIfNeeded } from '../actions/schemas';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
+import { fetchTablesIfNeeded } from '../actions/tables';
+import { fetchTableTriggersIfNeeded } from '../actions/triggers';
+import { fetchViewsIfNeeded } from '../actions/views';
+import { DB_CLIENTS } from '../api';
 import DatabaseFilter from '../components/database-filter';
 import DatabaseList from '../components/database-list';
-import Header from '../components/header';
 import Footer from '../components/footer';
+import Header from '../components/header';
 import Loader from '../components/loader';
 import PromptModal from '../components/prompt-modal';
-import * as eventKeys from '../../common/event';
+import QueryTabs from '../components/query-tabs';
 import { requireClientLogo } from '../components/require-context';
-import MenuHandler from '../utils/menu';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { Database } from '../reducers/databases';
-import { DbTable } from '../../common/types/database';
-import QueryTabs from '../components/query-tabs';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+import MenuHandler from '../utils/menu';
 import { escapeRegExpString } from '../utils/regexp';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports

@@ -1,8 +1,9 @@
 import { Action, Reducer } from 'redux';
-import * as connTypes from '../actions/connections';
-import * as types from '../actions/views';
-import * as dbTypes from '../actions/databases';
+
 import { DbTable } from '../../common/types/database';
+import * as connTypes from '../actions/connections';
+import * as dbTypes from '../actions/databases';
+import * as types from '../actions/views';
 
 export interface ViewAction extends Action {
   type: string;

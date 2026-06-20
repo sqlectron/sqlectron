@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
 import { Meta } from '@storybook/react';
+import React, { FC } from 'react';
 
 import Checkbox, { CheckboxProps } from '../../src/renderer/components/checkbox';
 

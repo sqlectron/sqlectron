@@ -1,5 +1,6 @@
-import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { CloudDownload } from 'lucide-react';
+import React, { FC, MouseEvent, useEffect, useState } from 'react';
+
 import { CONFIG, sqlectron } from '../api';
 
 const repo = CONFIG.repository?.url.replace('https://github.com/', '');

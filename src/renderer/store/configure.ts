@@ -1,7 +1,8 @@
 import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { createLogger as createReduxLogger } from 'redux-logger';
-import rootReducer from '../reducers';
+
 import { sqlectron, CONFIG } from '../api';
+import rootReducer from '../reducers';
 
 const middlewares: Middleware[] = [];
 

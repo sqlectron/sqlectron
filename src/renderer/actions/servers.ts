@@ -1,7 +1,9 @@
 import { AnyAction } from 'redux';
+
 import { Server } from '../../common/types/server';
 import { sqlectron } from '../api';
 import { ThunkResult } from '../reducers';
+
 import * as ConfigActions from './config';
 
 export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';

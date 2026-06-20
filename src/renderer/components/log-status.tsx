@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
 import { Terminal } from 'lucide-react';
+import React, { FC } from 'react';
+
 import { useAppSelector } from '../hooks/redux';
 
 const LogStatus: FC = () => {

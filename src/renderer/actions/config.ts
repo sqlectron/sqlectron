@@ -1,7 +1,8 @@
 import { AnyAction } from 'redux';
-import { ThunkResult } from '../reducers';
-import { sqlectron } from '../api';
+
 import { BaseConfig } from '../../common/types/config';
+import { sqlectron } from '../api';
+import { ThunkResult } from '../reducers';
 
 export const LOAD_CONFIG_REQUEST = 'LOAD_CONFIG_REQUEST';
 export const LOAD_CONFIG_SUCCESS = 'LOAD_CONFIG_SUCCESS';

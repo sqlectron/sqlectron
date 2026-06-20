@@ -1,17 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router';
-import * as ServersActions from '../actions/servers';
-import * as ConnActions from '../actions/connections';
+
+import { Server } from '../../common/types/server';
 import * as ConfigActions from '../actions/config';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import Header from '../components/header';
+import * as ConnActions from '../actions/connections';
+import * as ServersActions from '../actions/servers';
 import Footer from '../components/footer';
+import Header from '../components/header';
+import Message from '../components/message';
+import ServerFilter from '../components/server-filter';
 import ServerList from '../components/server-list';
 import ServerModalForm from '../components/server-modal-form';
 import SettingsModalForm from '../components/settings-modal-form';
-import ServerFilter from '../components/server-filter';
-import Message from '../components/message';
-import { Server } from '../../common/types/server';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { escapeRegExpString } from '../utils/regexp';
 
 const BREADCRUMB = [{ icon: 'server', label: 'servers' }];

@@ -1,6 +1,6 @@
+import { SchemaFilter } from '../../common/types/database';
 import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
-import { SchemaFilter } from '../../common/types/database';
 
 export const FETCH_TABLES_REQUEST = 'FETCH_TABLES_REQUEST';
 export const FETCH_TABLES_SUCCESS = 'FETCH_TABLES_SUCCESS';

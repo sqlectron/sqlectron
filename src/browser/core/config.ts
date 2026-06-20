@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
-import * as utils from './utils';
-import * as crypto from './crypto';
+
 import { BaseConfig, Config, ConfigFile } from '../../common/types/config';
+
+import * as crypto from './crypto';
+import * as utils from './utils';
 
 const EMPTY_CONFIG = <ConfigFile>{
   servers: [],

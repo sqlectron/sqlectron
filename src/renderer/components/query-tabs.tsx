@@ -1,15 +1,15 @@
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import React, { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { TabPanel, Tabs } from 'react-tabs';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-
-import Query from './query';
-import TabList from './tab-list';
-import { Button } from './ui/button';
 
 import * as QueryActions from '../actions/queries';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import QueryTab from './query-tab';
 import { DB_CLIENTS } from '../api';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+
+import Query from './query';
+import QueryTab from './query-tab';
+import TabList from './tab-list';
+import { Button } from './ui/button';
 
 interface Props {
   sideBarWidth: number;

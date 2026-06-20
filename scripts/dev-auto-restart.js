@@ -1,7 +1,7 @@
 #!/usr/bin/env node
+const electron = require('electron');
 const fs = require('fs');
 const { join } = require('path');
-const electron = require('electron');
 
 const main = join(__dirname, '../out/browser/main.js');
 const watch = [join(__dirname, '../out/browser')];

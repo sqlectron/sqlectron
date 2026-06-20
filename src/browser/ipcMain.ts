@@ -1,13 +1,15 @@
 import { ipcMain, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
-import { config, servers, getConn } from './core';
+
+import * as event from '../common/event';
+import { DialogFilter, MenuOptions } from '../common/types/api';
+import { Config } from '../common/types/config';
+import { SchemaFilter, DatabaseFilter } from '../common/types/database';
+import { Server } from '../common/types/server';
+
 import browser from './browser';
 import { getConfig } from './config';
+import { config, servers, getConn } from './core';
 import createLogger, { applyLogConfig } from './logger';
-import * as event from '../common/event';
-import { Config } from '../common/types/config';
-import { Server } from '../common/types/server';
-import { DialogFilter, MenuOptions } from '../common/types/api';
-import { SchemaFilter, DatabaseFilter } from '../common/types/database';
 
 const rendererLogger = createLogger('renderer');
 

@@ -1,15 +1,17 @@
-import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown, ChevronRight, Database as DatabaseIcon } from 'lucide-react';
-import { cn } from '../lib/utils';
-import DatabaseListItemMetatada from './database-list-item-metadata';
-import DatabaseFilter from './database-filter';
+import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import * as eventKeys from '../../common/event';
-import ContextMenu from '../utils/context-menu';
-import { useAppSelector } from '../hooks/redux';
-import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
+import { useAppSelector } from '../hooks/redux';
+import { cn } from '../lib/utils';
+import { Database } from '../reducers/databases';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+import ContextMenu from '../utils/context-menu';
 import { escapeRegExpString } from '../utils/regexp';
+
+import DatabaseFilter from './database-filter';
+import DatabaseListItemMetatada from './database-list-item-metadata';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST_ITEM';
 
