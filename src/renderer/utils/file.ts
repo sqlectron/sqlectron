@@ -1,5 +1,5 @@
-import { sqlectron } from './../api';
 import { DialogFilter } from './../../common/types/api';
+import { sqlectron } from './../api';
 
 export function showSaveDialog(filters: Array<DialogFilter>): Promise<string> {
   return sqlectron.browser.dialog.showSaveDialog(filters);

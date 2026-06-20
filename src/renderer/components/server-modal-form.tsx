@@ -1,18 +1,20 @@
-import React, { ChangeEvent, FC, ReactElement, useCallback, useState } from 'react';
+import { ConnectionString } from 'connection-string';
 import { cloneDeep, set } from 'lodash';
-import Select from 'react-select';
 import { Copy, Eye, EyeOff, FolderOpen, Loader2, Plug, Trash2 } from 'lucide-react';
+import React, { ChangeEvent, FC, ReactElement, useCallback, useState } from 'react';
+import Select from 'react-select';
+
+import { Server } from '../../common/types/server';
+import { titlize } from '../../common/utils/string';
 import { DB_CLIENTS } from '../api';
+import { useAppSelector } from '../hooks/redux';
+import { cn } from '../lib/utils';
+import { ValidationErrors } from '../reducers/servers';
+
+import Checkbox from './checkbox';
 import ConfirmModal from './confim-modal';
 import Message from './message';
-import Checkbox from './checkbox';
 import { requireClientLogo } from './require-context';
-import { ConnectionString } from 'connection-string';
-import { Server } from '../../common/types/server';
-import { ValidationErrors } from '../reducers/servers';
-import { useAppSelector } from '../hooks/redux';
-import { titlize } from '../../common/utils/string';
-import { cn } from '../lib/utils';
 import { Button, buttonVariants } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
@@ -144,7 +146,8 @@ const FileBrowseButton: FC<FileBrowseButtonProps> = ({ id, name, disabled, onCha
       buttonVariants({ variant: 'outline', size: 'sm' }),
       'cursor-pointer',
       disabled && 'pointer-events-none opacity-50',
-    )}>
+    )}
+  >
     <FolderOpen className="h-4 w-4" />
     <input
       type="file"
@@ -501,7 +504,8 @@ const ServerModalForm: FC<Props> = ({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={onToggleShowPlainPasswordClick}>
+                  onClick={onToggleShowPlainPasswordClick}
+                >
                   {showPlainPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
@@ -553,7 +557,8 @@ const ServerModalForm: FC<Props> = ({
               className={errorInputClass('name')}
             />
             <em
-              className={cn('text-xs text-slate-500', showPlainPassword ? 'invisible' : 'visible')}>
+              className={cn('text-xs text-slate-500', showPlainPassword ? 'invisible' : 'visible')}
+            >
               Make the password visible in order to change the database credentials through the URI
               format.
             </em>
@@ -757,7 +762,8 @@ const ServerModalForm: FC<Props> = ({
           <Button
             variant="default"
             onClick={handleTestConnectionClick}
-            disabled={!serverState.client || testConnection.connecting}>
+            disabled={!serverState.client || testConnection.connecting}
+          >
             {testConnection.connecting ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -769,7 +775,8 @@ const ServerModalForm: FC<Props> = ({
             <Button
               variant="outline"
               onClick={handleDuplicateClick}
-              disabled={testConnection.connecting}>
+              disabled={testConnection.connecting}
+            >
               <Copy className="h-4 w-4" />
               Duplicate
             </Button>
@@ -784,7 +791,8 @@ const ServerModalForm: FC<Props> = ({
             <Button
               variant="destructive"
               onClick={onRemoveOpenClick}
-              disabled={testConnection.connecting}>
+              disabled={testConnection.connecting}
+            >
               <Trash2 className="h-4 w-4" />
               Remove
             </Button>

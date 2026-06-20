@@ -1,15 +1,15 @@
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import React, { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { TabPanel, Tabs } from 'react-tabs';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-
-import Query from './query';
-import TabList from './tab-list';
-import { Button } from './ui/button';
 
 import * as QueryActions from '../actions/queries';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import QueryTab from './query-tab';
 import { DB_CLIENTS } from '../api';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+
+import Query from './query';
+import QueryTab from './query-tab';
+import TabList from './tab-list';
+import { Button } from './ui/button';
 
 interface Props {
   sideBarWidth: number;
@@ -165,7 +165,8 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
       className="react-tabs"
       onSelect={handleSelectTab}
       selectedIndex={selectedIndex}
-      forceRenderTabPanel>
+      forceRenderTabPanel
+    >
       <div className="flex items-center border-b border-slate-200">
         {isTabsFitOnScreen && (
           <Button
@@ -176,7 +177,8 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
             onClick={() => {
               const position = tabNavPosition + 100;
               setTabNavPosition(position > 0 ? 0 : position);
-            }}>
+            }}
+          >
             <ChevronLeft className="h-4 w-4" />
           </Button>
         )}
@@ -184,7 +186,8 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
           <TabList
             ref={tabListRef}
             className="react-tabs__tab-list flex"
-            style={{ left: `${tabNavPosition}px`, transition: 'left 0.2s linear' }}>
+            style={{ left: `${tabNavPosition}px`, transition: 'left 0.2s linear' }}
+          >
             {tabs}
           </TabList>
         </div>
@@ -192,7 +195,8 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
           variant="outline"
           size="sm"
           className="h-7 shrink-0 rounded-none border-y-0 border-r-0 px-2"
-          onClick={() => newTab()}>
+          onClick={() => newTab()}
+        >
           <Plus className="h-4 w-4" />
         </Button>
         {isTabsFitOnScreen && (
@@ -203,7 +207,8 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
             disabled={tabListTotalWidthChildren < tabListTotalWidth || isOnMaxPosition}
             onClick={() => {
               setTabNavPosition(tabNavPosition - 100);
-            }}>
+            }}
+          >
             <ChevronRight className="h-4 w-4" />
           </Button>
         )}

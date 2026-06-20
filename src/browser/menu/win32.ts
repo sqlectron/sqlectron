@@ -1,8 +1,9 @@
 import { shell } from 'electron';
 import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electron';
+
+import * as eventKeys from '../../common/event';
 import { Config } from '../../common/types/config';
 import { BuildWindow } from '../../common/types/menu';
-import * as eventKeys from '../../common/event';
 import { titlize } from '../../common/utils/string';
 
 function sendMessage(win: BrowserWindow, message: string) {

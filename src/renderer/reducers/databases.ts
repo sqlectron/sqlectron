@@ -1,7 +1,8 @@
 import { Action, Reducer } from 'redux';
+
 import * as connTypes from '../actions/connections';
-import * as queryTypes from '../actions/queries';
 import * as types from '../actions/databases';
+import * as queryTypes from '../actions/queries';
 
 export interface Database {
   name: string;

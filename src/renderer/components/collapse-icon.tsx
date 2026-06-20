@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import React, { FC } from 'react';
 
 interface CollapseIconProps {
   arrowDirection: 'down' | 'right';

@@ -3,7 +3,7 @@ name: Release
 on:
   workflow_dispatch:
   release:
-    types: [ 'created' ]
+    types: ['created']
 
 jobs:
   build:
@@ -20,56 +20,55 @@ jobs:
       fail-fast: false
 
     steps:
-    - name: Install Linux Dependencies
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install icnsutils graphicsmagick rpm libarchive-tools gcc-multilib g++-multilib
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install icnsutils graphicsmagick rpm libarchive-tools gcc-multilib g++-multilib
 
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-    - name: Use Node.js ${{ env.node-version }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ env.node-version }}
-        cache: npm
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.node-version }}
+          cache: npm
 
-    - run: npm ci
+      - run: npm ci
 
-    - name: Fix chrome-sandbox permissions
-      if: runner.os == 'Linux'
-      run: sudo chown root ./node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 ./node_modules/electron/dist/chrome-sandbox
+      - name: Fix chrome-sandbox permissions
+        if: runner.os == 'Linux'
+        run: sudo chown root ./node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 ./node_modules/electron/dist/chrome-sandbox
 
-    - name: Set environment variables for macOS
-      if: runner.os == 'macOS'
-      run: |
-        echo "CSC_LINK=${{ secrets.APPLE_CERT_BASE64 }}" >> $GITHUB_ENV
-        echo "CSC_KEY_PASSWORD=${{ secrets.APPLE_CERT_PASSWORD }}" >> $GITHUB_ENV
-        echo "APPLE_ID=${{ secrets.APPLE_ID }}" >> $GITHUB_ENV
-        echo "APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}" >> $GITHUB_ENV
-        echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
+      - name: Set environment variables for macOS
+        if: runner.os == 'macOS'
+        run: |
+          echo "CSC_LINK=${{ secrets.APPLE_CERT_BASE64 }}" >> $GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=${{ secrets.APPLE_CERT_PASSWORD }}" >> $GITHUB_ENV
+          echo "APPLE_ID=${{ secrets.APPLE_ID }}" >> $GITHUB_ENV
+          echo "APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
 
-    - name: Set environment variables for Windows
-      if: runner.os == 'Windows'
-      run: |
-        echo "AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $env:GITHUB_ENV
-        echo "AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $env:GITHUB_ENV
-        echo "AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $env:GITHUB_ENV
+      - name: Set environment variables for Windows
+        if: runner.os == 'Windows'
+        run: |
+          echo "AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $env:GITHUB_ENV
+          echo "AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $env:GITHUB_ENV
+          echo "AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $env:GITHUB_ENV
 
-    - name: Build distribution
-      if: github.event_name == 'workflow_dispatch'
-      run: npm run dist -- --publish never
+      - name: Build distribution
+        if: github.event_name == 'workflow_dispatch'
+        run: npm run dist -- --publish never
 
-    - name: Build and publish distribution
-      run: npm run dist
-      if: github.event_name == 'release'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish distribution
+        run: npm run dist
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload artifacts
-      if: github.event_name == 'workflow_dispatch'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{ matrix.os }}
-        path: dist
-
+      - name: Upload artifacts
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.os }}
+          path: dist

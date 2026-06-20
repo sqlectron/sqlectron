@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from 'react';
 import { ChevronDown, ChevronRight, Columns } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
+
 import { cn } from '../lib/utils';
 
 interface Props<T> {
@@ -32,7 +33,8 @@ const TableSubmenu = <T extends { name: string; dataType?: string }>({
           'flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs font-medium text-slate-600',
           !hasItems && 'text-slate-300',
         )}
-        onClick={toggleCollapse}>
+        onClick={toggleCollapse}
+      >
         <Icon className="h-3.5 w-3.5 shrink-0" />
         {title}
       </div>
@@ -45,7 +47,8 @@ const TableSubmenu = <T extends { name: string; dataType?: string }>({
               <div
                 key={item.name}
                 title={item.name}
-                className="flex items-center gap-1 px-2 py-0.5 text-xs">
+                className="flex items-center gap-1 px-2 py-0.5 text-xs"
+              >
                 {title === 'Columns' && <Columns className="h-3.5 w-3.5 shrink-0" />}
                 <span className="truncate">{item.name}</span>
                 {title === 'Columns' && (

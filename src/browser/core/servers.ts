@@ -1,13 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
+
+import { Server, ServerResult, EncryptedPassword } from '../../common/types/server';
+
+import * as config from './config';
+import * as crypto from './crypto';
 import {
   validate,
   validateUniqueId,
   ServerValidationError,
   ValidationErrors,
 } from './validators/server';
-import * as config from './config';
-import * as crypto from './crypto';
-import { Server, ServerResult, EncryptedPassword } from '../../common/types/server';
 
 export async function getAll(): Promise<Array<Server>> {
   const { servers } = await config.get();

@@ -1,15 +1,17 @@
-import React, { useCallback, useMemo, useState } from 'react';
 import groupBy from 'lodash/groupBy';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import React, { useCallback, useMemo, useState } from 'react';
+
+import type { DbTable } from '../../common/types/database';
 import { cn } from '../lib/utils';
+import type { ColumnsByTable } from '../reducers/columns';
+import type { Database } from '../reducers/databases';
+import type { IndexesByTable } from '../reducers/indexes';
+import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+import type { TriggersByTable } from '../reducers/triggers';
+
 import CollapseIcon from './collapse-icon';
 import DatabaseItem from './database-item';
-import type { Database } from '../reducers/databases';
-import type { DbTable } from '../../common/types/database';
-import type { ActionType, ObjectType } from '../reducers/sqlscripts';
-import type { ColumnsByTable } from '../reducers/columns';
-import type { TriggersByTable } from '../reducers/triggers';
-import type { IndexesByTable } from '../reducers/indexes';
 
 interface Props<T> {
   title: string;
@@ -70,7 +72,8 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
           'flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs font-medium text-slate-600',
           !hasItems && 'text-slate-300',
         )}
-        onClick={toggleCollapse}>
+        onClick={toggleCollapse}
+      >
         <Icon className="h-3.5 w-3.5 shrink-0" />
         {title}
       </div>
@@ -90,7 +93,8 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
                         'flex items-center gap-1 px-2 py-0.5 text-xs',
                         hasChildren ? 'cursor-pointer' : 'cursor-default',
                       )}
-                      onClick={() => handleTableCollapse(key)}>
+                      onClick={() => handleTableCollapse(key)}
+                    >
                       {hasChildren ? (
                         <CollapseIcon arrowDirection={tableUncollapsed[key] ? 'down' : 'right'} />
                       ) : (

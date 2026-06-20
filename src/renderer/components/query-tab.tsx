@@ -1,11 +1,12 @@
 import { debounce } from 'lodash';
+import { X } from 'lucide-react';
 import React, { FC, useCallback, useState } from 'react';
 import { Tab } from 'react-tabs';
-import { X } from 'lucide-react';
 
 import * as QueryActions from '../actions/queries';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { cn } from '../lib/utils';
+
 import { Input } from './ui/input';
 
 interface Props {
@@ -70,7 +71,8 @@ const QueryTab: FC<Props> = ({ queryId, tabNavPosition, setTabNavPosition }) => 
             removeQuery(queryId);
             const position = tabNavPosition + 200;
             setTabNavPosition(position > 0 ? 0 : position);
-          }, 200)}>
+          }, 200)}
+        >
           <X className="h-3 w-3" />
         </button>
       </>
@@ -89,7 +91,8 @@ const QueryTab: FC<Props> = ({ queryId, tabNavPosition, setTabNavPosition }) => 
         isCurrentQuery
           ? 'border-slate-900 bg-white font-medium text-slate-900'
           : 'border-transparent text-slate-500 hover:bg-slate-100',
-      )}>
+      )}
+    >
       {buildContent()}
     </Tab>
   );

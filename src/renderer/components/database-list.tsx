@@ -1,8 +1,10 @@
 import React, { FC, RefObject } from 'react';
-import DatabaseListItem from './database-list-item';
-import { Database } from '../reducers/databases';
+
 import { DbTable } from '../../common/types/database';
+import { Database } from '../reducers/databases';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+
+import DatabaseListItem from './database-list-item';
 
 interface Props {
   client: string;

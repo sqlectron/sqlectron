@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FC, KeyboardEvent, useCallback, useState } from 'react';
+
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -39,7 +40,8 @@ const PromptModal: FC<Props> = ({ onCancelClick, onOKClick, title, message, type
       <DialogContent
         showCloseButton={false}
         onEscapeKeyDown={(event) => event.preventDefault()}
-        onPointerDownOutside={(event) => event.preventDefault()}>
+        onPointerDownOutside={(event) => event.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{message}</DialogDescription>

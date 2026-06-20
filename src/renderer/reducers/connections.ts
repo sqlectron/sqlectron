@@ -1,9 +1,10 @@
 import { Action, Reducer } from 'redux';
+
+import { Config as ConfigType } from '../../common/types/config';
+import { Server } from '../../common/types/server';
 import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
 import { DB_CLIENTS } from '../api';
-import { Server } from '../../common/types/server';
-import { Config as ConfigType } from '../../common/types/config';
 
 export interface ConnectionAction extends Action {
   type: string;

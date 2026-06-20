@@ -1,17 +1,19 @@
-import React, { FC, MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Table as TableIcon } from 'lucide-react';
+import React, { FC, MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
+
+import * as eventKeys from '../../common/event';
+import type { DbTable } from '../../common/types/database';
 import { DB_CLIENTS } from '../api';
 import { cn } from '../lib/utils';
+import type { ColumnsByTable } from '../reducers/columns';
+import type { Database } from '../reducers/databases';
+import type { IndexesByTable } from '../reducers/indexes';
+import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+import type { TriggersByTable } from '../reducers/triggers';
+import ContextMenu from '../utils/context-menu';
+
 import CollapseIcon from './collapse-icon';
 import TableSubmenu from './table-submenu';
-import * as eventKeys from '../../common/event';
-import ContextMenu from '../utils/context-menu';
-import type { Database } from '../reducers/databases';
-import type { ActionType, ObjectType } from '../reducers/sqlscripts';
-import type { ColumnsByTable } from '../reducers/columns';
-import type { TriggersByTable } from '../reducers/triggers';
-import type { IndexesByTable } from '../reducers/indexes';
-import type { DbTable } from '../../common/types/database';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST';
 
@@ -49,10 +51,8 @@ const DatabaseItem: FC<Props> = ({
 }) => {
   const [tableCollapsed, setTableCollapsed] = useState(true);
   const [contextMenu, setContextMenu] = useState<ContextMenu | null>(null);
-  const [
-    displayContextMenuEvent,
-    setDisplayContextMenuEvent,
-  ] = useState<MouseEvent<HTMLSpanElement> | null>(null);
+  const [displayContextMenuEvent, setDisplayContextMenuEvent] =
+    useState<MouseEvent<HTMLSpanElement> | null>(null);
 
   const disabledFeatures = useMemo<string[]>(
     () => DB_CLIENTS.find((dbClient) => dbClient.key === client)?.disabledFeatures || [],
@@ -174,7 +174,8 @@ const DatabaseItem: FC<Props> = ({
           indent && 'ml-2',
           onSelectItem ? 'cursor-pointer' : 'cursor-default',
         )}
-        onContextMenu={onContextMenu}>
+        onContextMenu={onContextMenu}
+      >
         {dbObjectType === 'Table' ? (
           <CollapseIcon
             arrowDirection={tableCollapsed ? 'right' : 'down'}

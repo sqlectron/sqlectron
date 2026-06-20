@@ -1,6 +1,8 @@
 import { Menu, App } from 'electron';
+
 import { Config } from '../../common/types/config';
 import { BuildWindow } from '../../common/types/menu';
+
 import * as darwin from './darwin';
 import * as linux from './linux';
 import * as win32 from './win32';

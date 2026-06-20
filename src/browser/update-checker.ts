@@ -1,7 +1,9 @@
 import { BrowserWindow } from 'electron';
-import { Config } from '../common/types/config';
-import createLogger from './logger';
+
 import * as event from '../common/event';
+import { Config } from '../common/types/config';
+
+import createLogger from './logger';
 
 const logger = createLogger('gh-update-checker');
 

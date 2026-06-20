@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react';
 import { X } from 'lucide-react';
+import React, { FC, useState } from 'react';
+
 import { cn } from '../lib/utils';
 
 interface Props {
@@ -30,12 +31,14 @@ const Message: FC<Props> = ({ closeable, type, title, message, preformatted }) =
       className={cn(
         'relative my-2 rounded-md border p-3 text-sm',
         (type && TYPE_STYLES[type]) || 'border-slate-200 bg-slate-50 text-slate-800',
-      )}>
+      )}
+    >
       {closeable && (
         <button
           type="button"
           onClick={() => setVisible(false)}
-          className="absolute right-2 top-2 text-current opacity-60 hover:opacity-100">
+          className="absolute right-2 top-2 text-current opacity-60 hover:opacity-100"
+        >
           <X className="h-4 w-4" />
         </button>
       )}

@@ -1,5 +1,5 @@
-import { sqlectron } from '../api';
 import { MenuItem } from '../../common/types/api';
+import { sqlectron } from '../api';
 
 export interface MenuItemSeparator {
   type: 'separator';

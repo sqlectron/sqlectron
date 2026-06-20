@@ -1,7 +1,8 @@
 import { sqlectron } from '../api';
-import { appendQuery } from './queries';
 import { ApplicationState, ThunkResult } from '../reducers';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+
+import { appendQuery } from './queries';
 
 export const GET_SCRIPT_REQUEST = 'GET_SCRIPT_REQUEST';
 export const GET_SCRIPT_SUCCESS = 'GET_SCRIPT_SUCCESS';

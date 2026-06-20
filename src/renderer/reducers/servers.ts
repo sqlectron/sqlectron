@@ -1,7 +1,8 @@
 import { Reducer } from 'redux';
-import * as types from '../actions/servers';
-import * as configTypes from '../actions/config';
+
 import { Server } from '../../common/types/server';
+import * as configTypes from '../actions/config';
+import * as types from '../actions/servers';
 
 export type ValidationErrors = Record<string, string>;
 

@@ -1,14 +1,15 @@
+import { cloneDeep } from 'lodash';
 import React, { CSSProperties, FC, useEffect, useState } from 'react';
-import { CONFIG } from '../api';
-import * as ConfigActions from '../actions/config';
-import imageSrc from './sqlectron.gif';
 
-import { sqlectron } from '../api';
 import * as eventKeys from '../../common/event';
+import * as ConfigActions from '../actions/config';
+import { CONFIG } from '../api';
+import { sqlectron } from '../api';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { mapObjectToConfig } from '../utils/config';
 import MenuHandler from '../utils/menu';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { cloneDeep } from 'lodash';
+
+import imageSrc from './sqlectron.gif';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('../../../vendor/renderer/lato/latofonts.css');

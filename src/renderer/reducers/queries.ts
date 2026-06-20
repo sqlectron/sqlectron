@@ -1,7 +1,9 @@
 import { Action, Reducer, AnyAction } from 'redux';
-import { ConnectionAction } from './connections';
+
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/queries';
+
+import { ConnectionAction } from './connections';
 
 interface QueryPartialUpdate {
   name?: string;

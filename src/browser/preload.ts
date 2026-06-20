@@ -3,14 +3,14 @@
  */
 import { ipcRenderer, contextBridge } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
+
+import * as eventKeys from '../common/event';
 import type { SqlectronAPI, DialogFilter, MenuOptions, ListenerUnsub } from '../common/types/api';
+import type { Config } from '../common/types/config';
 import type { DatabaseFilter, SchemaFilter } from '../common/types/database';
 import type { Server } from '../common/types/server';
-import type { Config } from '../common/types/config';
-import * as eventKeys from '../common/event';
 
 const ipcRendererHelper = {
-  // eslint-disable-next-line no-unused-vars
   receive: (channel: string, cb: (...args: Array<string>) => void): ListenerUnsub => {
     // Deliberately strip event as it includes `sender`
     const subscription = (event, ...args) => cb(...args);
@@ -166,7 +166,6 @@ const sqlectronAPI: SqlectronAPI = {
   update: {
     checkUpdateAvailable: () => ipcRenderer.send(eventKeys.UPDATE_CHECK),
     onUpdateAvailable: (
-      // eslint-disable-next-line no-unused-vars
       cb: (currentVersion: string, latestVersion: string) => void,
     ): ListenerUnsub => ipcRendererHelper.receive(eventKeys.UPDATE_AVAILABLE, cb),
   },

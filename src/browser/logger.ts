@@ -1,7 +1,9 @@
 import log from 'electron-log/main';
-import * as sqlectron from './core';
-import { getConfig } from './config';
+
 import { LogOptions } from '../common/types/config';
+
+import { getConfig } from './config';
+import * as sqlectron from './core';
 
 type LogLevel = 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly';
 

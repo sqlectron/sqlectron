@@ -1,5 +1,6 @@
 // Reference: http://lollyrock.com/articles/nodejs-encryption
 import crypto from 'crypto';
+
 import { EncryptedPassword } from '../../common/types/server';
 
 const algorithm = 'aes-256-cbc';

@@ -1,15 +1,17 @@
-import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown, ChevronRight, Database as DatabaseIcon } from 'lucide-react';
-import { cn } from '../lib/utils';
-import DatabaseListItemMetatada from './database-list-item-metadata';
-import DatabaseFilter from './database-filter';
+import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import * as eventKeys from '../../common/event';
-import ContextMenu from '../utils/context-menu';
-import { useAppSelector } from '../hooks/redux';
-import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
+import { useAppSelector } from '../hooks/redux';
+import { cn } from '../lib/utils';
+import { Database } from '../reducers/databases';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+import ContextMenu from '../utils/context-menu';
 import { escapeRegExpString } from '../utils/regexp';
+
+import DatabaseFilter from './database-filter';
+import DatabaseListItemMetatada from './database-list-item-metadata';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST_ITEM';
 
@@ -51,23 +53,16 @@ const DatabaseListItem: FC<Props> = ({
   onRefreshDatabase,
   onOpenTab,
 }) => {
-  const {
-    tables,
-    views,
-    functions,
-    procedures,
-    columnsByTable,
-    triggersByTable,
-    indexesByTable,
-  } = useAppSelector((state) => ({
-    tables: state.tables.itemsByDatabase[database.name],
-    views: state.views.viewsByDatabase[database.name],
-    functions: state.routines.functionsByDatabase[database.name],
-    procedures: state.routines.proceduresByDatabase[database.name],
-    columnsByTable: state.columns.columnsByTable[database.name],
-    triggersByTable: state.triggers.triggersByTable[database.name],
-    indexesByTable: state.indexes.indexesByTable[database.name],
-  }));
+  const { tables, views, functions, procedures, columnsByTable, triggersByTable, indexesByTable } =
+    useAppSelector((state) => ({
+      tables: state.tables.itemsByDatabase[database.name],
+      views: state.views.viewsByDatabase[database.name],
+      functions: state.routines.functionsByDatabase[database.name],
+      procedures: state.routines.proceduresByDatabase[database.name],
+      columnsByTable: state.columns.columnsByTable[database.name],
+      triggersByTable: state.triggers.triggersByTable[database.name],
+      indexesByTable: state.indexes.indexesByTable[database.name],
+    }));
 
   const [filter, setFilter] = useState('');
   const [collapsed, setCollapsed] = useState(false);
@@ -170,12 +165,14 @@ const DatabaseListItem: FC<Props> = ({
         'rounded-sm',
         isCurrentDB && 'bg-amber-50 ring-1 ring-inset ring-amber-200',
         !isCurrentDB && isMetadataLoaded && 'bg-cyan-50/60',
-      )}>
+      )}
+    >
       <div
         data-testid="db-header"
         className="flex cursor-pointer items-center gap-1 px-2 py-1 text-sm"
         onClick={() => onHeaderClick(database)}
-        onContextMenu={onContextMenu}>
+        onContextMenu={onContextMenu}
+      >
         <Icon className="h-3.5 w-3.5 shrink-0 text-slate-400" />
         <DatabaseIcon className="h-3.5 w-3.5 shrink-0" />
         <span className="truncate">{database.name}</span>

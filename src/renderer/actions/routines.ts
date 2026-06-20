@@ -1,6 +1,6 @@
+import { SchemaFilter } from '../../common/types/database';
 import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
-import { SchemaFilter } from '../../common/types/database';
 
 export const FETCH_ROUTINES_REQUEST = 'FETCH_ROUTINES_REQUEST';
 export const FETCH_ROUTINES_SUCCESS = 'FETCH_ROUTINES_SUCCESS';

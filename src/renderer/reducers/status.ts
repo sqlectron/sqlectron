@@ -1,7 +1,8 @@
 import { Action, Reducer } from 'redux';
+
 import * as connTypes from '../actions/connections';
-import * as tablesTypes from '../actions/tables';
 import * as queriesTypes from '../actions/queries';
+import * as tablesTypes from '../actions/tables';
 
 export interface StatusAction extends Action {
   type: string;

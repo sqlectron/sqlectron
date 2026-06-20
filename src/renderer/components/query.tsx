@@ -1,22 +1,24 @@
-import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import debounce from 'lodash/debounce';
-import { format } from 'sql-formatter';
-import AceEditor, { ICommand } from 'react-ace';
 import ace from 'ace-builds';
+import debounce from 'lodash/debounce';
+import { Info, Loader2 } from 'lucide-react';
+import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import AceEditor, { ICommand } from 'react-ace';
+import { ResizableBox } from 'react-resizable';
+import { format } from 'sql-formatter';
 import 'ace-builds/src-noconflict/mode-sql';
 import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { ResizableBox } from 'react-resizable';
-import { Info, Loader2 } from 'lucide-react';
+
+import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
+import { useAppSelector } from '../hooks/redux';
+import { Query } from '../reducers/queries';
+import MenuHandler from '../utils/menu';
+
 import CheckBox from './checkbox';
 import QueryResults from './query-results';
 import ServerDBClientInfoModal from './server-db-client-info-modal';
 import { Button } from './ui/button';
-import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
-import MenuHandler from '../utils/menu';
-import { Query } from '../reducers/queries';
-import { useAppSelector } from '../hooks/redux';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./react-resizable.css');
@@ -312,8 +314,8 @@ const Query: FC<Props> = ({
                 language: ['cassandra', 'sqlite'].includes(client)
                   ? 'sql'
                   : client === 'sqlserver'
-                  ? 'tsql'
-                  : client,
+                    ? 'tsql'
+                    : client,
               }),
             );
           }
@@ -331,7 +333,8 @@ const Query: FC<Props> = ({
           className="react-resizable react-resizable-se-resize rounded-md border border-slate-200 bg-white p-2"
           height={QUERY_EDITOR_HEIGTH}
           width={500}
-          onResizeStop={onQueryBoxResize}>
+          onResizeStop={onQueryBoxResize}
+        >
           <>
             <div ref={queryRef} tabIndex={-1} onFocus={onFocus}></div>
             <AceEditor
@@ -370,7 +373,8 @@ const Query: FC<Props> = ({
                 variant="outline"
                 size="sm"
                 title="Query Information"
-                onClick={onShowInfoClick}>
+                onClick={onShowInfoClick}
+              >
                 <Info className="h-4 w-4" />
               </Button>
             )}
@@ -381,7 +385,8 @@ const Query: FC<Props> = ({
               size="sm"
               className="w-28 pr-5 [-webkit-mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_right_center,transparent_99%,#000_100%)]"
               disabled={query.isExecuting}
-              onClick={handleExecQueryClick}>
+              onClick={handleExecQueryClick}
+            >
               {query.isExecuting && <Loader2 className="h-4 w-4 animate-spin" />}
               Execute
             </Button>
@@ -394,7 +399,8 @@ const Query: FC<Props> = ({
                 size="sm"
                 className="w-24 pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
                 disabled={query.isCanceling}
-                onClick={handleCancelQueryClick}>
+                onClick={handleCancelQueryClick}
+              >
                 {query.isCanceling && <Loader2 className="h-4 w-4 animate-spin" />}
                 Cancel
               </Button>
@@ -403,7 +409,8 @@ const Query: FC<Props> = ({
                 variant="outline"
                 size="sm"
                 className="w-24 pl-5 [-webkit-mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)] [mask-image:radial-gradient(circle_18px_at_left_center,transparent_99%,#000_100%)]"
-                onClick={onDiscQueryClick}>
+                onClick={onDiscQueryClick}
+              >
                 Discard
               </Button>
             )}

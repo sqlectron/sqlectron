@@ -1,8 +1,10 @@
-import React, { FC } from 'react';
 import { Pencil, Plug } from 'lucide-react';
-import { requireClientLogo } from './require-context';
-import { DB_CLIENTS } from '../api';
+import React, { FC } from 'react';
+
 import { Server } from '../../common/types/server';
+import { DB_CLIENTS } from '../api';
+
+import { requireClientLogo } from './require-context';
 import { Button } from './ui/button';
 
 /**
@@ -37,7 +39,8 @@ const ServerListCard: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
         size="sm"
         className="absolute right-2 top-2 h-7 w-7 rounded-full p-0"
         title="Edit"
-        onClick={onEditClick}>
+        onClick={onEditClick}
+      >
         <Pencil className="h-3.5 w-3.5" />
       </Button>
     </div>
@@ -45,7 +48,8 @@ const ServerListCard: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
       data-testid="connect-button"
       variant="outline"
       className="w-full shrink-0 rounded-t-none rounded-b-md border-x-0 border-b-0 border-t-slate-200"
-      onClick={onConnectClick}>
+      onClick={onConnectClick}
+    >
       <Plug className="h-4 w-4" />
       Connect
     </Button>

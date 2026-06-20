@@ -1,5 +1,6 @@
 import isPlainObject from 'lodash/isPlainObject';
 import React, { FC, useCallback, useState } from 'react';
+
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 
@@ -46,7 +47,8 @@ const PreviewModal: FC<Props> = ({ value, onCloseClick }) => {
               key={item.type}
               variant={(selected || 'plain') === item.type ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setSelected(item.type)}>
+              onClick={() => setSelected(item.type)}
+            >
               {item.name}
             </Button>
           ))}

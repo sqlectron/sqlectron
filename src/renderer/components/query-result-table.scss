@@ -3,7 +3,7 @@
   border-style: solid;
   border-width: 1px;
   box-sizing: border-box;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 
 .ReactVirtualized__Grid {
@@ -31,9 +31,15 @@
   overflow: hidden !important;
 }
 
-.ReactVirtualized__Grid.grid-body ::-webkit-scrollbar{ display: none }
-.ReactVirtualized__Grid.grid-body:hover { overflow:auto !important; }
-.ReactVirtualized__Grid.grid-body:hover ::-webkit-scrollbar { display: block }
+.ReactVirtualized__Grid.grid-body ::-webkit-scrollbar {
+  display: none;
+}
+.ReactVirtualized__Grid.grid-body:hover {
+  overflow: auto !important;
+}
+.ReactVirtualized__Grid.grid-body:hover ::-webkit-scrollbar {
+  display: block;
+}
 
 .ReactVirtualized__Grid.grid-body > .ReactVirtualized__Grid__innerScrollContainer {
   background: #fff;
@@ -72,7 +78,7 @@
 .ReactVirtualized__Grid.grid-header-row {
   overflow: hidden !important;
   background: #f9fafb;
-  border: 1px solid rgba(34,36,38,.1);
+  border: 1px solid rgba(34, 36, 38, 0.1);
   border-right: none;
 }
 

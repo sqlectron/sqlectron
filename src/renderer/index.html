@@ -1,90 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-      <title>Sqlectron</title>
-      <meta charset="utf-8"/>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <head>
+    <title>Sqlectron</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-      <style>
-        #loading h3 {
-          padding: 0;
-          font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-          font-size: 14px;
-          line-height: 30px;
-          color: rgba(0,0,0,.87);
-          position: absolute;
-          bottom: 0;
-          left: 50%;
-        }
+    <style>
+      #loading h3 {
+        padding: 0;
+        font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        line-height: 30px;
+        color: rgba(0, 0, 0, 0.87);
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+      }
 
-        #loading {
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          background: #fff;
-          color: #333333;
-          z-index: 100000;
-          text-align: center;
-        }
+      #loading {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: #fff;
+        color: #333333;
+        z-index: 100000;
+        text-align: center;
+      }
 
-        #loading div {
-          display: none;
-        }
+      #loading div {
+        display: none;
+      }
 
-        #loading img {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          margin-left: -404px;
-          margin-top: -202px;
-        }
+      #loading img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -404px;
+        margin-top: -202px;
+      }
 
-        .loading-hidden {
+      .loading-hidden {
+        opacity: 0;
+        transition: opacity 0.1s ease-out;
+      }
+
+      /* Signal Loader: https://www.pexels.com/blog/css-only-loaders */
+      #loading-signal {
+        box-sizing: initial;
+
+        border: 3px solid #75c4c1;
+        border-radius: 30px;
+        height: 30px;
+        left: 50%;
+        margin: -15px 0 0 -15px;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        width: 30px;
+
+        animation: pulsate 1s ease-out;
+        animation-iteration-count: infinite;
+        z-index: 100001;
+      }
+
+      @keyframes pulsate {
+        0% {
+          transform: scale(0.1);
           opacity: 0;
-          transition: opacity .1s ease-out;
         }
-
-        /* Signal Loader: https://www.pexels.com/blog/css-only-loaders */
-        #loading-signal {
-          box-sizing: initial;
-
-          border: 3px solid #75C4C1;
-          border-radius: 30px;
-          height: 30px;
-          left: 50%;
-          margin: -15px 0 0 -15px;
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1.2);
           opacity: 0;
-          position: absolute;
-          top: 50%;
-          width: 30px;
-
-          animation: pulsate 1s ease-out;
-          animation-iteration-count: infinite;
-          z-index: 100001;
         }
-
-        @keyframes pulsate {
-          0% {
-            transform: scale(.1);
-            opacity: 0.0;
-          }
-          50% {
-            opacity: 1;
-          }
-          100% {
-            transform: scale(1.2);
-            opacity: 0;
-          }
-        }
-      </style>
-    </head>
-    <body>
-      <div id="content"></div>
-      <div id="loading-started"></div>
-      <div id="loading-signal"></div>
-      <div id="loading"></div>
-    </body>
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content"></div>
+    <div id="loading-started"></div>
+    <div id="loading-signal"></div>
+    <div id="loading"></div>
+  </body>
 </html>

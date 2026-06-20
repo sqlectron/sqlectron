@@ -1,10 +1,7 @@
-import { WebContents, BrowserWindow, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
-import path from 'path';
-import { cloneDeep, omit } from 'lodash';
 import csvStringify from 'csv-stringify';
-import browserFacade from '../browser';
-import { rowsValuesToString } from '../../common/utils/convert';
-
+import { WebContents, BrowserWindow, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
+import { cloneDeep, omit } from 'lodash';
+import path from 'path';
 import * as db from 'sqlectron-db-core';
 import { ADAPTERS, setSelectLimit } from 'sqlectron-db-core';
 import type {
@@ -15,9 +12,13 @@ import type {
   Server as DBServer,
   LegacyServerConfig,
 } from 'sqlectron-db-core';
-import { Server } from '../../common/types/server';
+
 import type { SqlectronDB } from '../../common/types/api';
 import type { Adapter, DbTable, DbView } from '../../common/types/database';
+import { Server } from '../../common/types/server';
+import { rowsValuesToString } from '../../common/utils/convert';
+import browserFacade from '../browser';
+
 import { writeFile, readFile } from './utils';
 
 interface CancellableQuery {
@@ -354,7 +355,7 @@ function stringifyResultToCSV(origRows: any[], delimiter: string): Promise<strin
   const rows = cloneDeep(origRows);
 
   const header = Object.keys(rows[0]).reduce((_header, col) => {
-    _header[col] = col; // eslint-disable-line no-param-reassign
+    _header[col] = col;
     return _header;
   }, {});
 

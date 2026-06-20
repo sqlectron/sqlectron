@@ -1,9 +1,9 @@
 import { app, dialog } from 'electron';
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
+import { registerIPCMainHandlers } from './ipcMain';
 import createLogger from './logger';
 import { buildNewWindow } from './window';
-import { registerIPCMainHandlers } from './ipcMain';
 
 async function loadExtension(extension) {
   try {

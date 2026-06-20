@@ -1,4 +1,5 @@
 import { Action, Reducer } from 'redux';
+
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/sqlscripts';
 
