@@ -107,8 +107,10 @@ const QueryResultTable: FC<Props> = ({
   const previousOffsetWidth = usePrevious(widthOffset);
 
   const resize = useCallback(() => {
+    // widthOffset = sidebar width; 27 = sidebar right border + content padding
     const newTableWidth = window.innerWidth - (widthOffset + 27);
-    const newTableHeight = window.innerHeight - (heightOffset + 225);
+    // heightOffset = query editor height; 180 = 50 (header) + 29 (tab bar) + 44 (button row) + 40 (footer) + 17 (misc padding/borders)
+    const newTableHeight = window.innerHeight - (heightOffset + 180);
 
     let totalColumnWidths = 0;
 
