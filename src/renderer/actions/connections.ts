@@ -43,6 +43,7 @@ export function connect(
     let server;
     let database;
     let defaultDatabase;
+    const wasAlreadyConnected = isConnected;
 
     try {
       if (reconnecting) {
@@ -96,7 +97,9 @@ export function connect(
         clonedServer,
         database,
         config,
-        reconnecting,
+        // If the server was already connected and no explicit database was requested,
+        // this is a re-mount (e.g., HMR) — treat as reconnect to avoid spurious new query tabs.
+        reconnecting: reconnecting || (wasAlreadyConnected && !databaseName),
       });
     } catch (error) {
       dispatch({
