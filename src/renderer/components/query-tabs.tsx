@@ -12,11 +12,10 @@ import TabList from './tab-list';
 import { Button } from './ui/button';
 
 interface Props {
-  sideBarWidth: number;
   queryRefs: Record<number, RefObject<HTMLDivElement>>;
 }
 
-const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
+const QueryTabs: FC<Props> = ({ queryRefs }) => {
   const dispatch = useAppDispatch();
   const { connections, queries } = useAppSelector((state) => state);
 
@@ -141,14 +140,13 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
     const query = queries.queriesById[queryId];
 
     return (
-      <TabPanel key={queryId} className="react-tabs__tab-panel">
+      <TabPanel key={queryId} className="react-tabs__tab-panel min-h-0 flex-1">
         <Query
           editorName={`querybox${queryId}`}
           client={server.client}
           allowCancel={allowCancel}
           query={query}
           queryRef={queryRefs[queryId]}
-          widthOffset={sideBarWidth}
           onExecQueryClick={handleExecuteQuery}
           onCancelQueryClick={handleCancelQuery}
           onCopyToClipboardClick={copyToClipboard}
@@ -162,12 +160,12 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
 
   return (
     <Tabs
-      className="react-tabs"
+      className="react-tabs flex h-full flex-col"
       onSelect={handleSelectTab}
       selectedIndex={selectedIndex}
       forceRenderTabPanel
     >
-      <div className="flex items-center border-b border-slate-200">
+      <div className="flex shrink-0 items-center border-b border-slate-200">
         {isTabsFitOnScreen && (
           <Button
             variant="outline"

@@ -71,7 +71,7 @@ const QueryResultTableCell: FC<Props> = ({ rowIndex, col, data, onOpenPreviewCli
   return (
     <div className="item" onContextMenu={onContextMenu}>
       {value === null ? (
-        <span className="table-cell-type-null inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-1.5 text-[10px] uppercase text-slate-400">
+        <span className="table-cell-type-null inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-1.5 text-[10px]/4 uppercase text-slate-400">
           NULL
         </span>
       ) : (

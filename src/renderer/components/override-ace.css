@@ -1,4 +1,0 @@
-.ace_editor.ace_autocomplete .ace_completion-highlight {
-  /* Avoid Blurry render of Highlighting in Retina display */
-  text-shadow: 1px 0px 0px !important;
-}

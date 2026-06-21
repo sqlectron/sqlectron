@@ -5,8 +5,6 @@ import Message from './message';
 import QueryResult from './query-result';
 
 interface Props {
-  widthOffset: number;
-  heightOffset: number;
   onCopyToClipboardClick: (rows, type: string, delimiter?: string) => void;
   onSaveToFileClick: (rows, type: string, delimiter?: string) => void;
   copied: boolean | null;
@@ -28,8 +26,6 @@ interface Props {
 }
 
 const QueryResults: FC<Props> = ({
-  widthOffset,
-  heightOffset,
   onCopyToClipboardClick,
   onSaveToFileClick,
   copied,
@@ -78,16 +74,13 @@ const QueryResults: FC<Props> = ({
 
   const totalQueries = results.length;
   return (
-    <div id="query-result">
+    <div id="query-result" className={totalQueries === 1 ? 'h-full' : undefined}>
       {results.map((result, idx) => (
         <QueryResult
           {...result}
           totalQueries={totalQueries}
           queryIndex={idx}
-          isMultipleResults={results.length > 1}
           key={idx}
-          widthOffset={widthOffset}
-          heightOffset={heightOffset}
           copied={copied}
           saved={saved}
           onSaveToFileClick={onSaveToFileClick}

@@ -58,7 +58,13 @@ const STYLES: Record<string, CSSProperties> = {
     padding: '50px 10px 40px 10px',
   },
   sidebar: { transition: 'all .2s' },
-  content: { flex: 1, overflow: 'auto', paddingLeft: '5px' },
+  content: {
+    flex: 1,
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingLeft: '5px',
+  },
   collapse: {
     position: 'fixed',
     color: '#fff',
@@ -418,7 +424,7 @@ const QueryBrowserContainer: FC = () => {
           </ResizableBox>
         </div>
         <div style={STYLES.content}>
-          <QueryTabs sideBarWidth={sideBarWidth} queryRefs={queryRefs} />
+          <QueryTabs queryRefs={queryRefs} />
         </div>
       </div>
       <div style={STYLES.footer}>

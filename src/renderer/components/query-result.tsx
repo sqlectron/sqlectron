@@ -12,9 +12,6 @@ interface Props {
   queryIndex: number;
   totalQueries: number;
   command: string;
-  isMultipleResults: boolean;
-  widthOffset: number;
-  heightOffset: number;
   onCopyToClipboardClick: (rows, type: string, delimiter?: string) => void;
   onSaveToFileClick: (rows, type: string, delimiter?: string) => void;
   copied: boolean | null;
@@ -30,9 +27,6 @@ const QueryResult: FC<Props> = ({
   queryIndex,
   totalQueries,
   command,
-  isMultipleResults,
-  widthOffset,
-  heightOffset,
   onCopyToClipboardClick,
   onSaveToFileClick,
   copied,
@@ -66,8 +60,6 @@ const QueryResult: FC<Props> = ({
     );
   }
 
-  // Not sure what type of query they ran, but cannot render table, print
-  // generic message.
   if (fields.length === 0) {
     return (
       <Message
@@ -97,16 +89,9 @@ const QueryResult: FC<Props> = ({
     );
   }
 
-  let adjustedWidthOffset = widthOffset;
-  if (isMultipleResults) {
-    adjustedWidthOffset += 30; // padding of the query result box
-  }
-
   const tableResult = (
     <QueryResultTable
       key={queryIndex}
-      widthOffset={adjustedWidthOffset}
-      heightOffset={heightOffset}
       copied={copied}
       saved={saved}
       fields={fields}
@@ -120,9 +105,9 @@ const QueryResult: FC<Props> = ({
 
   if (totalQueries === 1) {
     return (
-      <div key={queryIndex}>
-        {msgDuplicatedColumns}
-        {tableResult}
+      <div key={queryIndex} className="flex h-full flex-col">
+        {msgDuplicatedColumns && <div className="shrink-0">{msgDuplicatedColumns}</div>}
+        <div className="min-h-0 flex-1">{tableResult}</div>
       </div>
     );
   }

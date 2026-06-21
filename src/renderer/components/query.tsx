@@ -1,14 +1,26 @@
-import ace from 'ace-builds';
+import { autocompletion, CompletionContext } from '@codemirror/autocomplete';
+import { selectLine } from '@codemirror/commands';
+import {
+  sql,
+  Cassandra,
+  keywordCompletionSource,
+  MariaSQL,
+  MSSQL,
+  MySQL,
+  PostgreSQL,
+  SQLDialect,
+  SQLite,
+  StandardSQL,
+} from '@codemirror/lang-sql';
+import { search } from '@codemirror/search';
+import { EditorView, keymap } from '@codemirror/view';
+import { githubLight } from '@uiw/codemirror-theme-github';
+import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import debounce from 'lodash/debounce';
 import { Info, Loader2 } from 'lucide-react';
 import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import AceEditor, { ICommand } from 'react-ace';
 import { ResizableBox } from 'react-resizable';
 import { format } from 'sql-formatter';
-import 'ace-builds/src-noconflict/mode-sql';
-import 'ace-builds/src-noconflict/theme-github';
-import 'ace-builds/src-noconflict/ext-language_tools';
-import 'ace-builds/src-noconflict/ext-searchbox';
 
 import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
 import { useAppSelector } from '../hooks/redux';
@@ -22,11 +34,23 @@ import { Button } from './ui/button';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./react-resizable.css');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-require('./override-ace.css');
 
-const QUERY_EDITOR_HEIGTH = 200;
-const langTools = ace.require('ace/ext/language_tools');
+const QUERY_EDITOR_HEIGHT = 200;
+
+const CLIENT_DIALECT_MAP: Record<string, SQLDialect> = {
+  mysql: MySQL,
+  mariadb: MariaSQL,
+  postgresql: PostgreSQL,
+  sqlite: SQLite,
+  sqlserver: MSSQL,
+  cassandra: Cassandra,
+};
+
+const FORMAT_LANGUAGE_MAP: Record<string, string> = {
+  cassandra: 'sql',
+  sqlite: 'sql',
+  sqlserver: 'tsql',
+};
 
 const INFOS = {
   mysql: [
@@ -41,12 +65,7 @@ const INFOS = {
   ],
 };
 
-const EVENT_KEYS = {
-  onSelectionChange: 'changeSelection',
-};
-
 interface Props {
-  widthOffset: number;
   client: string;
   editorName: string;
   allowCancel: boolean;
@@ -61,7 +80,6 @@ interface Props {
 }
 
 const Query: FC<Props> = ({
-  widthOffset,
   client,
   editorName,
   allowCancel,
@@ -106,254 +124,240 @@ const Query: FC<Props> = ({
 
   const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [wrapEnabled, setWrapEnabled] = useState(false);
-  const editorRef = useRef<AceEditor>(null);
+  const [fontSize, setFontSize] = useState(12);
+  const editorRef = useRef<ReactCodeMirrorRef>(null);
 
-  const handleSelectionChange = useCallback(() => {
-    if (editorRef.current) {
-      const elem = editorRef.current;
-      debounce(() => onSelectionChange(query.query, elem.editor.getCopyText()), 100);
+  // Refs for mutable values referenced inside stable extensions
+  const currentQueryRef = useRef(query.query);
+  currentQueryRef.current = query.query;
+  const clientRef = useRef(client);
+  clientRef.current = client;
+  const onSQLChangeRef = useRef(onSQLChange);
+  onSQLChangeRef.current = onSQLChange;
+  const onSelectionChangeRef = useRef(onSelectionChange);
+  onSelectionChangeRef.current = onSelectionChange;
+
+  const debouncedSelectionChange = useMemo(
+    () => debounce((q: string, selected: string) => onSelectionChangeRef.current(q, selected), 100),
+    [],
+  );
+
+  const formatQuery = useCallback(() => {
+    const q = currentQueryRef.current;
+    const c = clientRef.current;
+    if (q) {
+      onSQLChangeRef.current(format(q, { language: (FORMAT_LANGUAGE_MAP[c] ?? c) as any }));
     }
-  }, [onSelectionChange, query.query, editorRef]);
+  }, []);
 
-  useEffect(() => {
-    if (!editorRef.current) {
-      return;
-    }
+  // Stable extensions — created once at mount; mutable values accessed via refs
+  const stableExtensions = useMemo(
+    () => [
+      sql({ dialect: CLIENT_DIALECT_MAP[client] ?? StandardSQL }),
+      search({ top: true }),
+      EditorView.updateListener.of((update) => {
+        if (update.selectionSet && !update.docChanged) {
+          const sel = update.state.selection.main;
+          debouncedSelectionChange(
+            currentQueryRef.current,
+            update.state.sliceDoc(sel.from, sel.to),
+          );
+        }
+      }),
+      keymap.of([
+        {
+          key: 'Mod-=',
+          run: () => {
+            setFontSize((s) => s + 1);
+            return true;
+          },
+        },
+        {
+          key: 'Mod-+',
+          run: () => {
+            setFontSize((s) => s + 1);
+            return true;
+          },
+        },
+        {
+          key: 'Mod--',
+          run: () => {
+            setFontSize((s) => Math.max(s - 1, 1));
+            return true;
+          },
+        },
+        {
+          key: 'Mod-_',
+          run: () => {
+            setFontSize((s) => Math.max(s - 1, 1));
+            return true;
+          },
+        },
+        {
+          key: 'Mod-0',
+          run: () => {
+            setFontSize(12);
+            return true;
+          },
+        },
+        { key: 'Mod-l', run: selectLine },
+        {
+          key: 'Mod-i',
+          run: () => {
+            formatQuery();
+            return true;
+          },
+        },
+      ]),
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
-    const editor = editorRef.current.editor;
+  const fontSizeTheme = useMemo(
+    () =>
+      EditorView.theme({
+        '&': { fontSize: `${fontSize}px` },
+        '&.cm-focused': { outline: 'none' },
+      }),
+    [fontSize],
+  );
 
-    // @ts-ignore
-    editor.on(EVENT_KEYS.onSelectionChange, handleSelectionChange);
+  const autocompleteExtension = useMemo(() => {
+    if (!enabledAutoComplete) return [];
 
-    // init with the auto complete disabled
-    editor.completers = [];
-    // @ts-ignore
-    editor.setOption('enableBasicAutocompletion', false);
-
-    editor.focus();
-
-    menuHandler.setMenus({
-      [BROWSER_MENU_EDITOR_FORMAT]: () => editor.execCommand('format'),
-    });
-  }, [editorRef, handleSelectionChange, menuHandler]);
-
-  useEffect(() => {
-    if (!enabledAutoComplete || !editorRef.current) {
-      return;
-    }
-
-    const mapCompletionTypes = (items, type: string) => {
+    const mapItems = (items: any, type: string) => {
       let result = items;
       if (!Array.isArray(items)) {
-        result = Object.keys(items || {}).reduce((all, name) => all.concat(items[name]), []);
+        result = Object.keys(items || {}).reduce<any[]>((all, name) => all.concat(items[name]), []);
       }
-
-      return (result || []).map(({ name }) => ({ name, type }));
+      return (result || []).map(({ name }: { name: string }) => ({ label: name, type }));
     };
 
-    const completions = [
-      ...mapCompletionTypes(databases, 'database'),
-      ...mapCompletionTypes(schemas, 'schema'),
-      ...mapCompletionTypes(tables, 'table'),
-      ...mapCompletionTypes(columnsByTable, 'column'),
-      ...mapCompletionTypes(triggersByTable, 'trigger'),
-      ...mapCompletionTypes(indexesByTable, 'index'),
-      ...mapCompletionTypes(views, 'view'),
-      ...mapCompletionTypes(functions, 'function'),
-      ...mapCompletionTypes(procedures, 'procedure'),
-    ].map(({ name, type }) => ({
-      name,
-      value: name,
-      score: 1,
-      meta: type,
-    }));
-
-    const customCompleter = {
-      getCompletions(editor, session, pos, prefix, callback) {
-        callback(null, completions);
-      },
-    };
-
-    // force load only the current available completers
-    // discarding any previous existing completers
-    editorRef.current.editor.completers = [
-      langTools.snippetCompleter,
-      langTools.textCompleter,
-      langTools.keyWordCompleter,
-      customCompleter,
+    const options = [
+      ...mapItems(databases, 'namespace'),
+      ...mapItems(schemas, 'namespace'),
+      ...mapItems(tables, 'class'),
+      ...mapItems(columnsByTable, 'property'),
+      ...mapItems(triggersByTable, 'keyword'),
+      ...mapItems(indexesByTable, 'keyword'),
+      ...mapItems(views, 'class'),
+      ...mapItems(functions, 'function'),
+      ...mapItems(procedures, 'function'),
     ];
 
-    // @ts-ignore
-    editorRef.current.editor.setOption('enableBasicAutocompletion', true);
+    const dialect = CLIENT_DIALECT_MAP[client] ?? StandardSQL;
 
-    // @ts-ignore
-    editorRef.current.editor.setOption('enableLiveAutocompletion', enabledLiveAutoComplete);
+    return [
+      autocompletion({
+        override: [
+          keywordCompletionSource(dialect, true),
+          (context: CompletionContext) => {
+            const word = context.matchBefore(/\w*/);
+            if (!word || (word.from === word.to && !context.explicit)) return null;
+            return { from: word.from, options };
+          },
+        ],
+        activateOnTyping: enabledLiveAutoComplete,
+      }),
+    ];
   }, [
-    columnsByTable,
-    databases,
     enabledAutoComplete,
     enabledLiveAutoComplete,
-    functions,
-    indexesByTable,
-    procedures,
+    client,
+    databases,
     schemas,
     tables,
+    columnsByTable,
     triggersByTable,
+    indexesByTable,
     views,
+    functions,
+    procedures,
   ]);
 
-  useEffect(() => {
-    if (!editorRef.current) {
-      return;
-    }
-    const elem = editorRef.current;
-    return () => {
-      elem.editor.removeListener(EVENT_KEYS.onSelectionChange, handleSelectionChange);
-    };
-  }, [editorRef, handleSelectionChange]);
+  const extensions = useMemo(
+    () => [
+      ...stableExtensions,
+      fontSizeTheme,
+      ...autocompleteExtension,
+      ...(wrapEnabled ? [EditorView.lineWrapping] : []),
+    ],
+    [stableExtensions, fontSizeTheme, autocompleteExtension, wrapEnabled],
+  );
 
-  useEffect(() => {
-    return () => {
+  const onCreateEditor = useCallback(
+    (view: EditorView) => {
+      view.focus();
+      menuHandler.setMenus({ [BROWSER_MENU_EDITOR_FORMAT]: formatQuery });
+    },
+    [menuHandler, formatQuery],
+  );
+
+  useEffect(
+    () => () => {
       menuHandler.dispose();
-    };
-  }, [menuHandler]);
-
-  useEffect(() => {
-    if (query.isExecuting && query.isDefaultSelect) {
-      window.scrollTo(0, 0);
-    }
-  }, [query]);
+    },
+    [menuHandler],
+  );
 
   useEffect(() => {
     if (isCurrentQuery) {
-      editorRef.current?.editor.focus();
+      editorRef.current?.view?.focus();
     }
   }, [isCurrentQuery]);
 
   const handleExecQueryClick = useCallback(() => {
-    const sqlQuery = editorRef.current?.editor.getCopyText() || query.query;
-    onExecQueryClick(sqlQuery);
-  }, [onExecQueryClick, query.query, editorRef]);
+    const view = editorRef.current?.view;
+    const sel = view?.state.selection.main;
+    const selectedText = sel && !sel.empty ? view!.state.sliceDoc(sel.from, sel.to) : '';
+    onExecQueryClick(selectedText || query.query);
+  }, [onExecQueryClick, query.query]);
 
-  const onDiscQueryClick = useCallback(() => {
-    onSQLChange('');
-  }, [onSQLChange]);
+  const onDiscQueryClick = useCallback(() => onSQLChange(''), [onSQLChange]);
 
-  const handleCancelQueryClick = useCallback(() => {
-    onCancelQueryClick();
-  }, [onCancelQueryClick]);
+  const handleCancelQueryClick = useCallback(() => onCancelQueryClick(), [onCancelQueryClick]);
 
-  const onShowInfoClick = useCallback(() => {
-    setInfoModalVisible(true);
-  }, []);
+  const onShowInfoClick = useCallback(() => setInfoModalVisible(true), []);
 
   const onQueryBoxResize = useCallback(() => {
-    editorRef.current?.editor.resize();
-  }, [editorRef]);
-
-  const onWrapContentsChecked = useCallback(() => {
-    setWrapEnabled(true);
+    editorRef.current?.view?.requestMeasure();
   }, []);
 
-  const onWrapContentsUnchecked = useCallback(() => {
-    setWrapEnabled(false);
-  }, []);
-
+  const onWrapContentsChecked = useCallback(() => setWrapEnabled(true), []);
+  const onWrapContentsUnchecked = useCallback(() => setWrapEnabled(false), []);
   const onFocus = useCallback(() => {
-    editorRef.current?.editor.focus();
+    editorRef.current?.view?.focus();
   }, []);
-
-  const commands = useMemo(() => {
-    return [
-      {
-        name: 'increaseFontSize',
-        bindKey: 'Ctrl-=|Ctrl-+',
-        exec(editor) {
-          const size = parseInt(editor.getFontSize(), 10) || 12;
-          // @ts-ignore
-          editor.setFontSize(size + 1);
-        },
-      },
-      {
-        name: 'decreaseFontSize',
-        bindKey: 'Ctrl+-|Ctrl-_',
-        exec(editor) {
-          const size = parseInt(editor.getFontSize(), 10) || 12;
-          // @ts-ignore
-          editor.setFontSize(Math.max(size - 1 || 1));
-        },
-      },
-      {
-        name: 'resetFontSize',
-        bindKey: 'Ctrl+0|Ctrl-Numpad0',
-        exec(editor) {
-          // @ts-ignore
-          editor.setFontSize(12);
-        },
-      },
-      {
-        name: 'selectCurrentLine',
-        bindKey: { win: 'Ctrl-L', mac: 'Command-L' },
-        exec(editor) {
-          const { row } = editor.selection.getCursor();
-          const endColumn = editor.session.getLine(row).length;
-          editor.selection.setSelectionRange({
-            start: { column: 0, row },
-            end: { column: endColumn, row },
-          });
-        },
-      },
-      {
-        name: 'format',
-        bindKey: { win: 'Ctrl-I', mac: 'Command-I' },
-        exec: (editor) => {
-          if (query.query) {
-            editor.setValue(
-              format(query.query, {
-                // @ts-ignore
-                language: ['cassandra', 'sqlite'].includes(client)
-                  ? 'sql'
-                  : client === 'sqlserver'
-                    ? 'tsql'
-                    : client,
-              }),
-            );
-          }
-        },
-      },
-    ] as ICommand[];
-  }, [client, query.query]);
 
   const infos = INFOS[client];
 
   return (
-    <div>
-      <div>
+    <div className="flex h-full flex-col">
+      <div className="shrink-0">
         <ResizableBox
           className="react-resizable react-resizable-se-resize rounded-md border border-slate-200 bg-white p-2"
-          height={QUERY_EDITOR_HEIGTH}
+          height={QUERY_EDITOR_HEIGHT}
           width={500}
           onResizeStop={onQueryBoxResize}
         >
-          <>
-            <div ref={queryRef} tabIndex={-1} onFocus={onFocus}></div>
-            <AceEditor
-              mode="sql"
-              theme="github"
-              name={editorName}
-              height="calc(100% - 15px)"
-              width="100%"
-              ref={editorRef}
-              value={query.query}
-              wrapEnabled={wrapEnabled}
-              showPrintMargin={false}
-              commands={commands}
-              editorProps={{ $blockScrolling: Infinity }}
-              onChange={debounce(onSQLChange, 50)}
-              enableBasicAutocompletion
-              enableLiveAutocompletion
-            />
-            <div className="flex justify-end mb-1">
+          <div className="flex h-full flex-col">
+            <div ref={queryRef} tabIndex={-1} onFocus={onFocus} />
+            <div id={editorName} className="min-h-0 flex-1">
+              <CodeMirror
+                ref={editorRef}
+                value={query.query}
+                theme={githubLight}
+                extensions={extensions}
+                height="100%"
+                width="100%"
+                style={{ height: '100%' }}
+                basicSetup={{ autocompletion: false }}
+                onChange={(value) => onSQLChangeRef.current(value)}
+                onCreateEditor={onCreateEditor}
+              />
+            </div>
+            <div className="flex justify-end">
               <div className="pr-2">
                 <CheckBox
                   name="wrapQueryContents"
@@ -364,7 +368,7 @@ const Query: FC<Props> = ({
                 />
               </div>
             </div>
-          </>
+          </div>
         </ResizableBox>
         <div className="flex items-center justify-between py-1">
           <div>
@@ -417,20 +421,20 @@ const Query: FC<Props> = ({
           </div>
         </div>
       </div>
-      <QueryResults
-        widthOffset={widthOffset}
-        heightOffset={QUERY_EDITOR_HEIGTH}
-        onSaveToFileClick={onSaveToFileClick}
-        onCopyToClipboardClick={onCopyToClipboardClick}
-        copied={query.copied}
-        saved={query.saved}
-        query={query.queryHistory[query.queryHistory.length - 1]}
-        results={query.results}
-        isExecuting={query.isExecuting}
-        error={query.error}
-        executionStartTime={query.executionStartTime}
-        executionTime={query.executionTime}
-      />
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <QueryResults
+          onSaveToFileClick={onSaveToFileClick}
+          onCopyToClipboardClick={onCopyToClipboardClick}
+          copied={query.copied}
+          saved={query.saved}
+          query={query.queryHistory[query.queryHistory.length - 1]}
+          results={query.results}
+          isExecuting={query.isExecuting}
+          error={query.error}
+          executionStartTime={query.executionStartTime}
+          executionTime={query.executionTime}
+        />
+      </div>
       {infoModalVisible && (
         <ServerDBClientInfoModal
           infos={infos}
