@@ -1,4 +1,5 @@
-[![Build](https://github.com/sqlectron/sqlectron-gui/workflows/Build/badge.svg?branch=master&event=push)](https://github.com/sqlectron/sqlectron-gui/actions?query=workflow%3ABuild+branch%3Amaster)
+[![Test](https://github.com/sqlectron/sqlectron/actions/workflows/test.yml/badge.svg)](https://github.com/sqlectron/sqlectron/actions/workflows/test.yml)
+![GitHub Release](https://img.shields.io/github/v/release/sqlectron/sqlectron)
 
 <p align="center">
   <img src="https://sqlectron.github.io/logos/logo-512.png">
