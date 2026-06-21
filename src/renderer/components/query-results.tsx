@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import Loader from './loader';
 import Message from './message';
@@ -23,6 +23,8 @@ interface Props {
     | null;
   isExecuting: boolean;
   error: Error | null;
+  executionStartTime: number | null;
+  executionTime: number | null;
 }
 
 const QueryResults: FC<Props> = ({
@@ -35,7 +37,21 @@ const QueryResults: FC<Props> = ({
   results,
   isExecuting,
   error,
+  executionStartTime,
+  executionTime,
 }) => {
+  const [elapsed, setElapsed] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isExecuting || executionStartTime == null) {
+      return;
+    }
+    const interval = setInterval(() => {
+      setElapsed(Date.now() - executionStartTime);
+    }, 100);
+    return () => clearInterval(interval);
+  }, [isExecuting, executionStartTime]);
+
   if (error) {
     if (error.message) {
       const errorBody = Object.keys(error)
@@ -51,7 +67,7 @@ const QueryResults: FC<Props> = ({
   if (isExecuting) {
     return (
       <div className="relative min-h-[250px]">
-        <Loader message="Loading" type="active" inverted />
+        <Loader message={`Loading (${(elapsed / 1000).toFixed(1)}s)`} type="active" inverted />
       </div>
     );
   }
@@ -76,6 +92,7 @@ const QueryResults: FC<Props> = ({
           saved={saved}
           onSaveToFileClick={onSaveToFileClick}
           onCopyToClipboardClick={onCopyToClipboardClick}
+          executionTime={idx === 0 ? executionTime : null}
         />
       ))}
     </div>

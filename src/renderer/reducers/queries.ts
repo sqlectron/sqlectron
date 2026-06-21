@@ -18,6 +18,8 @@ interface QueryPartialUpdate {
   error?: null | Error;
   copied?: null | boolean;
   isCanceling?: boolean;
+  executionStartTime?: null | number;
+  executionTime?: null | number;
 }
 
 export interface Query {
@@ -45,6 +47,8 @@ export interface Query {
   saved: null | boolean;
   isCanceling: boolean;
   resultItemsPerPage: number;
+  executionStartTime: null | number;
+  executionTime: null | number;
 }
 
 export interface QueryAction extends Action {
@@ -139,6 +143,8 @@ const queryReducer: Reducer<QueryState> = function (
         isExecuting: true,
         isDefaultSelect: action.isDefaultSelect,
         didInvalidate: false,
+        executionStartTime: Date.now(),
+        executionTime: null,
         queryHistory: [
           ...state.queriesById[state.currentQueryId as number].queryHistory,
           action.query,
@@ -146,10 +152,12 @@ const queryReducer: Reducer<QueryState> = function (
       });
     }
     case types.EXECUTE_QUERY_SUCCESS: {
+      const startTime = state.queriesById[state.currentQueryId as number].executionStartTime;
       return changeStateByCurrentQuery(state, {
         error: null,
         isExecuting: false,
         results: action.results,
+        executionTime: startTime != null ? Date.now() - startTime : null,
       });
     }
     case types.EXECUTE_QUERY_FAILURE: {
@@ -286,6 +294,8 @@ function addNewQuery(
     saved: null,
     isCanceling: false,
     resultItemsPerPage,
+    executionStartTime: null,
+    executionTime: null,
   };
 
   return {

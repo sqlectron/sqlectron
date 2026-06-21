@@ -77,6 +77,7 @@ interface Props {
   fields: any[];
   rows: any[];
   rowCount: number | undefined;
+  executionTime: number | null;
 }
 
 const QueryResultTable: FC<Props> = ({
@@ -89,6 +90,7 @@ const QueryResultTable: FC<Props> = ({
   fields,
   rows,
   rowCount,
+  executionTime,
 }) => {
   const config = useAppSelector((state) => state.config);
   const [tableWidth, setTableWidth] = useState<null | number>(null);
@@ -253,10 +255,17 @@ const QueryResultTable: FC<Props> = ({
 
     return (
       <div className="flex items-center justify-between gap-2 bg-black/5 p-1">
-        <div className={badgeClass}>
-          <TableIcon className="h-3 w-3" />
-          Rows
-          <span className="font-semibold">{rowCount}</span>
+        <div className="flex items-center gap-2">
+          <div className={badgeClass}>
+            <TableIcon className="h-3 w-3" />
+            Rows
+            <span className="font-semibold">{rowCount}</span>
+          </div>
+          {executionTime != null && (
+            <div className={badgeClass}>
+              <span className="font-semibold">{(executionTime / 1000).toFixed(3)}s</span>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {savePanel}
@@ -272,6 +281,7 @@ const QueryResultTable: FC<Props> = ({
     onCopyToClipboardClick,
     rows,
     onSaveToFileClick,
+    executionTime,
   ]);
 
   const getColumnWidth = useCallback(

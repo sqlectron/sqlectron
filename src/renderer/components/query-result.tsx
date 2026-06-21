@@ -19,6 +19,7 @@ interface Props {
   onSaveToFileClick: (rows, type: string, delimiter?: string) => void;
   copied: boolean | null;
   saved: boolean | null;
+  executionTime: number | null;
 }
 
 const QueryResult: FC<Props> = ({
@@ -36,16 +37,18 @@ const QueryResult: FC<Props> = ({
   onSaveToFileClick,
   copied,
   saved,
+  executionTime,
 }) => {
   const isSelect = command === 'SELECT';
   const isExplain = command === 'EXPLAIN';
   const isUnknown = command === 'UNKNOWN';
+  const msgTime = executionTime != null ? ` Took ${(executionTime / 1000).toFixed(3)}s.` : '';
   if (!isSelect && !isExplain && !isUnknown) {
     const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
     return (
       <Message
         key={`msgAffectedRows-${queryIndex}`}
-        message={`Query executed successfully. ${msgAffectedRows}`}
+        message={`Query executed successfully. ${msgAffectedRows}${msgTime}`}
         type="success"
       />
     );
@@ -69,7 +72,7 @@ const QueryResult: FC<Props> = ({
     return (
       <Message
         key={`genericResult-${queryIndex}`}
-        message={`Query executed successfully.`}
+        message={`Query executed successfully.${msgTime}`}
         type="success"
       />
     );
@@ -111,6 +114,7 @@ const QueryResult: FC<Props> = ({
       rowCount={rowCount}
       onSaveToFileClick={onSaveToFileClick}
       onCopyToClipboardClick={onCopyToClipboardClick}
+      executionTime={executionTime}
     />
   );
 

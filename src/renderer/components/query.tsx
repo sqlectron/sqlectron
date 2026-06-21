@@ -428,6 +428,8 @@ const Query: FC<Props> = ({
         results={query.results}
         isExecuting={query.isExecuting}
         error={query.error}
+        executionStartTime={query.executionStartTime}
+        executionTime={query.executionTime}
       />
       {infoModalVisible && (
         <ServerDBClientInfoModal
