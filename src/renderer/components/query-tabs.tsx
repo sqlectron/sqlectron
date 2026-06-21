@@ -165,7 +165,7 @@ const QueryTabs: FC<Props> = ({ queryRefs }) => {
       selectedIndex={selectedIndex}
       forceRenderTabPanel
     >
-      <div className="flex shrink-0 items-center border-b border-slate-200">
+      <div className="flex shrink-0 items-center">
         {isTabsFitOnScreen && (
           <Button
             variant="outline"
