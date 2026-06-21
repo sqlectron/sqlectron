@@ -87,7 +87,7 @@ const INITIAL_STATE: QueryState = {
   enabledLiveAutoComplete: true,
 };
 
-const queryReducer: Reducer<QueryState> = function (
+const queryReducer: Reducer<QueryState, AnyAction> = function (
   state: QueryState = INITIAL_STATE,
   action: AnyAction,
 ): QueryState {

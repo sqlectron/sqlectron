@@ -17,7 +17,8 @@ interface Props {
 
 const QueryTabs: FC<Props> = ({ queryRefs }) => {
   const dispatch = useAppDispatch();
-  const { connections, queries } = useAppSelector((state) => state);
+  const connections = useAppSelector((state) => state.connections);
+  const queries = useAppSelector((state) => state.queries);
 
   const [tabNavPosition, setTabNavPosition] = useState(0);
 

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { Server } from '../../common/types/server';
@@ -27,12 +28,15 @@ const ServerManagement = () => {
   const [filter, setFilter] = useState('');
   const dispatch = useAppDispatch();
 
-  const { connections, servers, config, status } = useAppSelector((state) => ({
-    connections: state.connections,
-    servers: state.servers,
-    config: state.config,
-    status: state.status,
-  }));
+  const { connections, servers, config, status } = useAppSelector(
+    (state) => ({
+      connections: state.connections,
+      servers: state.servers,
+      config: state.config,
+      status: state.status,
+    }),
+    shallowEqual,
+  );
 
   const onFilterChange = useCallback(
     (event) => {

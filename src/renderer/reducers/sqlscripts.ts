@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/sqlscripts';
@@ -42,7 +42,7 @@ const INITIAL_STATE: ScriptState = {
   scriptsByObject: {},
 };
 
-const scriptReducer: Reducer<ScriptState> = function (
+const scriptReducer: Reducer<ScriptState, AnyAction> = function (
   state: ScriptState = INITIAL_STATE,
   action,
 ): ScriptState {

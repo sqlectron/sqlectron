@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import { DbTable } from '../../common/types/database';
 import * as connTypes from '../actions/connections';
@@ -29,7 +29,7 @@ const INITIAL_STATE: ViewState = {
   viewsByDatabase: {},
 };
 
-const viewReducer: Reducer<ViewState> = function (
+const viewReducer: Reducer<ViewState, AnyAction> = function (
   state: ViewState = INITIAL_STATE,
   action,
 ): ViewState {

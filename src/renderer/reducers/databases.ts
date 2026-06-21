@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/databases';
@@ -33,7 +33,7 @@ const INITIAL_STATE: DatabaseState = {
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_DATABASE', 'DROP_DATABASE'];
 
-const databaseReducer: Reducer<DatabaseState> = function (
+const databaseReducer: Reducer<DatabaseState, AnyAction> = function (
   state: DatabaseState = INITIAL_STATE,
   action,
 ): DatabaseState {

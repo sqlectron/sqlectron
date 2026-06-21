@@ -2,9 +2,9 @@ import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { createLogger as createReduxLogger } from 'redux-logger';
 
 import { sqlectron, CONFIG } from '../api';
-import rootReducer from '../reducers';
+import rootReducer, { ApplicationState } from '../reducers';
 
-const middlewares: Middleware[] = [];
+const middlewares: Middleware<object, ApplicationState>[] = [];
 
 const isLogConsoleEnabled = CONFIG.log.console;
 const isLogFileEnabled = CONFIG.log.file;
@@ -39,7 +39,9 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
     }
   }
 
-  middlewares.push(createReduxLogger(loggerConfig));
+  middlewares.push(
+    createReduxLogger(loggerConfig) as unknown as Middleware<object, ApplicationState>,
+  );
 }
 
 export const store = configureStore({

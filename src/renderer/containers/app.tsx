@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import React, { CSSProperties, FC, useEffect, useState } from 'react';
+import React, { CSSProperties, FC, PropsWithChildren, useEffect, useState } from 'react';
 
 import * as eventKeys from '../../common/event';
 import * as ConfigActions from '../actions/config';
@@ -18,7 +18,7 @@ require('../tailwind.css');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('./app.css');
 
-const AppContainer: FC = ({ children }) => {
+const AppContainer: FC<PropsWithChildren> = ({ children }) => {
   const dispatch = useAppDispatch();
   const config = useAppSelector((state) => state.config);
 

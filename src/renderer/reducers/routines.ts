@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
@@ -43,7 +43,7 @@ const INITIAL_STATE: RoutineState = {
   proceduresByDatabase: {},
 };
 
-const routineReducer: Reducer<RoutineState> = function (
+const routineReducer: Reducer<RoutineState, AnyAction> = function (
   state: RoutineState = INITIAL_STATE,
   action,
 ): RoutineState {

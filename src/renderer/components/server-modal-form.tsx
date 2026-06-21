@@ -2,6 +2,7 @@ import { ConnectionString } from 'connection-string';
 import { cloneDeep, set } from 'lodash';
 import { Copy, Eye, EyeOff, FolderOpen, Loader2, Plug, Trash2 } from 'lucide-react';
 import React, { ChangeEvent, FC, ReactElement, useCallback, useState } from 'react';
+import { shallowEqual } from 'react-redux';
 import Select from 'react-select';
 
 import { Server } from '../../common/types/server';
@@ -181,11 +182,14 @@ const ServerModalForm: FC<Props> = ({
   server,
   error,
 }) => {
-  const testConnection = useAppSelector((state) => ({
-    connected: state.connections.testConnected,
-    connecting: state.connections.testConnecting,
-    error: state.connections.testError,
-  }));
+  const testConnection = useAppSelector(
+    (state) => ({
+      connected: state.connections.testConnected,
+      connecting: state.connections.testConnecting,
+      error: state.connections.testError,
+    }),
+    shallowEqual,
+  );
 
   const [serverState, setServerState] = useState<FormServer>(cloneDeep(server || {}));
   const [showPlainPassword, setShowPlainPassword] = useState(false);

@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
@@ -36,7 +36,7 @@ const INITIAL_STATE: SchemaState = {
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_SCHEMA', 'DROP_SCHEMA'];
 
-const schemaReducer: Reducer<SchemaState> = function (
+const schemaReducer: Reducer<SchemaState, AnyAction> = function (
   state: SchemaState = INITIAL_STATE,
   action,
 ): SchemaState {

@@ -19,6 +19,7 @@ import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import debounce from 'lodash/debounce';
 import { Info, Loader2 } from 'lucide-react';
 import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { shallowEqual } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
 import { format } from 'sql-formatter';
 
@@ -105,20 +106,23 @@ const Query: FC<Props> = ({
     indexesByTable,
     functions,
     procedures,
-  } = useAppSelector((state) => ({
-    isCurrentQuery: query.id === state.queries.currentQueryId,
-    enabledAutoComplete: state.config.data?.enabledAutoComplete || false,
-    enabledLiveAutoComplete: state.config.data?.enabledLiveAutoComplete || false,
-    databases: state.databases.items,
-    schemas: state.schemas.itemsByDatabase[query.database],
-    tables: state.tables.itemsByDatabase[query.database],
-    views: state.views.viewsByDatabase[query.database],
-    columnsByTable: state.columns.columnsByTable[query.database],
-    triggersByTable: state.triggers.triggersByTable[query.database],
-    indexesByTable: state.indexes.indexesByTable[query.database],
-    functions: state.routines.functionsByDatabase[query.database],
-    procedures: state.routines.proceduresByDatabase[query.database],
-  }));
+  } = useAppSelector(
+    (state) => ({
+      isCurrentQuery: query.id === state.queries.currentQueryId,
+      enabledAutoComplete: state.config.data?.enabledAutoComplete || false,
+      enabledLiveAutoComplete: state.config.data?.enabledLiveAutoComplete || false,
+      databases: state.databases.items,
+      schemas: state.schemas.itemsByDatabase[query.database],
+      tables: state.tables.itemsByDatabase[query.database],
+      views: state.views.viewsByDatabase[query.database],
+      columnsByTable: state.columns.columnsByTable[query.database],
+      triggersByTable: state.triggers.triggersByTable[query.database],
+      indexesByTable: state.indexes.indexesByTable[query.database],
+      functions: state.routines.functionsByDatabase[query.database],
+      procedures: state.routines.proceduresByDatabase[query.database],
+    }),
+    shallowEqual,
+  );
 
   const menuHandler = useMemo(() => new MenuHandler(), []);
 

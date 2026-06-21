@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import { Config as ConfigType } from '../../common/types/config';
 import { Server } from '../../common/types/server';
@@ -47,7 +47,7 @@ const INITIAL_STATE: ConnectionState = {
   testError: null,
 };
 
-const connectionReducer: Reducer<ConnectionState> = function (
+const connectionReducer: Reducer<ConnectionState, AnyAction> = function (
   state: ConnectionState = INITIAL_STATE,
   action,
 ): ConnectionState {

@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import { Config as ConfigType } from '../../common/types/config';
 import * as types from '../actions/config';
@@ -33,7 +33,7 @@ const INITIAL_STATE: ConfigState = {
   isLoaded: false,
 };
 
-const configReducer: Reducer<ConfigState> = function (
+const configReducer: Reducer<ConfigState, AnyAction> = function (
   state: ConfigState = INITIAL_STATE,
   action,
 ): ConfigState {

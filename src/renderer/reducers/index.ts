@@ -1,4 +1,4 @@
-import { combineReducers, Reducer, AnyAction } from 'redux';
+import { AnyAction, combineReducers } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import columns, { ColumnState } from './columns';
@@ -36,7 +36,7 @@ export interface ApplicationState {
   sqlscripts: ScriptState;
 }
 
-const rootReducer: Reducer<ApplicationState> = combineReducers<ApplicationState>({
+const rootReducer = combineReducers({
   config,
   databases,
   servers,

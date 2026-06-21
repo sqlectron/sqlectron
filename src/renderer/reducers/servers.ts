@@ -1,4 +1,4 @@
-import { Reducer } from 'redux';
+import { AnyAction, Reducer } from 'redux';
 
 import { Server } from '../../common/types/server';
 import * as configTypes from '../actions/config';
@@ -22,7 +22,7 @@ const INITIAL_STATE: ServerState = {
   editingServer: null,
 };
 
-const serverReducer: Reducer<ServerState> = function (
+const serverReducer: Reducer<ServerState, AnyAction> = function (
   state: ServerState = INITIAL_STATE,
   action,
 ): ServerState {

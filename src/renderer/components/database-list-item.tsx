@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronRight, Database as DatabaseIcon } from 'lucide-react';
 import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { shallowEqual } from 'react-redux';
 
 import * as eventKeys from '../../common/event';
 import { DbTable } from '../../common/types/database';
@@ -54,15 +55,18 @@ const DatabaseListItem: FC<Props> = ({
   onOpenTab,
 }) => {
   const { tables, views, functions, procedures, columnsByTable, triggersByTable, indexesByTable } =
-    useAppSelector((state) => ({
-      tables: state.tables.itemsByDatabase[database.name],
-      views: state.views.viewsByDatabase[database.name],
-      functions: state.routines.functionsByDatabase[database.name],
-      procedures: state.routines.proceduresByDatabase[database.name],
-      columnsByTable: state.columns.columnsByTable[database.name],
-      triggersByTable: state.triggers.triggersByTable[database.name],
-      indexesByTable: state.indexes.indexesByTable[database.name],
-    }));
+    useAppSelector(
+      (state) => ({
+        tables: state.tables.itemsByDatabase[database.name],
+        views: state.views.viewsByDatabase[database.name],
+        functions: state.routines.functionsByDatabase[database.name],
+        procedures: state.routines.proceduresByDatabase[database.name],
+        columnsByTable: state.columns.columnsByTable[database.name],
+        triggersByTable: state.triggers.triggersByTable[database.name],
+        indexesByTable: state.indexes.indexesByTable[database.name],
+      }),
+      shallowEqual,
+    );
 
   const [filter, setFilter] = useState('');
   const [collapsed, setCollapsed] = useState(false);

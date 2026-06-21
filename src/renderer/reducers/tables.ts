@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'redux';
+import { Action, AnyAction, Reducer } from 'redux';
 
 import { DbTable } from '../../common/types/database';
 import * as connTypes from '../actions/connections';
@@ -33,7 +33,7 @@ const INITIAL_STATE: TableState = {
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_TABLE', 'DROP_TABLE'];
 
-const tableReducer: Reducer<TableState> = function (
+const tableReducer: Reducer<TableState, AnyAction> = function (
   state: TableState = INITIAL_STATE,
   action,
 ): TableState {
