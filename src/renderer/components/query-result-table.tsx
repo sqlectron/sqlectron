@@ -1,6 +1,6 @@
 import scrollbarSize from 'dom-helpers/scrollbarSize';
 import { Copy, Save, Table as TableIcon } from 'lucide-react';
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import { AutoSizer, Grid, ScrollSync } from 'react-virtualized';
 
@@ -62,6 +62,28 @@ const resolveCellWidth = (fieldName: string, rows: any[], fontName?: string) => 
   }
 
   return averageRowsCellWidth > maxWidth ? maxWidth : averageRowsCellWidth;
+};
+
+const DraggableHandle = ({
+  columnIndex,
+  field,
+  handleStop,
+}: {
+  columnIndex: number;
+  field: any;
+  handleStop: any;
+}) => {
+  const nodeRef = useRef(null);
+  return (
+    <Draggable
+      axis="x"
+      nodeRef={nodeRef}
+      onStop={(e, data) => handleStop({ name: field.name, index: columnIndex }, e, data)}
+      position={{ x: 0, y: 0 }}
+    >
+      <div className="draggable-handle" ref={nodeRef} />
+    </Draggable>
+  );
 };
 
 interface Props {
@@ -245,24 +267,16 @@ const QueryResultTable: FC<Props> = ({
   const renderHeaderCell = useCallback(
     (params) => {
       const field = fields[params.columnIndex];
-      let resizeDrag: ReactElement | null = null;
-      if (fields.length - 1 !== params.columnIndex) {
-        resizeDrag = (
-          <Draggable
-            axis="x"
-            onStop={(e, data) =>
-              handleStop({ name: field.name, index: params.columnIndex }, e, data)
-            }
-            position={{ x: 0, y: 0 }}
-          >
-            <div className="draggable-handle" />
-          </Draggable>
-        );
-      }
       return (
         <div className="item">
           <span>{field.name}</span>
-          {resizeDrag}
+          {fields.length - 1 !== params.columnIndex ? (
+            <DraggableHandle
+              columnIndex={params.columnIndex}
+              field={field}
+              handleStop={handleStop}
+            />
+          ) : null}
         </div>
       );
     },
