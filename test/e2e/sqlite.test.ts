@@ -102,7 +102,7 @@ describe('Sqlite', () => {
     // Set default query and automatically executes it
     await helper.expectToEqualText(
       mainWindow,
-      '.react-tabs__tab-panel--selected .ace_content',
+      '.react-tabs__tab-panel--selected #querybox1 [contenteditable="true"]',
       'SELECT * FROM "document" LIMIT 101',
     );
 
