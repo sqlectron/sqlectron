@@ -13,6 +13,7 @@ import {
   StandardSQL,
 } from '@codemirror/lang-sql';
 import { search } from '@codemirror/search';
+import { Prec } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
 import { githubLight } from '@uiw/codemirror-theme-github';
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
@@ -140,6 +141,8 @@ const Query: FC<Props> = ({
   onSQLChangeRef.current = onSQLChange;
   const onSelectionChangeRef = useRef(onSelectionChange);
   onSelectionChangeRef.current = onSelectionChange;
+  const onExecQueryClickRef = useRef(onExecQueryClick);
+  onExecQueryClickRef.current = onExecQueryClick;
 
   const debouncedSelectionChange = useMemo(
     () => debounce((q: string, selected: string) => onSelectionChangeRef.current(q, selected), 100),
@@ -168,6 +171,19 @@ const Query: FC<Props> = ({
           );
         }
       }),
+      Prec.highest(
+        keymap.of([
+          {
+            key: 'Mod-Enter',
+            run: (view) => {
+              const sel = view.state.selection.main;
+              const selectedText = !sel.empty ? view.state.sliceDoc(sel.from, sel.to) : '';
+              onExecQueryClickRef.current(selectedText || currentQueryRef.current);
+              return true;
+            },
+          },
+        ]),
+      ),
       keymap.of([
         {
           key: 'Mod-=',
