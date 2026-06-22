@@ -54,7 +54,7 @@ const SettingsModalForm: FC<Props> = ({ onSaveClick, onCancelClick, config }) =>
       }
       const newState = cloneDeep(configState || {}) as Config;
       const { target } = event;
-      const value = target.files ? target.files[0].path : target.value;
+      const value = target.files ? sqlectron.browser.getPathForFile(target.files[0]) : target.value;
       const name = target.name.replace(/^file\./, '');
       const [name1, name2] = name.split('.');
 

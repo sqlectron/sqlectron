@@ -21,6 +21,6 @@ export function attachMenuToWindow(app: App, buildNewWindow: BuildWindow, appCon
   if (process.platform === 'darwin') {
     const dockTemplate = menus.darwin.buildTemplateDockMenu(app, buildNewWindow);
     const dockMenu = Menu.buildFromTemplate(dockTemplate);
-    app.dock.setMenu(dockMenu);
+    app.dock?.setMenu(dockMenu);
   }
 }

@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      node-version: 18
+      node-version: 24
 
     strategy:
       matrix:
@@ -35,6 +35,8 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - run: npx install-electron
 
       - name: Fix chrome-sandbox permissions
         if: runner.os == 'Linux'

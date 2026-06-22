@@ -7,7 +7,7 @@ import Select from 'react-select';
 
 import { Server } from '../../common/types/server';
 import { titlize } from '../../common/utils/string';
-import { DB_CLIENTS } from '../api';
+import { sqlectron, DB_CLIENTS } from '../api';
 import { useAppSelector } from '../hooks/redux';
 import { cn } from '../lib/utils';
 import { ValidationErrors } from '../reducers/servers';
@@ -231,7 +231,9 @@ const ServerModalForm: FC<Props> = ({
       const newState = {};
       const { target } = event;
       let value: string | string[] =
-        'files' in target && target.files ? target.files[0].path : target.value;
+        'files' in target && target.files
+          ? sqlectron.browser.getPathForFile(target.files[0])
+          : target.value;
       const name = target.name.replace(/^file\./, '');
       const [name1, name2] = name.split('.');
 

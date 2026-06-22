@@ -164,6 +164,8 @@ const browserFacade: SqlectronBrowser = {
   shell: shellFacade,
   clipboard: clipboardFacade,
   webFrame: webFrameFacade,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getPathForFile: (file: File): string => failNotImplemented(),
 };
 
 export default browserFacade;

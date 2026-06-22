@@ -51,14 +51,10 @@ export function decrypt(encrypted: EncryptedPassword, secret: string): string {
  * of existing sqlectron-db-core users to the much better iv functions above.
  *
  * @deprecated 8.1.0
- * @param {string} text
- * @param {string} secret
  */
-export function unsafeDecrypt(text: string, secret: string): string {
-  if (!secret) {
-    throw new Error('Missing crypto secret');
-  }
-
-  const decipher = crypto.createDecipher('aes-256-ctr', secret);
-  return decipher.update(text, 'hex', 'utf8') + decipher.final('utf8');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function unsafeDecrypt(username: string, password: string): string {
+  throw new Error(
+    'This method is no longer implemented. You will need to delete any existing ecrypted values and re-encrypt them using the new encrypt method',
+  );
 }

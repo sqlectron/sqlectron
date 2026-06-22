@@ -1,7 +1,7 @@
 /**
  * Expose remote modules to the renderer process.
  */
-import { ipcRenderer, contextBridge } from 'electron';
+import { ipcRenderer, contextBridge, webUtils } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
 
 import * as eventKeys from '../common/event';
@@ -161,6 +161,8 @@ const sqlectronAPI: SqlectronAPI = {
       setZoomFactor: (zoom: number) =>
         ipcRenderer.send(eventKeys.BROWSER_WEB_FRAME_SET_ZOOM_FACTOR, zoom),
     },
+
+    getPathForFile: (file: File) => webUtils.getPathForFile(file),
   },
 
   update: {

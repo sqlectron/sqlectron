@@ -169,15 +169,10 @@ export interface SqlectronBrowser {
   shell: SqlectronBrowserShell;
   clipboard: SqlectronBrowserClipboard;
   webFrame: SqlectronBrowserWebFrame;
+  getPathForFile(file: File): string;
 }
 
 export type ListenerUnsub = () => void;
-
-export interface SqlectronBrowser {
-  dialog: SqlectronBrowserDialog;
-  fs: SqlectronBrowserFS;
-  menu: SqlectronBrowserMenu;
-}
 
 export interface SqlectronAPI {
   db: SqlectronDB;

@@ -1,20 +1,13 @@
 import { app, dialog } from 'electron';
-import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import {
+  installExtension,
+  REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
+} from 'electron-devtools-installer';
 
 import { registerIPCMainHandlers } from './ipcMain';
 import createLogger from './logger';
 import { buildNewWindow } from './window';
-
-async function loadExtension(extension) {
-  try {
-    const name = await installExtension(extension);
-    // eslint-disable-next-line no-console
-    console.log(`Loaded ${name}`);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(`Error loading extension: ${err}`);
-  }
-}
 
 const logger = createLogger('app');
 
@@ -40,9 +33,9 @@ app.whenReady().then(async () => {
   registerIPCMainHandlers();
 
   if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
-    // Disabling React DevTools as they don't load properly with the current Electron version
-    /*loadExtension(REACT_DEVELOPER_TOOLS),*/
-    await Promise.all([loadExtension(REDUX_DEVTOOLS)]);
+    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+      .then((exts) => exts.forEach((ext) => logger.info(`Loaded extension: ${ext.name}`)))
+      .catch((err) => logger.error(`Error loading extension: ${err}`));
   }
 
   buildNewWindow(app);

@@ -93,7 +93,7 @@
     }
   },
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky install && npx install-electron --no",
     "dev": "cross-env NODE_ENV=development concurrently --names \"webpack,electron\" --prefix name \"npm run dev:webpack\" \"npm run dev:electron\"",
     "dev:webpack": "webpack serve --color",
     "dev:electron": "npm run compile:browser && concurrently --kill-others --names \"build,run\" \"npm run compile:browser -- -w\" \"cross-env DEBUG=spawn-auto-restart node scripts/dev-auto-restart.js\"",
@@ -128,7 +128,6 @@
     "connection-string": "^4.3.4",
     "core-js": "^3.6.5",
     "csv-stringify": "^5.5.1",
-    "electron-devtools-installer": "^3.2.1",
     "electron-log": "^5.4.4",
     "env-paths": "^1.0.0",
     "joi": "^17.13.3",
@@ -162,7 +161,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/jsdom": "^16.2.8",
     "@types/lodash": "^4.14.178",
-    "@types/node": "^18.19.130",
+    "@types/node": "^24.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-resizable": "^3.0.2",
@@ -185,8 +184,9 @@
     "dom-helpers": "^5.1.4",
     "dotenv": "^10.0.0",
     "dotenv-webpack": "^7.0.2",
-    "electron": "^24.8.8",
-    "electron-builder": "26.0.20",
+    "electron": "^42.0.0",
+    "electron-builder": "26.15.3",
+    "electron-devtools-installer": "^4.0.0",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
@@ -235,5 +235,15 @@
     "webpack": "^5.36.2",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^4.7.2"
+  },
+  "allowScripts": {
+    "core-js@3.15.2": true,
+    "core-js-pure@3.47.0": true,
+    "electron-winstaller@5.4.0": true,
+    "esbuild@0.25.12": true,
+    "fsevents@2.3.3": true,
+    "fsevents@1.2.13": true,
+    "sqlite3@5.1.7": true,
+    "ssh2@1.17.0": true
   }
 }
