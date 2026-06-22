@@ -221,7 +221,7 @@
     "rimraf": "^3.0.2",
     "sass": "^1.49.0",
     "sass-loader": "^11.0.1",
-    "spawn-auto-restart": "^3.0.0",
+    "spawn-auto-restart": "^3.1.1",
     "sql-formatter": "^4.0.2",
     "style-loader": "^1.2.1",
     "tailwind-merge": "^3.6.0",
